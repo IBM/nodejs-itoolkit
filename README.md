@@ -15,4 +15,4 @@ The toolkit is a Node.js wrapper over the XMLSERVICE open source project from IB
 Clone the project to your system and update your Node.js code to refer to the path of Node.js toolkit.
 
 #License
-MIT.  View [`LICENSE`](https://bitbucket.org/litmis/nodejs-itoolkit/LICENSE) file.
+MIT.  View [`LICENSE`](https://bitbucket.org/litmis/nodejs-itoolkit/src) file.
