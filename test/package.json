@@ -1,0 +1,22 @@
+{
+  "name": "nodejs-itoolkit-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "test.js",
+  "scripts": {
+    "test": "mocha --no-exit test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://bitbucket.org/litmis/nodejs-itoolkit.git"
+  },
+  "keywords": [
+    "nodejs-itoolkit"
+  ],
+  "author": "Xu Meng",
+  "license": "MIT",
+  "homepage": "https://bitbucket.org/litmis/nodejs-itoolkit#readme",
+  "dependencies": {
+    "mocha": "^3.2.0"
+  }
+}
