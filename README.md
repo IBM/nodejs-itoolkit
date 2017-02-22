@@ -16,9 +16,9 @@ Clone the project to your system and update your Node.js code to refer to the pa
 
 ###Run Test###
 
-cd test
-npm i
-npm test
+* cd test
+* npm i
+* npm test
 
 ###Contributions###
 If you would like to contribute please issue a pull request.  No document signing is necessary for this code base.
