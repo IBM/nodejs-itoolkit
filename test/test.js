@@ -66,7 +66,7 @@ describe('Basic Function Test', function() {
   describe('Test iPgm()', function() {
     it(hint, function(done) {
       var conn = new xt.iConn(opt.db);
-      var pgm = new xt.iPgm('Q1WCRSVAL', {'lib':'QSYS'});
+      var pgm = new xt.iPgm('QWCRSVAL', {'lib':'QSYS'});
       var outBuf = [
           [0, '10i0'],
           [0, '10i0'],
