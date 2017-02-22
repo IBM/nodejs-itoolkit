@@ -14,6 +14,12 @@ The toolkit is a Node.js wrapper over the XMLSERVICE open source project from IB
 
 Clone the project to your system and update your Node.js code to refer to the path of Node.js toolkit.
 
+###Run Test###
+
+cd test
+npm i
+npm test
+
 ###Contributions###
 If you would like to contribute please issue a pull request.  No document signing is necessary for this code base.
 
