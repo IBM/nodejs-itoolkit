@@ -116,5 +116,28 @@ describe('Basic Function Test', function() {
         else done(new Error(JSON.stringify(results)));
       });
     });
+    
+    it('should return SQL result set', function(done) {
+      var conn = new xt.iConn(opt.db);
+      var sql = new xt.iSql();
+      sql.addQuery("SELECT LSTNAM, STATE FROM QIWS.QCUSTCDT");
+      sql.fetch();
+      sql.free();
+      conn.add(sql);
+      conn.run(function(str){
+        var results = xt.xmlToJson(str);
+        var success1 = false;
+        var success2 = false;
+        results.every(function(result, i){
+          if(result.hasOwnProperty('success'))
+            success1 = result.success == true;
+          result.result.every(function(row, i){
+            success2 = row[0].hasOwnProperty('desc');
+          })
+        });
+        if(success1 && success2) done();
+        else done(new Error(JSON.stringify(results)));
+      });
+    });
   });
 });
