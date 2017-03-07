@@ -63,6 +63,23 @@ describe('Basic Function Test', function() {
     });
   });
   
+  describe('Test iQsh()', function() {
+    it(hint, function(done) {
+      var conn = new xt.iConn(opt.db);
+      conn.add(xt.iQsh('system wrksyssts'));
+      conn.run(function(str){
+        var results = xt.xmlToJson(str);
+        var success = true;
+        results.every(function(result, i){
+          if(result.hasOwnProperty('success'))
+            success = result.success == true;
+        });
+        if(success) done();
+        else done(new Error(JSON.stringify(results)));
+      });
+    });
+  });
+  
   describe('Test iPgm()', function() {
     it(hint, function(done) {
       var conn = new xt.iConn(opt.db);
