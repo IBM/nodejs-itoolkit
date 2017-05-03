@@ -2,7 +2,7 @@
 var assert = require('assert');
 var NodeVer = process.version.slice(1,2);
 assert.notEqual(NodeVer, '0', 'Unsupported version of Node.js!');
-var xt = require('/QOpenSys/QIBM/ProdData/OPS/Node'+NodeVer+'/os400/xstoolkit/lib/itoolkit');
+var xt = require('../lib/itoolkit');
 var hint = 'check the "success" property in return value'
 
 var opt = {
