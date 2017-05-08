@@ -15,7 +15,7 @@
 var assert = require('assert');
 var NodeVer = process.version.slice(1,2);
 assert.notEqual(NodeVer, '0', 'Unsupported version of Node.js!');
-var xt = require('/QOpenSys/QIBM/ProdData/OPS/Node'+NodeVer+'/os400/xstoolkit/lib/itoolkit');
+var xt = require('../lib/itoolkit');
 var hint = 'check the "success" property in return value'
 //Need change based on your server configurations
 var opt = {
@@ -102,7 +102,7 @@ describe('Basic Function Test', function() {
       conn.add(pgm);
       conn.run(function(str){
         var results = xt.xmlToJson(str);
-        var success = true;
+        var success = false;
         results.every(function(result, i){
           if(result.hasOwnProperty('success'))
             success = result.success == true;
@@ -110,6 +110,50 @@ describe('Basic Function Test', function() {
         if(success) done();
         else done(new Error(JSON.stringify(results)));
       });
+    });
+    it('Should return arbitrarily named parameter', function(done) {
+      var conn = new xt.iConn(opt.db);
+      var pgm = new xt.iPgm('QWCRSVAL', {'lib':'QSYS'});
+      var outBuf = [
+          [0, '10i0'],
+          [0, '10i0'],
+          ['', '36h'],
+          ['', '10A'],
+          ['', '1A'],
+          ['', '1A'],
+          [0, '10i0'],
+          [0, '10i0']
+        ];
+      pgm.addParam(outBuf, {'io':'out'});
+      pgm.addParam(66, '10i0');
+      pgm.addParam(1, '10i0');
+      pgm.addParam('QCCSID', '10A');
+      var paramValue = 'errno';
+      pgm.addParam(this.errno, {'io':'both', 'len' : 'rec2', 'name' : paramValue });
+      conn.add(pgm);
+      conn.run(function(str){
+        var results = xt.xmlToJson(str);
+        var success = false;
+        results.every(function(result, i){
+          if(result.data[11].hasOwnProperty('name'))
+            success = result.data[11].name == paramValue;
+        });
+        if(success) done();
+        else done(new Error(JSON.stringify(results)));
+      });
+    });
+    it('Should return success with addReturn arbitrary attribute specified', function(done) {
+      var conn = new xt.iConn(opt.db);
+      var pgm = new xt.iPgm("ZZSRV6", {"lib":"XMLSERVICE", "func":"ZZVARY4"});
+      pgm.addParam("Gill", "10A", {"varying":"4"});
+      var test_value = "NEW_NAME";
+      pgm.addReturn("0", "20A", {"varying":"4","name":test_value});
+      conn.add(pgm);
+      conn.run(function(str) {
+        var results = xt.xmlToJson(str);
+        if(results[0].data[1].name == test_value) done();
+        else done(new Error(JSON.stringify(results)));
+      });      
     });
   });
   
