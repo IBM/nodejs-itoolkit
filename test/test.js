@@ -200,5 +200,28 @@ describe('Basic Function Test', function() {
         else done(new Error(JSON.stringify(results)));
       });
     });
+
+    it('should parse SQL result set empty data tags correctly', function(done) {
+      var conn = new xt.iConn(opt.db);
+      var sql = new xt.iSql();
+      sql.addQuery("SELECT '' AS BLANK, STATE FROM QIWS.QCUSTCDT");
+      sql.fetch();
+      sql.free();
+      conn.add(sql);
+      conn.run(function(str){
+        var results = xt.xmlToJson(str);
+        var success1 = false;
+        var success2 = false;
+        results.every(function(result, i){
+          if(result.hasOwnProperty('success'))
+            success1 = result.success == true;
+          result.result.every(function(row, i){
+            success2 = row[0].value === '';
+          })
+        });
+        if(success1 && success2) done();
+        else done(new Error(JSON.stringify(results)));
+      });
+    });
   });
 });
