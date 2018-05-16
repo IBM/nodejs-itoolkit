@@ -57,7 +57,7 @@ The toolkit is a Node.js wrapper over the XMLSERVICE open source project from IB
 	conn.run(cbJson);
 ```
 
-## Example 2: Toolkie classes
+## Example 2: Toolkit classes
 ```js
 	var xt = require("itoolkit");
 	var wk = require('itoolkit/lib/iwork');
