@@ -1,0 +1,31 @@
+{
+  "name": "itoolkit",
+  "version": "0.1.3",
+  "description": "Wrapper over XMLSERVICE for access to all things IBM i",
+  "main": "lib/itoolkit.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/litmis/nodejs-itoolkit.git"
+  },
+  "keywords": [
+    "ibmi",
+    "xmlservice",
+    "rpg",
+    "srvpgm"
+  ],
+  "author": "IBM",
+  "license": "MIT",
+  "homepage": "https://bitbucket.org/litmis/nodejs-itoolkit",
+  "contributors": [
+    { "name" : "Xu Meng", "email": "dmabupt@gmail.com" },
+    { "name" : "Tony Cairns" },
+    { "name" : "Aaron Bartell", "email": "aaronbartell@gmail.com" }
+  ]
+}
