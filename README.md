@@ -4,17 +4,11 @@ The toolkit is a Node.js wrapper over the XMLSERVICE open source project from IB
 
 # Installation  
 
-	npm -g i itoolkit
-	
-  Then you can *require('itoolkit')* in your code.   
-  
-  If you encounter below error messega:  
-  
-  	Error: Cannot find module 'itoolkit'  
-	
-  you need to add the itoolkit path:  
-  
-	export NODE_PATH=/QOpenSys/pkgs/lib/nodejs8/lib/node_modules
+Installation is done from a PASE shell.
+
+```
+$ npm i itoolkit
+```
 
 # Quick Example
 
