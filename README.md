@@ -1,13 +1,15 @@
 # Node.js Toolkit
-The toolkit is a Node.js wrapper over the XMLSERVICE open source project from IBM. 
 
+#### The toolkit is a Node.js wrapper over the XMLSERVICE open source project from IBM. 
+
+[![NPM](https://nodei.co/npm/itoolkit.png?downloads=true&downloadRank=true)](https://nodei.co/npm/itoolkit/)
 
 # Installation  
 
 Installation is done from a PASE shell.
 
-```
-$ npm i itoolkit
+```sh
+    $ npm i itoolkit
 ```
 
 # Quick Example
