@@ -13,8 +13,6 @@
 // IN THE SOFTWARE.
 
 const assert = require('assert');
-const NodeVer = process.version.slice(1,2);
-assert.notEqual(NodeVer, '0', 'Unsupported version of Node.js!');
 const xt = require('../lib/itoolkit');
 const hint = 'check the "success" property in return value'
 //Need change based on your server configurations
@@ -22,7 +20,7 @@ const opt = {
   db   : '*LOCAL',
   user : 'YOURNAME',
   pwd  : 'PASSWORD',
-	host : '8.8.8.8',
+	host : '0.0.0.0',
 	port : 8080,
 	path : '/cgi-bin/xmlcgi.pgm'
 };
@@ -141,6 +139,7 @@ describe('Basic Function Test', () => {
         else done(new Error(JSON.stringify(results)));
       });
     });
+    /*** Refer to test/rpg/zzsrv6.rpgle
     it('Should return success with addReturn arbitrary attribute specified', (done) => {
       let conn = new xt.iConn(opt.db);
       let pgm = new xt.iPgm("ZZSRV6", {"lib":"XMLSERVICE", "func":"ZZVARY4"});
@@ -154,6 +153,7 @@ describe('Basic Function Test', () => {
         else done(new Error(JSON.stringify(results)));
       });      
     });
+    ***/
   });
   
   describe('Test iSql()', () => {

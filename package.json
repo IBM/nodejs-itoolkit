@@ -1,6 +1,6 @@
 {
   "name": "itoolkit",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Wrapper over XMLSERVICE for access to all things IBM i",
   "main": "lib/itoolkit.js",
   "directories": {
@@ -38,6 +38,7 @@
   ],
   "devDependencies": {
     "chai": "^4.1.2",
+    "idb-connector": "^1.1.6",
     "mocha": "^5.2.0"
   }
 }
