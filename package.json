@@ -38,7 +38,11 @@
   ],
   "devDependencies": {
     "chai": "^4.1.2",
+    "mocha": "^5.2.0",
+    "sinon": "^7.2.3"
+  },
+  "optionalDependencies": {
     "idb-connector": "^1.1.8",
-    "mocha": "^5.2.0"
+    "idb-pconnector": "^1.0.2"
   }
 }
