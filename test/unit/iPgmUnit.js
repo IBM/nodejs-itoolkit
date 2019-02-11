@@ -133,6 +133,7 @@ describe('iPgm Class Unit Tests', () => {
 
       expect(pgm.toXML()).to.equal(expectedXML);
     });
+<<<<<<< HEAD
 
     it('regular <parm> contains by=\'val\'', () => {
       const pgm = new iPgm("MYPGM", {lib:"MYLIB", func: "MY_PROCEDURE"});
@@ -185,6 +186,8 @@ describe('iPgm Class Unit Tests', () => {
       expect(lookAtXML).to.match(/<parm .*by='val'.*>/);
       expect(lookAtXML).to.match(/<parm .*io='both'.*>/);
   });
+=======
+>>>>>>> Added unit and functional tests
   });
 
 
