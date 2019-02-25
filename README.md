@@ -77,7 +77,8 @@ Installation is done from a PASE shell.
 * https://www.ibm.com/developerworks/community/wikis/home?lang=en#!/wiki/IBM%20i%20Technology%20Updates/page/Toolkit%20for%20i%20APIs
 
 # Contributions
-If you would like to contribute please issue a pull request.  No document signing is necessary for this code base.
+Please read the [contribution guidelines](https://github.com/IBM/nodejs-itoolkit/blob/master/CONTRIBUTING.md).
+
 
 # License
-MIT.  View [`LICENSE`](https://github.com/IBM/nodejs-itoolkit/blob/master/LICENSE) file.
+[`MIT`](https://github.com/IBM/nodejs-itoolkit/blob/master/LICENSE) file.
