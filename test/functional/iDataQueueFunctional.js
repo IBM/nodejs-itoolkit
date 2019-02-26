@@ -20,8 +20,7 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
-const { iConn } = require('../../lib/itoolkit');
-const { iDataQueue } = require('../../lib/idataq');
+const { iConn, iDataQueue } = require('../../lib/itoolkit');
 
 // Set Env variables or set values here.
 const opt = {
