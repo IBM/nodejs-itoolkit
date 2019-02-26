@@ -20,8 +20,7 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
-const { iConn } = require('../../lib/itoolkit');
-const { iUserSpace } = require('../../lib/iuserSpace');
+const { iConn, iUserSpace } = require('../../lib/itoolkit');
 
 // Set Env variables or set values here.
 const opt = {

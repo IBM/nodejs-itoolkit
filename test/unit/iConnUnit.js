@@ -23,24 +23,13 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const { iConn, iSh } = require('../../lib/itoolkit');
 
-// const iNetwork = require('../lib/inetwork')
-// Need change based on your server configurations
-/* const opt = {
-  db   : '*LOCAL',
-  user : 'YOURNAME',
-  pwd  : 'PASSWORD',
-  host : '0.0.0.0',
-  port : 8080,
-  path : '/cgi-bin/xmlcgi.pgm'
-};
- */
 const opt = {
-  database: '*LOCAL',
-  user: process.env.USERID,
-  password: process.env.PASSWD,
-  host: 'lp13ut28.rch.stglabs.ibm.com',
-  port: 80,
-  path: '/cgi-bin/xmlcgi.pgm',
+  database: process.env.TKDB || '*LOCAL',
+  user: process.env.TKUSER || '',
+  password: process.env.TKPASS || '',
+  host: process.env.TKHOST || 'localhost',
+  port: process.env.TKPORT || 80,
+  path: process.env.TKPATH || '/cgi-bin/xmlcgi.pgm',
 };
 
 
@@ -50,36 +39,37 @@ describe('iConn Class Unit Tests', () => {
       const connection = new iConn(opt.database, opt.user, opt.password);
 
       expect(connection).to.be.instanceOf(iConn);
-      expect(connection.conn).to.be.an('Object');
-      expect(connection.conn.I_TRANSPORT_DB2_DATABASE).to.equal(opt.database);
-      expect(connection.conn.I_TRANSPORT_DB2_USER).to.equal(opt.user);
-      expect(connection.conn.I_TRANSPORT_DB2_PASSWORD).to.equal(opt.password);
-      expect(connection.conn.I_TRANSPORT).to.equal('DB2');
-      expect(connection.conn.I_TRANSPORT_CTL).to.equal('*here');
-      expect(connection.conn.I_TRANSPORT_IPC).to.equal('*NA');
-      expect(connection.conn.I_XML_SERVICE_LIB).to.equal('QXMLSERV');
-      expect(connection.cmds).to.be.an('Array');
-      expect(connection.cmds.length).to.equal(0);
-      expect(connection.timeout).to.equal(5000);
-      expect(connection.I_DEBUG_VERBOSE).to.equal(false);
+      expect(connection.connection.conn).to.be.an('Object');
+      expect(connection.connection.conn.I_TRANSPORT_DB2_DATABASE).to.equal(opt.database);
+      expect(connection.connection.conn.I_TRANSPORT_DB2_USER).to.equal(opt.user);
+      expect(connection.connection.conn.I_TRANSPORT_DB2_PASSWORD).to.equal(opt.password);
+      expect(connection.connection.conn.I_TRANSPORT).to.equal('DB2');
+      expect(connection.connection.conn.I_TRANSPORT_CTL).to.equal('*here');
+      expect(connection.connection.conn.I_TRANSPORT_IPC).to.equal('*NA');
+      expect(connection.connection.conn.I_XML_SERVICE_LIB).to.equal('QXMLSERV');
+      expect(connection.connection.cmds).to.be.an('Array');
+      expect(connection.connection.cmds.length).to.equal(0);
+      expect(connection.connection.timeout).to.equal(5000);
+      expect(connection.connection.I_DEBUG_VERBOSE).to.equal(false);
     });
 
     it('creates and returns an instance of iConn with rest transport', () => {
       const connection = new iConn(opt.database, opt.user, opt.password, opt);
 
       expect(connection).to.be.instanceOf(iConn);
-      expect(connection.conn).to.be.an('Object');
-      expect(connection.conn.I_TRANSPORT_DB2_DATABASE).to.equal(opt.database);
-      expect(connection.conn.I_TRANSPORT_DB2_USER).to.equal(opt.user);
-      expect(connection.conn.I_TRANSPORT_DB2_PASSWORD).to.equal(opt.password);
-      expect(connection.conn.I_TRANSPORT).to.equal('REST');
-      expect(connection.conn.I_TRANSPORT_CTL).to.equal('*here');
-      expect(connection.conn.I_TRANSPORT_IPC).to.equal('*NA');
-      expect(connection.conn.I_XML_SERVICE_LIB).to.equal('QXMLSERV');
-      expect(connection.cmds).to.be.an('Array');
-      expect(connection.cmds.length).to.equal(0);
-      expect(connection.timeout).to.equal(5000);
-      expect(connection.I_DEBUG_VERBOSE).to.equal(false);
+      expect(connection.connection.conn).to.be.an('Object');
+      expect(connection.connection.conn.I_TRANSPORT_DB2_DATABASE).to.equal(opt.database);
+      expect(connection.connection.conn.I_TRANSPORT_DB2_USER).to.equal(opt.user);
+      expect(connection.connection.conn.I_TRANSPORT_DB2_PASSWORD).to.equal(opt.password);
+      expect(connection.connection.conn.I_TRANSPORT).to.equal('REST');
+      expect(connection.connection.conn.I_TRANSPORT_CTL).to.equal('*here');
+      expect(connection.connection.conn.I_TRANSPORT_IPC).to.equal('*NA');
+      expect(connection.connection.conn.I_XML_SERVICE_LIB).to.equal('QXMLSERV');
+      expect(connection.connection.conn.I_TRANSPORT_REST_XML_OUT_SIZE).to.equal('500000');
+      expect(connection.connection.cmds).to.be.an('Array');
+      expect(connection.connection.cmds.length).to.equal(0);
+      expect(connection.connection.timeout).to.equal(5000);
+      expect(connection.connection.I_DEBUG_VERBOSE).to.equal(false);
     });
   });
 
@@ -88,8 +78,8 @@ describe('iConn Class Unit Tests', () => {
       const connection = new iConn(opt.database, opt.user, opt.password);
 
       connection.add(iSh('ls -lah'));
-      expect(connection.cmds.length).to.equal(1);
-      expect(connection.cmds[0]).to.equal('<sh error=\'fast\'>ls -lah</sh>');
+      expect(connection.connection.cmds.length).to.equal(1);
+      expect(connection.connection.cmds[0]).to.equal('<sh error=\'fast\'>ls -lah</sh>');
     });
   });
 
@@ -164,9 +154,9 @@ describe('iConn Class Unit Tests', () => {
     it('override timeout for sync mode', () => {
       const connection = new iConn(opt.database, opt.user, opt.password);
 
-      expect(connection.timeout).to.equal(5000);
+      expect(connection.connection.timeout).to.equal(5000);
       connection.setTimeout(3);
-      expect(connection.timeout).to.equal(3000);
+      expect(connection.connection.timeout).to.equal(3000);
     });
   });
 });
