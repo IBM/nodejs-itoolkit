@@ -25,7 +25,7 @@ const { iConn, iUserSpace } = require('../../lib/itoolkit');
 // Set Env variables or set values here.
 const opt = {
   database: process.env.TKDB || '*LOCAL',
-  user: process.env.TKUSER || '',
+  username: process.env.TKUSER || '',
   password: process.env.TKPASS || '',
   host: process.env.TKHOST || 'localhost',
   port: process.env.TKPORT || 80,
@@ -61,7 +61,8 @@ describe('iUserSpace Functional Tests', () => {
         const userSpaceName = `USP${(transport.name).toUpperCase()}`;
 
         userSpace.createUserSpace(userSpaceName, lib, 'LOG', 50, '*EXCLUDE',
-          description, (output) => {
+          description, (error, output) => {
+            expect(error).to.equal(null);
             expect(output).to.be.a('boolean').and.to.equal(true);
             done();
           });
@@ -81,7 +82,8 @@ describe('iUserSpace Functional Tests', () => {
         const userSpaceName = `USP${(transport.name).toUpperCase()}`;
 
         userSpace.setUserSpaceData(userSpaceName, lib, msg.length, msg,
-          (output) => {
+          (error, output) => {
+            expect(error).to.equal(null);
             expect(output).to.be.a('boolean').and.to.equal(true);
             done();
           });
@@ -99,7 +101,8 @@ describe('iUserSpace Functional Tests', () => {
 
           const userSpaceName = `USP${(transport.name).toUpperCase()}`;
 
-          userSpace.getUserSpaceData(userSpaceName, lib, 21, (output) => {
+          userSpace.getUserSpaceData(userSpaceName, lib, 21, (error, output) => {
+            expect(error).to.equal(null);
             expect(output).to.be.a('string').and.to.equal('Hello from userspace!');
             done();
           });
@@ -116,7 +119,8 @@ describe('iUserSpace Functional Tests', () => {
 
         const userSpaceName = `USP${(transport.name).toUpperCase()}`;
 
-        userSpace.deleteUserSpace(userSpaceName, lib, (output) => {
+        userSpace.deleteUserSpace(userSpaceName, lib, (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.a('boolean').and.to.equal(true);
           done();
         });

@@ -26,7 +26,7 @@ const { iSql, xmlToJson } = require('../../lib/itoolkit');
 // Set Env variables or set values here.
 const opt = {
   database: process.env.TKDB || '*LOCAL',
-  user: process.env.TKUSER || '',
+  username: process.env.TKUSER || '',
   password: process.env.TKPASS || '',
   host: process.env.TKHOST || 'localhost',
   port: process.env.TKPORT || 80,
@@ -50,7 +50,8 @@ describe('iSql Functional Tests', () => {
         sql.fetch();
         sql.free();
         connection.add(sql);
-        connection.run((xmlOut) => {
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
 
           results.forEach((result) => {
@@ -79,7 +80,8 @@ describe('iSql Functional Tests', () => {
         sql.fetch();
         sql.free();
         connection.add(sql);
-        connection.run((xmlOut) => {
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
           results.forEach((result) => {
             expect(result.success).to.equal(true);
@@ -107,7 +109,8 @@ describe('iSql Functional Tests', () => {
         sql.fetch();
         sql.free();
         connection.add(sql);
-        connection.run((xmlOut) => {
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
 
           results.forEach((result) => {
@@ -132,7 +135,8 @@ describe('iSql Functional Tests', () => {
         // [catalog, schema, table, table type]
         sql.tables(['', 'QIWS', 'QCUSTCDT', '']);
         connection.add(sql.toXML());
-        connection.run((xmlOut) => {
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
 
           results.forEach((result) => {
@@ -152,14 +156,15 @@ describe('iSql Functional Tests', () => {
 
   describe('tablePriv', () => {
     transports.forEach((transport) => {
-      it('returns privilege data for a table', (done) => {
+      it(`returns privilege data for a table using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
         const sql = new iSql();
         // [catalog, schema, table]
         sql.tablePriv(['', 'QIWS', 'QCUSTCDT']);
         connection.add(sql.toXML());
-        connection.run((xmlOut) => {
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
 
           results.forEach((result) => {
@@ -179,14 +184,15 @@ describe('iSql Functional Tests', () => {
 
   describe('columns', () => {
     transports.forEach((transport) => {
-      it('returns meta data for a column', (done) => {
+      it(`returns meta data for a column using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
         const sql = new iSql();
         // catalog, schema, table, column
         sql.columns(['', 'QIWS', 'QCUSTCDT', 'CUSNUM']);
         connection.add(sql.toXML());
-        connection.run((xmlOut) => {
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
 
           results.forEach((result) => {
@@ -206,7 +212,7 @@ describe('iSql Functional Tests', () => {
 
   describe('columnPriv', () => {
     transports.forEach((transport) => {
-      it('returns privilege data for a column', (done) => {
+      it(`returns privilege data for a column using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
         const sql = new iSql();
@@ -214,7 +220,8 @@ describe('iSql Functional Tests', () => {
         sql.columnPriv(['', 'QIWS', 'QCUSTCDT', 'BALDUE']);
 
         connection.add(sql.toXML());
-        connection.run((xmlOut) => {
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
 
           results.forEach((result) => {
@@ -234,14 +241,15 @@ describe('iSql Functional Tests', () => {
 
   describe('procedures', () => {
     transports.forEach((transport) => {
-      it('returns meta data on for a procedure', (done) => {
+      it(`returns meta data on for a procedure using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
         const sql = new iSql();
         // [catalog, schema, procedure]
         sql.procedures(['', 'QSYS2', 'TCPIP_INFO']);
         connection.add(sql.toXML());
-        connection.run((xmlOut) => {
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
 
           results.forEach((result) => {
@@ -261,14 +269,15 @@ describe('iSql Functional Tests', () => {
 
   describe('pColumns', () => {
     transports.forEach((transport) => {
-      it('returns meta data for procedure column', (done) => {
+      it(`returns meta data for procedure column using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
         const sql = new iSql();
         // [catalog, schema, procedure, column]
         sql.pColumns(['', 'QSYS2', 'QCMDEXC', 'COMMAND']);
         connection.add(sql.toXML());
-        connection.run((xmlOut) => {
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
 
           results.forEach((result) => {
@@ -295,7 +304,8 @@ describe('iSql Functional Tests', () => {
         // [catalog, schema, table]
         sql.primaryKeys(['', 'QUSRSYS', 'QASZRAIRX']);
         connection.add(sql.toXML());
-        connection.run((xmlOut) => {
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
           results.forEach((result) => {
             expect(result.success).to.equal(true);
@@ -314,7 +324,7 @@ describe('iSql Functional Tests', () => {
 
   describe('foreignKeys', () => {
     transports.forEach((transport) => {
-      it('returns meta data for a foreign key', (done) => {
+      it(`returns meta data for a foreign key using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
         const sql = new iSql();
@@ -322,7 +332,8 @@ describe('iSql Functional Tests', () => {
         // fk: [catalog, schema, table]
         sql.foreignKeys(['', 'QUSRSYS', 'QASZRAIRC', '', 'QUSRSYS', 'QASZRAIRX']);
         connection.add(sql.toXML());
-        connection.run((xmlOut) => {
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
           results.forEach((result) => {
             expect(result.success).to.equal(true);
@@ -341,14 +352,15 @@ describe('iSql Functional Tests', () => {
 
   describe('statistics', () => {
     transports.forEach((transport) => {
-      it('returns stats info for table', (done) => {
+      it(`returns stats info for table using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
         const sql = new iSql();
 
         sql.statistics(['', 'QIWS', 'QCUSTCDT', 'all']);
         connection.add(sql.toXML());
-        connection.run((xmlOut) => {
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
           results.forEach((result) => {
             expect(result.success).to.equal(true);
@@ -378,7 +390,7 @@ describe('iSql Functional Tests', () => {
         sql.special(['', 'QUSRSYS', 'QASZRAIRX', 'row', 'no'], { error: 'on' });
         connection.add(sql.toXML());
         connection.debug(true);
-        connection.run((xmlOut) => {
+        connection.run((error, xmlOut) => {
           // eslint-disable-next-line no-console
           console.log(`xml output: \n ${xmlOut}`);
           const results = xmlToJson(xmlOut);
@@ -406,7 +418,7 @@ describe('iSql Functional Tests', () => {
         sql.rowCount();
         sql.free();
         connection.add(sql.toXML());
-        connection.run((xmlOut) => {
+        connection.run((error, xmlOut) => {
           const results = xmlToJson(xmlOut);
           done();
           results.forEach((result) => {

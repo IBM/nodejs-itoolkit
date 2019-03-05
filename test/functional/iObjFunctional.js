@@ -25,7 +25,7 @@ const { iConn, iObj } = require('../../lib/itoolkit');
 // Set Env variables or set values here.
 const opt = {
   database: process.env.TKDB || '*LOCAL',
-  user: process.env.TKUSER || '',
+  username: process.env.TKUSER || '',
   password: process.env.TKPASS || '',
   host: process.env.TKHOST || 'localhost',
   port: process.env.TKPORT || 80,
@@ -54,7 +54,8 @@ describe('iObj Functional Tests', () => {
 
         const obj = new iObj(connection);
 
-        obj.retrUsrAuth('*PUBLIC', '*PGM', 'XMLCGI', 'QXMLSERV', (output) => {
+        obj.retrUsrAuth('*PUBLIC', '*PGM', 'XMLCGI', 'QXMLSERV', (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.an('Object');
           expect(output).to.have.a.property('Object_authority_/_Data_authority');
           expect(output).to.have.a.property('Authorization_list_management');
@@ -104,7 +105,8 @@ describe('iObj Functional Tests', () => {
 
         const obj = new iObj(connection);
 
-        obj.retrCmdInfo('CRTLIB', '*LIBL', (output) => {
+        obj.retrCmdInfo('CRTLIB', '*LIBL', (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.an('Object');
           expect(output).to.have.a.property('Command_name');
           expect(output).to.have.a.property('Command_library_name');
@@ -158,7 +160,8 @@ describe('iObj Functional Tests', () => {
 
         const obj = new iObj(connection);
 
-        obj.retrPgmInfo('XMLCGI', 'QXMLSERV', (output) => {
+        obj.retrPgmInfo('XMLCGI', 'QXMLSERV', (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.an('Object');
           expect(output).to.have.a.property('Program_name');
           expect(output).to.have.a.property('Program_library_name');
@@ -237,7 +240,8 @@ describe('iObj Functional Tests', () => {
 
         const obj = new iObj(connection);
 
-        obj.retrSrvPgmInfo('QZSRVSSL', 'QHTTPSVR', (output) => {
+        obj.retrSrvPgmInfo('QZSRVSSL', 'QHTTPSVR', (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.an('Object');
           expect(output).to.have.a.property('Service_program_name');
           expect(output).to.have.a.property('Service_program_name');
@@ -296,7 +300,8 @@ describe('iObj Functional Tests', () => {
 
         const obj = new iObj(connection);
 
-        obj.retrUserInfo('QSYS', (output) => {
+        obj.retrUserInfo('QSYS', (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.an('Object');
           expect(output).to.have.a.property('User_profile_name');
           expect(output).to.have.a.property('Previous_sign-on_date_and_time');
@@ -326,7 +331,8 @@ describe('iObj Functional Tests', () => {
 
         const obj = new iObj(connection);
 
-        obj.retrUserAuthToObj('/home', (output) => {
+        obj.retrUserAuthToObj('/home', (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.an('Object');
           expect(output).to.have.a.property('Profile_name');
           expect(output).to.have.a.property('User_or_group_indicator');
@@ -356,7 +362,8 @@ describe('iObj Functional Tests', () => {
 
         const obj = new iObj(connection);
 
-        obj.addToLibraryList('QHTTPSVR', (output) => {
+        obj.addToLibraryList('QHTTPSVR', (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.a('boolean').and.to.equal(true);
           done();
         });

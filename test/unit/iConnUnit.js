@@ -21,11 +21,12 @@
 
 const { expect } = require('chai');
 const sinon = require('sinon');
+const { Connection } = require('../../lib/Connection');
 const { iConn, iSh } = require('../../lib/itoolkit');
 
 const opt = {
   database: process.env.TKDB || '*LOCAL',
-  user: process.env.TKUSER || '',
+  username: process.env.TKUSER || '',
   password: process.env.TKPASS || '',
   host: process.env.TKHOST || 'localhost',
   port: process.env.TKPORT || 80,
@@ -35,47 +36,98 @@ const opt = {
 
 describe('iConn Class Unit Tests', () => {
   describe('constructor', () => {
+    it('creates and returns an instance of Connection with idb transport', () => {
+      const connection = new Connection(opt);
+
+      expect(connection).to.be.instanceOf(Connection);
+      expect(connection.conn).to.be.an('Object');
+      expect(connection.conn.database).to.equal(opt.database);
+      expect(connection.conn.username).to.equal(opt.username);
+      expect(connection.conn.password).to.equal(opt.password);
+      expect(connection.conn.transport).to.equal('idb');
+      expect(connection.conn.ctl).to.equal('*here');
+      expect(connection.conn.ipc).to.equal('*NA');
+      expect(connection.conn.xslib).to.equal('QXMLSERV');
+      expect(connection.cmds).to.be.an('Array');
+      expect(connection.cmds.length).to.equal(0);
+      expect(connection.conn.verbose).to.equal(false);
+    });
+
+    it('creates and returns an instance of Connection with rest transport', () => {
+      const config = {
+        database: process.env.TKDB || '*LOCAL',
+        username: process.env.TKUSER || '',
+        password: process.env.TKPASS || '',
+        host: process.env.TKHOST || 'localhost',
+        port: process.env.TKPORT || 80,
+        path: process.env.TKPATH || '/cgi-bin/xmlcgi.pgm',
+        transport: 'rest',
+      };
+
+      const connection = new Connection(config);
+
+      expect(connection).to.be.instanceOf(Connection);
+      expect(connection.conn).to.be.an('Object');
+      expect(connection.conn.database).to.equal(config.database);
+      expect(connection.conn.username).to.equal(config.username);
+      expect(connection.conn.password).to.equal(config.password);
+      expect(connection.conn.transport).to.equal('rest');
+      expect(connection.conn.ctl).to.equal('*here');
+      expect(connection.conn.ipc).to.equal('*NA');
+      expect(connection.conn.xslib).to.equal('QXMLSERV');
+      expect(connection.conn.outputBuffer).to.equal(500000);
+      expect(connection.cmds).to.be.an('Array');
+      expect(connection.cmds.length).to.equal(0);
+      expect(connection.conn.verbose).to.equal(false);
+    });
+
     it('creates and returns an instance of iConn with idb transport', () => {
-      const connection = new iConn(opt.database, opt.user, opt.password);
+      const connection = new iConn(opt.database, opt.username, opt.password);
 
       expect(connection).to.be.instanceOf(iConn);
       expect(connection.connection.conn).to.be.an('Object');
-      expect(connection.connection.conn.I_TRANSPORT_DB2_DATABASE).to.equal(opt.database);
-      expect(connection.connection.conn.I_TRANSPORT_DB2_USER).to.equal(opt.user);
-      expect(connection.connection.conn.I_TRANSPORT_DB2_PASSWORD).to.equal(opt.password);
-      expect(connection.connection.conn.I_TRANSPORT).to.equal('DB2');
-      expect(connection.connection.conn.I_TRANSPORT_CTL).to.equal('*here');
-      expect(connection.connection.conn.I_TRANSPORT_IPC).to.equal('*NA');
-      expect(connection.connection.conn.I_XML_SERVICE_LIB).to.equal('QXMLSERV');
+      expect(connection.connection.conn.database).to.equal(opt.database);
+      expect(connection.connection.conn.username).to.equal(opt.username);
+      expect(connection.connection.conn.password).to.equal(opt.password);
+      expect(connection.connection.conn.transport).to.equal('idb');
+      expect(connection.connection.conn.ctl).to.equal('*here');
+      expect(connection.connection.conn.ipc).to.equal('*NA');
+      expect(connection.connection.conn.xslib).to.equal('QXMLSERV');
       expect(connection.connection.cmds).to.be.an('Array');
       expect(connection.connection.cmds.length).to.equal(0);
-      expect(connection.connection.timeout).to.equal(5000);
-      expect(connection.connection.I_DEBUG_VERBOSE).to.equal(false);
+      expect(connection.connection.conn.verbose).to.equal(false);
     });
 
     it('creates and returns an instance of iConn with rest transport', () => {
-      const connection = new iConn(opt.database, opt.user, opt.password, opt);
+      const connection = new iConn(opt.database, opt.username, opt.password, opt);
 
       expect(connection).to.be.instanceOf(iConn);
       expect(connection.connection.conn).to.be.an('Object');
-      expect(connection.connection.conn.I_TRANSPORT_DB2_DATABASE).to.equal(opt.database);
-      expect(connection.connection.conn.I_TRANSPORT_DB2_USER).to.equal(opt.user);
-      expect(connection.connection.conn.I_TRANSPORT_DB2_PASSWORD).to.equal(opt.password);
-      expect(connection.connection.conn.I_TRANSPORT).to.equal('REST');
-      expect(connection.connection.conn.I_TRANSPORT_CTL).to.equal('*here');
-      expect(connection.connection.conn.I_TRANSPORT_IPC).to.equal('*NA');
-      expect(connection.connection.conn.I_XML_SERVICE_LIB).to.equal('QXMLSERV');
-      expect(connection.connection.conn.I_TRANSPORT_REST_XML_OUT_SIZE).to.equal('500000');
+      expect(connection.connection.conn.database).to.equal(opt.database);
+      expect(connection.connection.conn.username).to.equal(opt.username);
+      expect(connection.connection.conn.password).to.equal(opt.password);
+      expect(connection.connection.conn.transport).to.equal('rest');
+      expect(connection.connection.conn.ctl).to.equal('*here');
+      expect(connection.connection.conn.ipc).to.equal('*NA');
+      expect(connection.connection.conn.xslib).to.equal('QXMLSERV');
+      expect(connection.connection.conn.outputBuffer).to.equal(500000);
       expect(connection.connection.cmds).to.be.an('Array');
       expect(connection.connection.cmds.length).to.equal(0);
-      expect(connection.connection.timeout).to.equal(5000);
-      expect(connection.connection.I_DEBUG_VERBOSE).to.equal(false);
+      expect(connection.connection.conn.verbose).to.equal(false);
     });
   });
 
   describe('add', () => {
-    it('appends to xml service request to the command list', () => {
-      const connection = new iConn(opt.database, opt.user, opt.password);
+    it('appends to xml service request to the command list using Connection class', () => {
+      const connection = new Connection(opt);
+
+      connection.add(iSh('ls -lah'));
+      expect(connection.cmds.length).to.equal(1);
+      expect(connection.cmds[0]).to.equal('<sh error=\'fast\'>ls -lah</sh>');
+    });
+
+    it('appends to xml service request to the command list using iConn class', () => {
+      const connection = new iConn(opt.database, opt.username, opt.password);
 
       connection.add(iSh('ls -lah'));
       expect(connection.connection.cmds.length).to.equal(1);
@@ -85,8 +137,17 @@ describe('iConn Class Unit Tests', () => {
 
 
   describe('debug', () => {
-    it('turns verbose mode on/off', () => {
-      const connection = new iConn(opt.database, opt.user, opt.password);
+    it('turns verbose mode on/off using Connection class', () => {
+      const connection = new Connection(opt);
+
+      connection.debug(true);
+      expect(connection.debug()).to.equal(true);
+      connection.debug(false);
+      expect(connection.debug()).to.equal(false);
+    });
+
+    it('turns verbose mode on/off using iConn class', () => {
+      const connection = new iConn(opt.database, opt.username, opt.password);
 
       connection.debug(true);
       expect(connection.debug()).to.equal(true);
@@ -97,26 +158,42 @@ describe('iConn Class Unit Tests', () => {
 
 
   describe('getConnection', () => {
-    it('returns conn (object) property from iConn instance', () => {
-      const connection = new iConn(opt.database, opt.user, opt.password);
+    it('returns conn (object) property from Connection instance', () => {
+      const connection = new Connection(opt);
 
       const returned = connection.getConnection();
 
       expect(returned).to.be.an('Object');
-      expect(returned.I_TRANSPORT_DB2_DATABASE).to.equal(opt.database);
-      expect(returned.I_TRANSPORT_DB2_USER).to.equal(opt.user);
-      expect(returned.I_TRANSPORT_DB2_PASSWORD).to.equal(opt.password);
-      expect(returned.I_TRANSPORT).to.equal('DB2');
-      expect(returned.I_TRANSPORT_CTL).to.equal('*here');
-      expect(returned.I_TRANSPORT_IPC).to.equal('*NA');
-      expect(returned.I_XML_SERVICE_LIB).to.equal('QXMLSERV');
+      expect(returned.database).to.equal(opt.database);
+      expect(returned.username).to.equal(opt.username);
+      expect(returned.password).to.equal(opt.password);
+      expect(returned.transport).to.equal('idb');
+      expect(returned.ctl).to.equal('*here');
+      expect(returned.ipc).to.equal('*NA');
+      expect(returned.xslib).to.equal('QXMLSERV');
+    });
+
+    it('returns conn (object) property from iConn instance', () => {
+      const connection = new iConn(opt.database, opt.username, opt.password);
+
+      const returned = connection.getConnection();
+      console.log(returned);
+
+      expect(returned).to.be.an('Object');
+      expect(returned.database).to.equal(opt.database);
+      expect(returned.username).to.equal(opt.username);
+      expect(returned.password).to.equal(opt.password);
+      expect(returned.transport).to.equal('idb');
+      expect(returned.ctl).to.equal('*here');
+      expect(returned.ipc).to.equal('*NA');
+      expect(returned.xslib).to.equal('QXMLSERV');
     });
   });
 
 
   describe('run', () => {
-    it('invokes transport to execute xml input and returns xml output in callback', () => {
-      const connection = new iConn(opt.database, opt.user, opt.password);
+    it('(Connection) invokes transport to execute xml input and returns xml output in callback', () => {
+      const connection = new Connection(opt.database, opt.username, opt.password);
       const xmlOut = `<?xml version='1.0'?><myscript><sql>
       <query error='fast' conn='conn1' stmt='stmt1'>
       <success><![CDATA[+++ success SELECT LSTNAM, STATE FROM QIWS.QCUSTCDT]]></success>
@@ -147,16 +224,38 @@ describe('iConn Class Unit Tests', () => {
         expect(result).to.equal(xmlOut);
       });
     });
-  });
 
+    it('(iConn) invokes transport to execute xml input and returns xml output in callback', () => {
+      const connection = new iConn(opt.database, opt.username, opt.password);
+      const xmlOut = `<?xml version='1.0'?><myscript><sql>
+      <query error='fast' conn='conn1' stmt='stmt1'>
+      <success><![CDATA[+++ success SELECT LSTNAM, STATE FROM QIWS.QCUSTCDT]]></success>
+      </query>
+      <fetch block='all' desc='on' stmt='stmt1'>
+      <row><data desc='LSTNAM'>Henning</data><data desc='STATE'>TX</data></row>
+      <row><data desc='LSTNAM'>Jones</data><data desc='STATE'>NY</data></row>
+      <row><data desc='LSTNAM'>Vine</data><data desc='STATE'>VT</data></row>
+      <row><data desc='LSTNAM'>Johnson</data><data desc='STATE'>GA</data></row>
+      <row><data desc='LSTNAM'>Tyron</data><data desc='STATE'>NY</data></row>
+      <row><data desc='LSTNAM'>Stevens</data><data desc='STATE'>CO</data></row>
+      <row><data desc='LSTNAM'>Alison</data><data desc='STATE'>MN</data></row>
+      <row><data desc='LSTNAM'>Doe</data><data desc='STATE'>CA</data></row>
+      <row><data desc='LSTNAM'>Thomas</data><data desc='STATE'>WY</data></row>
+      <row><data desc='LSTNAM'>Williams</data><data desc='STATE'>TX</data></row>
+      <row><data desc='LSTNAM'>Lee</data><data desc='STATE'>NY</data></row>
+      <row><data desc='LSTNAM'>Abraham</data><data desc='STATE'>MN</data></row>
+      <success>+++ success stmt1</success>
+      </fetch>
+      <free><success>+++ success </success>
+      </free>
+      </sql>
+      </myscript>`;
 
-  describe('setTimeout', () => {
-    it('override timeout for sync mode', () => {
-      const connection = new iConn(opt.database, opt.user, opt.password);
+      sinon.stub(connection, 'run').yields(xmlOut);
 
-      expect(connection.connection.timeout).to.equal(5000);
-      connection.setTimeout(3);
-      expect(connection.connection.timeout).to.equal(3000);
+      connection.run((result) => {
+        expect(result).to.equal(xmlOut);
+      });
     });
   });
 });

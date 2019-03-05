@@ -20,13 +20,15 @@
 
 const { expect } = require('chai');
 const {
-  iCmd, iSh, iQsh, xmlToJson,
+  iCmd, iSh, iQsh,
 } = require('../../lib/itoolkit');
+
+const { xmlToJson } = require('../../lib/utils');
 
 // Set Env variables or set values here.
 const opt = {
   database: process.env.TKDB || '*LOCAL',
-  user: process.env.TKUSER || '',
+  username: process.env.TKUSER || '',
   password: process.env.TKPASS || '',
   host: process.env.TKHOST || 'localhost',
   port: process.env.TKPORT || 80,
@@ -43,7 +45,8 @@ describe('iSh, iCmd, iQsh, Functional Tests', () => {
       it(`calls CL command using ${transport.name} transport`, (done) => {
         const connection = transport.me;
         connection.add(iCmd('RTVJOBA USRLIBL(?) SYSLIBL(?)'));
-        connection.run((xmlOut) => {
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
           results.forEach((result) => {
             expect(result.success).to.equal(true);
@@ -60,7 +63,8 @@ describe('iSh, iCmd, iQsh, Functional Tests', () => {
         const connection = transport.me;
 
         connection.add(iSh('system -i wrksyssts'));
-        connection.run((xmlOut) => {
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
           // xs does not return success property for iSh or iQsh
           // but on error data property = '\n'
@@ -80,7 +84,8 @@ describe('iSh, iCmd, iQsh, Functional Tests', () => {
       it(`calls QSH command using ${transport.name} transport`, (done) => {
         const connection = transport.me;
         connection.add(iQsh('system wrksyssts'));
-        connection.run((xmlOut) => {
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
           // xs does not return success property for iSh or iQsh
           // but on error data property = '\n'

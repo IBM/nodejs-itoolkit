@@ -25,7 +25,7 @@ const { iPgm, xmlToJson } = require('../../lib/itoolkit');
 // Set Env variables or set values here.
 const opt = {
   database: process.env.TKDB || '*LOCAL',
-  user: process.env.TKUSER || '',
+  username: process.env.TKUSER || '',
   password: process.env.TKPASS || '',
   host: process.env.TKHOST || 'localhost',
   port: process.env.TKPORT || 80,
@@ -60,7 +60,8 @@ describe('iPgm Functional Tests', () => {
         program.addParam('QCCSID', '10A');
         program.addParam(this.errno, { io: 'both', len: 'rec2' });
         connection.add(program);
-        connection.run((xmlOut) => {
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
 
           results.forEach((result) => {
@@ -98,7 +99,8 @@ describe('iPgm Functional Tests', () => {
 
         program.addParam(this.errno, { io: 'both', len: 'rec2', name: paramValue });
         connection.add(program);
-        connection.run((xmlOut) => {
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
 
           results.forEach((result) => {
@@ -123,8 +125,10 @@ describe('iPgm Functional Tests', () => {
         const testValue = 'NEW_NAME';
         program.addReturn('0', '20A', { letying: '4', name: testValue });
         connection.add(program);
-        connection.run((xmlOut) => {
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
+
           expect(results[0].data[1].name).to.equal(testValue);
           done();
         });

@@ -25,7 +25,7 @@ const { iConn, iDataQueue } = require('../../lib/itoolkit');
 // Set Env variables or set values here.
 const opt = {
   database: process.env.TKDB || '*LOCAL',
-  user: process.env.TKUSER || '',
+  username: process.env.TKUSER || '',
   password: process.env.TKPASS || '',
   host: process.env.TKHOST || 'localhost',
   port: process.env.TKPORT || 80,
@@ -94,7 +94,8 @@ describe('iDataQueue Functional Tests', () => {
 
         const dq = new iDataQueue(connection);
 
-        dq.sendToDataQueue(dqName, lib, 'Hello from DQ!', (output) => {
+        dq.sendToDataQueue(dqName, lib, 'Hello from DQ!', (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.equal(true);
           done();
         });
@@ -109,7 +110,8 @@ describe('iDataQueue Functional Tests', () => {
 
         const dq = new iDataQueue(connection);
 
-        dq.receiveFromDataQueue(dqName, lib, 100, (output) => {
+        dq.receiveFromDataQueue(dqName, lib, 100, (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.a('string').and.to.equal('Hello from DQ!');
           done();
         });
@@ -124,7 +126,8 @@ describe('iDataQueue Functional Tests', () => {
 
         const dq = new iDataQueue(connection);
 
-        dq.clearDataQueue(dqName, lib, (output) => {
+        dq.clearDataQueue(dqName, lib, (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.equal(true);
           done();
         });

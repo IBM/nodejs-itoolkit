@@ -25,7 +25,7 @@ const { iConn, iProd } = require('../../lib/itoolkit');
 // Set Env variables or set values here.
 const opt = {
   database: process.env.TKDB || '*LOCAL',
-  user: process.env.TKUSER || '',
+  username: process.env.TKUSER || '',
   password: process.env.TKPASS || '',
   host: process.env.TKHOST || 'localhost',
   port: process.env.TKPORT || 80,
@@ -54,7 +54,8 @@ describe('iProd Functional Tests', () => {
 
         const prod = new iProd(connection);
 
-        prod.getPTFInfo('SI67726', (ptf) => {
+        prod.getPTFInfo('SI67726', (error, ptf) => {
+          expect(error).to.equal(null);
           expect(ptf).to.be.an('Object');
           expect(ptf).to.have.a.property('Product_ID');
           expect(ptf).to.have.a.property('PTF_ID');
@@ -99,7 +100,8 @@ describe('iProd Functional Tests', () => {
 
         const prod = new iProd(connection);
 
-        prod.getProductInfo('5770DG1', (product) => {
+        prod.getProductInfo('5770DG1', (error, product) => {
+          expect(error).to.equal(null);
           expect(product).to.be.an('Object');
           expect(product).to.have.a.property('Reserved');
           expect(product).to.have.a.property('Product_ID');
@@ -137,7 +139,8 @@ describe('iProd Functional Tests', () => {
 
         const prod = new iProd(connection);
 
-        prod.getInstalledProducts((products) => {
+        prod.getInstalledProducts((error, products) => {
+          expect(error).to.equal(null);
           expect(products).to.be.an('Array');
           expect(products.length).to.be.greaterThan(0);
 

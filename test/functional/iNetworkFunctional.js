@@ -25,7 +25,7 @@ const { iConn, iNetwork } = require('../../lib/itoolkit');
 // Set Env variables or set values here.
 const opt = {
   database: process.env.TKDB || '*LOCAL',
-  user: process.env.TKUSER || '',
+  username: process.env.TKUSER || '',
   password: process.env.TKPASS || '',
   host: process.env.TKHOST || 'localhost',
   port: process.env.TKPORT || 80,
@@ -54,7 +54,8 @@ describe('iNetwork Functional Tests', () => {
 
         const net = new iNetwork(connection);
 
-        net.getTCPIPAttr((output) => {
+        net.getTCPIPAttr((error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.an('Object');
           expect(output).to.have.a.property('TCP/IPv4_stack_status');
           expect(output).to.have.a.property('How_long_active');
@@ -99,7 +100,8 @@ describe('iNetwork Functional Tests', () => {
 
         const net = new iNetwork(connection);
 
-        net.getNetInterfaceData('127.0.0.1', (output) => {
+        net.getNetInterfaceData('127.0.0.1', (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.an('Object');
           expect(output).to.have.a.property('Internet_address');
           expect(output).to.have.a.property('Internet_address_binary');
