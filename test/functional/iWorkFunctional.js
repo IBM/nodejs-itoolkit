@@ -20,12 +20,12 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
-const { iConn, iWork } = require('../../lib/itoolkit');
+const { Toolkit } = require('../../lib/itoolkit');
 
 // Set Env variables or set values here.
 const opt = {
   database: process.env.TKDB || '*LOCAL',
-  user: process.env.TKUSER || '',
+  username: process.env.TKUSER || '',
   password: process.env.TKPASS || '',
   host: process.env.TKHOST || 'localhost',
   port: process.env.TKPORT || 80,
@@ -37,24 +37,15 @@ const { returnTransports } = require('../../lib/utils');
 const transports = returnTransports(opt);
 
 describe('iWork Functional Tests', () => {
-  describe('constructor', () => {
-    it('creates and returns an instance of iWork', () => {
-      const connection = new iConn(opt.database, opt.user, opt.password);
-
-      const work = new iWork(connection);
-
-      expect(work).to.be.instanceOf(iWork);
-    });
-  });
-
   describe('getSysValue', () => {
     transports.forEach((transport) => {
       it(`returns the value of system variable using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const work = new iWork(connection);
+        const toolkit = new Toolkit(connection);
 
-        work.getSysValue('QCENTURY', (output) => {
+        toolkit.getSysValue('QCENTURY', (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.a('string').and.to.equal('1');
           done();
         });
@@ -65,13 +56,13 @@ describe('iWork Functional Tests', () => {
   describe('getSysStatus', () => {
     transports.forEach((transport) => {
       it('returns basic system status information about the signed-on users '
-         + `and batch jobs using ${transport.name} transport`,
+           + `and batch jobs using ${transport.name} transport`,
       (done) => {
         const connection = transport.me;
+        const toolkit = new Toolkit(connection);
 
-        const work = new iWork(connection);
-
-        work.getSysStatus((output) => {
+        toolkit.getSysStatus((error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.an('Object');
           expect(output).to.have.a.property('Current_date_and_time');
           expect(output).to.have.a.property('System_name');
@@ -101,9 +92,10 @@ describe('iWork Functional Tests', () => {
         (done) => {
           const connection = transport.me;
 
-          const work = new iWork(connection);
+          const toolkit = new Toolkit(connection);
 
-          work.getSysStatusExt((output) => {
+          toolkit.getSysStatusExt((error, output) => {
+            expect(error).to.equal(null);
             expect(output).to.be.an('Object');
             expect(output).to.have.a.property('Current_date_and_time');
             expect(output).to.have.a.property('System_name');
@@ -148,9 +140,10 @@ describe('iWork Functional Tests', () => {
         (done) => {
           const connection = transport.me;
 
-          const work = new iWork(connection);
+          const toolkit = new Toolkit(connection);
 
-          work.getJobStatus('000000', (output) => {
+          toolkit.getJobStatus('000000', (error, output) => {
+            expect(error).to.equal(null);
             expect(output).to.be.an('Object');
             expect(output).to.have.a.property('Job_status');
             expect(output).to.have.a.property('Fully_qualified_job_name');
@@ -165,9 +158,10 @@ describe('iWork Functional Tests', () => {
       it(`returns info on specfed job using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const work = new iWork(connection);
+        const toolkit = new Toolkit(connection);
 
-        work.getJobInfo('SCPF', 'QSYS', '000000', (output) => {
+        toolkit.getJobInfo('SCPF', 'QSYS', '000000', (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.an('Object');
           expect(output).to.have.a.property('Job_name');
           expect(output).to.have.a.property('User_name');
@@ -257,9 +251,10 @@ describe('iWork Functional Tests', () => {
       it(`returns contents of a data area using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const work = new iWork(connection);
+        const toolkit = new Toolkit(connection);
 
-        work.getDataArea('AMUSSE', 'TESTDA', 20, (output) => {
+        toolkit.getDataArea('NODETKTEST', 'TESTDA', 20, (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.an('Object');
           expect(output).to.have.a.property('Type_of_value_returned');
           expect(output).to.have.a.property('Library_name');

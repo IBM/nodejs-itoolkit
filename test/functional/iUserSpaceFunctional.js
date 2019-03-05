@@ -20,12 +20,12 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
-const { iConn, iUserSpace } = require('../../lib/itoolkit');
+const { Toolkit } = require('../../lib/itoolkit');
 
 // Set Env variables or set values here.
 const opt = {
   database: process.env.TKDB || '*LOCAL',
-  user: process.env.TKUSER || '',
+  username: process.env.TKUSER || '',
   password: process.env.TKPASS || '',
   host: process.env.TKHOST || 'localhost',
   port: process.env.TKPORT || 80,
@@ -39,29 +39,20 @@ const { returnTransports } = require('../../lib/utils');
 const transports = returnTransports(opt);
 
 describe('iUserSpace Functional Tests', () => {
-  describe('constructor', () => {
-    it('returns an instance of iUserSpace', () => {
-      const connection = new iConn(opt.database, opt.user, opt.password);
-
-      const userSpace = new iUserSpace(connection);
-
-      expect(userSpace).to.be.instanceOf(iUserSpace);
-    });
-  });
-
   describe('createUserSpace', () => {
     transports.forEach((transport) => {
       it(`creates a user space using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const userSpace = new iUserSpace(connection);
+        const toolkit = new Toolkit(connection);
 
         const description = 'Node toolkit test user space';
 
         const userSpaceName = `USP${(transport.name).toUpperCase()}`;
 
-        userSpace.createUserSpace(userSpaceName, lib, 'LOG', 50, '*EXCLUDE',
-          description, (output) => {
+        toolkit.createUserSpace(userSpaceName, lib, 'LOG', 50, '*EXCLUDE',
+          description, (error, output) => {
+            expect(error).to.equal(null);
             expect(output).to.be.a('boolean').and.to.equal(true);
             done();
           });
@@ -74,14 +65,15 @@ describe('iUserSpace Functional Tests', () => {
       it(`sets data within the user space using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const userSpace = new iUserSpace(connection);
+        const toolkit = new Toolkit(connection);
 
         const msg = 'Hello from userspace!';
 
         const userSpaceName = `USP${(transport.name).toUpperCase()}`;
 
-        userSpace.setUserSpaceData(userSpaceName, lib, msg.length, msg,
-          (output) => {
+        toolkit.setUserSpaceData(userSpaceName, lib, msg.length, msg,
+          (error, output) => {
+            expect(error).to.equal(null);
             expect(output).to.be.a('boolean').and.to.equal(true);
             done();
           });
@@ -95,11 +87,12 @@ describe('iUserSpace Functional Tests', () => {
         (done) => {
           const connection = transport.me;
 
-          const userSpace = new iUserSpace(connection);
+          const toolkit = new Toolkit(connection);
 
           const userSpaceName = `USP${(transport.name).toUpperCase()}`;
 
-          userSpace.getUserSpaceData(userSpaceName, lib, 21, (output) => {
+          toolkit.getUserSpaceData(userSpaceName, lib, 21, (error, output) => {
+            expect(error).to.equal(null);
             expect(output).to.be.a('string').and.to.equal('Hello from userspace!');
             done();
           });
@@ -112,11 +105,12 @@ describe('iUserSpace Functional Tests', () => {
       it(`removes a user space using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const userSpace = new iUserSpace(connection);
+        const toolkit = new Toolkit(connection);
 
         const userSpaceName = `USP${(transport.name).toUpperCase()}`;
 
-        userSpace.deleteUserSpace(userSpaceName, lib, (output) => {
+        toolkit.deleteUserSpace(userSpaceName, lib, (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.a('boolean').and.to.equal(true);
           done();
         });

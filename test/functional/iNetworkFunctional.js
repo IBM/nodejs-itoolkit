@@ -20,12 +20,12 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
-const { iConn, iNetwork } = require('../../lib/itoolkit');
+const { Toolkit } = require('../../lib/itoolkit');
 
 // Set Env variables or set values here.
 const opt = {
   database: process.env.TKDB || '*LOCAL',
-  user: process.env.TKUSER || '',
+  username: process.env.TKUSER || '',
   password: process.env.TKPASS || '',
   host: process.env.TKHOST || 'localhost',
   port: process.env.TKPORT || 80,
@@ -37,24 +37,15 @@ const { returnTransports } = require('../../lib/utils');
 const transports = returnTransports(opt);
 
 describe('iNetwork Functional Tests', () => {
-  describe('constructor', () => {
-    it('creates and returns an instance of iNetwork', () => {
-      const connection = new iConn(opt.database, opt.user, opt.password);
-
-      const net = new iNetwork(connection);
-
-      expect(net).to.be.instanceOf(iNetwork);
-    });
-  });
-
   describe('getTCPIPAttr', () => {
     transports.forEach((transport) => {
       it(`retrieves TCP/IP Attributes using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const net = new iNetwork(connection);
+        const toolkit = new Toolkit(connection);
 
-        net.getTCPIPAttr((output) => {
+        toolkit.getTCPIPAttr((error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.an('Object');
           expect(output).to.have.a.property('TCP/IPv4_stack_status');
           expect(output).to.have.a.property('How_long_active');
@@ -97,9 +88,10 @@ describe('iNetwork Functional Tests', () => {
       it(`retrieves IPv4 network interface info using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const net = new iNetwork(connection);
+        const toolkit = new Toolkit(connection);
 
-        net.getNetInterfaceData('127.0.0.1', (output) => {
+        toolkit.getNetInterfaceData('127.0.0.1', (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.an('Object');
           expect(output).to.have.a.property('Internet_address');
           expect(output).to.have.a.property('Internet_address_binary');

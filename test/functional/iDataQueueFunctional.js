@@ -20,12 +20,12 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
-const { iConn, iDataQueue } = require('../../lib/itoolkit');
+const { Toolkit } = require('../../lib/itoolkit');
 
 // Set Env variables or set values here.
 const opt = {
   database: process.env.TKDB || '*LOCAL',
-  user: process.env.TKUSER || '',
+  username: process.env.TKUSER || '',
   password: process.env.TKPASS || '',
   host: process.env.TKHOST || 'localhost',
   port: process.env.TKPORT || 80,
@@ -78,23 +78,16 @@ describe('iDataQueue Functional Tests', () => {
       console.log('CREATED DQ!');
     }
   });
-  describe('constructor', () => {
-    it('creates and returns an instance of iDataQueue', () => {
-      const connection = new iConn(opt.database, opt.user, opt.password);
-
-      const dq = new iDataQueue(connection);
-      expect(dq).to.be.instanceOf(iDataQueue);
-    });
-  });
 
   describe('sendToDataQueue', () => {
     transports.forEach((transport) => {
       it(`sends data to specified DQ using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const dq = new iDataQueue(connection);
+        const toolkit = new Toolkit(connection);
 
-        dq.sendToDataQueue(dqName, lib, 'Hello from DQ!', (output) => {
+        toolkit.sendToDataQueue(dqName, lib, 'Hello from DQ!', (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.equal(true);
           done();
         });
@@ -107,9 +100,10 @@ describe('iDataQueue Functional Tests', () => {
       it(`receives data from specfied DQ using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const dq = new iDataQueue(connection);
+        const toolkit = new Toolkit(connection);
 
-        dq.receiveFromDataQueue(dqName, lib, 100, (output) => {
+        toolkit.receiveFromDataQueue(dqName, lib, 100, (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.a('string').and.to.equal('Hello from DQ!');
           done();
         });
@@ -122,9 +116,10 @@ describe('iDataQueue Functional Tests', () => {
       it(`clears the specifed DQ using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const dq = new iDataQueue(connection);
+        const toolkit = new Toolkit(connection);
 
-        dq.clearDataQueue(dqName, lib, (output) => {
+        toolkit.clearDataQueue(dqName, lib, (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.equal(true);
           done();
         });

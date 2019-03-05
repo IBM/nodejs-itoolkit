@@ -20,12 +20,12 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
-const { iConn, iObj } = require('../../lib/itoolkit');
+const { Toolkit } = require('../../lib/itoolkit');
 
 // Set Env variables or set values here.
 const opt = {
   database: process.env.TKDB || '*LOCAL',
-  user: process.env.TKUSER || '',
+  username: process.env.TKUSER || '',
   password: process.env.TKPASS || '',
   host: process.env.TKHOST || 'localhost',
   port: process.env.TKPORT || 80,
@@ -37,24 +37,15 @@ const { returnTransports } = require('../../lib/utils');
 const transports = returnTransports(opt);
 
 describe('iObj Functional Tests', () => {
-  describe('constructor', () => {
-    it('creates and returns an instance of iObj', () => {
-      const connection = new iConn(opt.database, opt.user, opt.password);
-
-      const obj = new iObj(connection);
-
-      expect(obj).to.be.instanceOf(iObj);
-    });
-  });
-
   describe('retrUsrAuth', () => {
     transports.forEach((transport) => {
       it(`returns uses's authority for an object using ${transport.name} tranport`, (done) => {
         const connection = transport.me;
 
-        const obj = new iObj(connection);
+        const toolkit = new Toolkit(connection);
 
-        obj.retrUsrAuth('*PUBLIC', '*PGM', 'XMLCGI', 'QXMLSERV', (output) => {
+        toolkit.retrUsrAuth('*PUBLIC', '*PGM', 'XMLCGI', 'QXMLSERV', (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.an('Object');
           expect(output).to.have.a.property('Object_authority_/_Data_authority');
           expect(output).to.have.a.property('Authorization_list_management');
@@ -102,9 +93,10 @@ describe('iObj Functional Tests', () => {
       it(`returns command info using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const obj = new iObj(connection);
+        const toolkit = new Toolkit(connection);
 
-        obj.retrCmdInfo('CRTLIB', '*LIBL', (output) => {
+        toolkit.retrCmdInfo('CRTLIB', '*LIBL', (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.an('Object');
           expect(output).to.have.a.property('Command_name');
           expect(output).to.have.a.property('Command_library_name');
@@ -156,9 +148,10 @@ describe('iObj Functional Tests', () => {
       it(`returns program info using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const obj = new iObj(connection);
+        const toolkit = new Toolkit(connection);
 
-        obj.retrPgmInfo('XMLCGI', 'QXMLSERV', (output) => {
+        toolkit.retrPgmInfo('XMLCGI', 'QXMLSERV', (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.an('Object');
           expect(output).to.have.a.property('Program_name');
           expect(output).to.have.a.property('Program_library_name');
@@ -235,9 +228,10 @@ describe('iObj Functional Tests', () => {
       it(`returns service program info using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const obj = new iObj(connection);
+        const toolkit = new Toolkit(connection);
 
-        obj.retrSrvPgmInfo('QZSRVSSL', 'QHTTPSVR', (output) => {
+        toolkit.retrSrvPgmInfo('QZSRVSSL', 'QHTTPSVR', (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.an('Object');
           expect(output).to.have.a.property('Service_program_name');
           expect(output).to.have.a.property('Service_program_name');
@@ -294,9 +288,10 @@ describe('iObj Functional Tests', () => {
       it(`returns specified user profile info using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const obj = new iObj(connection);
+        const toolkit = new Toolkit(connection);
 
-        obj.retrUserInfo('QSYS', (output) => {
+        toolkit.retrUserInfo('QSYS', (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.an('Object');
           expect(output).to.have.a.property('User_profile_name');
           expect(output).to.have.a.property('Previous_sign-on_date_and_time');
@@ -324,9 +319,10 @@ describe('iObj Functional Tests', () => {
       it(`retrieves info for users who are authorized to an object using ${transport.name} transpsort`, (done) => {
         const connection = transport.me;
 
-        const obj = new iObj(connection);
+        const toolkit = new Toolkit(connection);
 
-        obj.retrUserAuthToObj('/home', (output) => {
+        toolkit.retrUserAuthToObj('/home', (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.an('Object');
           expect(output).to.have.a.property('Profile_name');
           expect(output).to.have.a.property('User_or_group_indicator');
@@ -354,9 +350,10 @@ describe('iObj Functional Tests', () => {
       it(`appends lib to user's lib list using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const obj = new iObj(connection);
+        const toolkit = new Toolkit(connection);
 
-        obj.addToLibraryList('QHTTPSVR', (output) => {
+        toolkit.addToLibraryList('QHTTPSVR', (error, output) => {
+          expect(error).to.equal(null);
           expect(output).to.be.a('boolean').and.to.equal(true);
           done();
         });

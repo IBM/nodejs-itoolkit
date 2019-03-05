@@ -20,19 +20,19 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
-const { iSql } = require('../../lib/itoolkit');
+const { SqlCall } = require('../../lib/itoolkit');
 
-describe('iSql Class Unit Tests', () => {
+describe('SqlCall Class Unit Tests', () => {
   describe('constructor', () => {
-    it('creates returns an instance of iSql', () => {
-      const sql = new iSql();
+    it('creates returns an instance of SqlCall', () => {
+      const sql = new SqlCall();
 
-      expect(sql).to.be.instanceOf(iSql);
+      expect(sql).to.be.instanceOf(SqlCall);
     });
   });
   describe('toXML', () => {
     it('returns current sql XML', () => {
-      const sql = new iSql();
+      const sql = new SqlCall();
 
       const expectedXML = '<sql></sql>';
 
@@ -41,7 +41,7 @@ describe('iSql Class Unit Tests', () => {
   });
   describe('addQuery', () => {
     it('appends query to sql XML', () => {
-      const sql = new iSql();
+      const sql = new SqlCall();
 
       const expectedXML = '<sql><query error=\'on\'>select * from QIWS.QCUSTCDT</query></sql>';
 
@@ -52,7 +52,7 @@ describe('iSql Class Unit Tests', () => {
   });
   describe('fetch', () => {
     it('appends fetch to sql XML', () => {
-      const sql = new iSql();
+      const sql = new SqlCall();
 
       const expectedXML = '<sql><fetch block=\'all\' desc=\'on\'></fetch></sql>';
 
@@ -62,7 +62,7 @@ describe('iSql Class Unit Tests', () => {
   });
   describe('commit', () => {
     it('appends commit to sql XML', () => {
-      const sql = new iSql();
+      const sql = new SqlCall();
 
       const expectedXML = '<sql><commit action=\'commit\'></commit></sql>';
 
@@ -72,7 +72,7 @@ describe('iSql Class Unit Tests', () => {
   });
   describe('prepare', () => {
     it('appends prepare to sql XML', () => {
-      const sql = new iSql();
+      const sql = new SqlCall();
 
       const expectedXML = '<sql><prepare error=\'fast\'>SELECT * FROM QIWS.QCUSTCDT WHERE BALDUE > ?</prepare></sql>';
 
@@ -83,7 +83,7 @@ describe('iSql Class Unit Tests', () => {
 
   describe('execute', () => {
     it('appends execute to sql XML', () => {
-      const sql = new iSql();
+      const sql = new SqlCall();
 
       const expectedXML = '<sql><execute error=\'fast\'><parm io=\'in\'>30</parm></execute></sql>';
 
@@ -93,7 +93,7 @@ describe('iSql Class Unit Tests', () => {
   });
   describe('connect', () => {
     it('appends connect to sql XML', () => {
-      const sql = new iSql();
+      const sql = new SqlCall();
 
 
       const expectedXML = '<sql><connect db=\'local\' uid=\'me\' pwd=\'mypass\' options=\'opt1\'></connect></sql>';
@@ -104,7 +104,7 @@ describe('iSql Class Unit Tests', () => {
   });
   describe('setOptions', () => {
     it('appends options to sql XML', () => {
-      const sql = new iSql();
+      const sql = new SqlCall();
 
       const expectedXML = '<sql><options autocommit=\'on\' naming=\'system\'></options></sql>';
 
@@ -115,7 +115,7 @@ describe('iSql Class Unit Tests', () => {
   });
   describe('tables', () => {
     it('appends tables to sql XML', () => {
-      const sql = new iSql();
+      const sql = new SqlCall();
 
       const expectedXML = '<sql><tables><parm></parm><parm>QIWS</parm><parm></parm><parm></parm></tables></sql>';
       // catalog, schema, table, table type
@@ -125,7 +125,7 @@ describe('iSql Class Unit Tests', () => {
   });
   describe('tablePriv', () => {
     it('appends tablepriv to sql XML', () => {
-      const sql = new iSql();
+      const sql = new SqlCall();
 
       const expectedXML = '<sql><tablepriv><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm></tablepriv></sql>';
       // catalog, schema, table
@@ -135,7 +135,7 @@ describe('iSql Class Unit Tests', () => {
   });
   describe('columns', () => {
     it('appends columns to sql XML', () => {
-      const sql = new iSql();
+      const sql = new SqlCall();
 
       const expectedXML = '<sql><columns><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm><parm></parm></columns></sql>';
       // catalog, schema, table, column
@@ -145,7 +145,7 @@ describe('iSql Class Unit Tests', () => {
   });
   describe('columnPriv', () => {
     it('appends columnpriv to sql XML', () => {
-      const sql = new iSql();
+      const sql = new SqlCall();
 
       const expectedXML = '<sql><columnpriv><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm><parm></parm></columnpriv></sql>';
       // catalog, schema, table, column
@@ -155,7 +155,7 @@ describe('iSql Class Unit Tests', () => {
   });
   describe('procedures', () => {
     it('appends procedures to sql XML', () => {
-      const sql = new iSql();
+      const sql = new SqlCall();
 
       const expectedXML = '<sql><procedures><parm></parm><parm>QSYS2</parm><parm>TCPIP_INFO</parm></procedures></sql>';
       // catalog, schema, procedure
@@ -167,7 +167,7 @@ describe('iSql Class Unit Tests', () => {
     it('appends pColumns to sql XML', () => {
       // procedure columns:
 
-      const sql = new iSql();
+      const sql = new SqlCall();
 
       const expectedXML = '<sql><pcolumns><parm></parm><parm>QSYS2</parm><parm>QCMDEXC</parm><parm>COMMAND</parm></pcolumns></sql>';
       // catalog, schema, procedure, column
@@ -177,7 +177,7 @@ describe('iSql Class Unit Tests', () => {
   });
   describe('primaryKeys', () => {
     it('appends primarykeys to sql XML', () => {
-      const sql = new iSql();
+      const sql = new SqlCall();
 
       const expectedXML = '<sql><primarykeys><parm></parm><parm>QUSRSYS</parm><parm>QASZRAIRX</parm></primarykeys></sql>';
       // catalog, schema, table
@@ -187,7 +187,7 @@ describe('iSql Class Unit Tests', () => {
   });
   describe('foreignKeys', () => {
     it('appends foreignkeys to sql XML', () => {
-      const sql = new iSql();
+      const sql = new SqlCall();
 
       const expectedXML = '<sql><foreignkeys><parm></parm><parm>QUSRSYS</parm><parm>QASZRAIRC</parm><parm></parm><parm>QUSRSYS</parm><parm>QASZRAIRX</parm></foreignkeys></sql>';
 
@@ -199,7 +199,7 @@ describe('iSql Class Unit Tests', () => {
   });
   describe('statistics', () => {
     it('appends statistics to sql XML', () => {
-      const sql = new iSql();
+      const sql = new SqlCall();
 
       const expectedXML = '<sql><statistics><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm><parm>all</parm></statistics></sql>';
       // catalog, schema, table, all | unique
@@ -209,7 +209,7 @@ describe('iSql Class Unit Tests', () => {
   });
   describe('special', () => {
     it('appends special to sql XML', () => {
-      const sql = new iSql();
+      const sql = new SqlCall();
 
       const expectedXML = '<sql><special><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm><parm>row</parm><parm>no</parm></special></sql>';
       // catalog, schema, table, row | transaction | session, no | unique
@@ -219,7 +219,7 @@ describe('iSql Class Unit Tests', () => {
   });
   describe('count', () => {
     it('appends count to sql XML', () => {
-      const sql = new iSql();
+      const sql = new SqlCall();
 
       const expectedXML = '<sql><count desc=\'both\'></count></sql>';
       // catalog, schema, table, all | unique
@@ -229,7 +229,7 @@ describe('iSql Class Unit Tests', () => {
   });
   describe('rowCount', () => {
     it('appends rowcount to sql XML', () => {
-      const sql = new iSql();
+      const sql = new SqlCall();
 
       const expectedXML = '<sql><rowcount></rowcount></sql>';
       // catalog, schema, table, all | unique
@@ -239,7 +239,7 @@ describe('iSql Class Unit Tests', () => {
   });
   describe('free', () => {
     it('appends free to sql XML', () => {
-      const sql = new iSql();
+      const sql = new SqlCall();
 
       const expectedXML = '<sql><free></free></sql>';
       // catalog, schema, table, all | unique
@@ -249,7 +249,7 @@ describe('iSql Class Unit Tests', () => {
   });
   describe('describe', () => {
     it('appends describe to sql XML', () => {
-      const sql = new iSql();
+      const sql = new SqlCall();
 
       const expectedXML = '<sql><describe desc=\'both\'></describe></sql>';
 
