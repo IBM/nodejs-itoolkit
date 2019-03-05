@@ -20,7 +20,7 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
-const { iPgm } = require('../../lib/itoolkit');
+const { ProgramCall } = require('../../lib/itoolkit');
 
 const outBuf = [
   [0, '10i0'],
@@ -39,17 +39,17 @@ const errno = [
   ['', '1A'],
 ];
 
-describe('iPgm Class Unit Tests', () => {
+describe('ProgramCall Class Unit Tests', () => {
   describe('constructor', () => {
-    it('creates and returns an instance of iPgm with lib and function set', () => {
-      const pgm = new iPgm('QTOCNETSTS');
-      expect(pgm).to.be.instanceOf(iPgm);
+    it('creates and returns an instance of ProgramCall with lib and function set', () => {
+      const pgm = new ProgramCall('QTOCNETSTS');
+      expect(pgm).to.be.instanceOf(ProgramCall);
     });
   });
 
   describe('toXML', () => {
     it('returns pgm XML', () => {
-      const pgm = new iPgm('QTOCNETSTS',
+      const pgm = new ProgramCall('QTOCNETSTS',
         {
           lib: 'QSYS',
           func: 'QtoRtvTCPA',
@@ -64,7 +64,7 @@ describe('iPgm Class Unit Tests', () => {
 
   describe('addParam', () => {
     it('appends param to pgm xml', () => {
-      const pgm = new iPgm('QTOCNETSTS',
+      const pgm = new ProgramCall('QTOCNETSTS',
         {
           lib: 'QSYS',
           func: 'QtoRtvTCPA',
@@ -135,7 +135,7 @@ describe('iPgm Class Unit Tests', () => {
     });
 
     it('regular <parm> contains by=\'val\'', () => {
-      const pgm = new iPgm('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
+      const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
       pgm.addParam('', '1A', { by: 'val' });
       pgm.addReturn('', '2A', { name: 'output' });
@@ -145,7 +145,7 @@ describe('iPgm Class Unit Tests', () => {
     });
 
     it('data structure <parm> contains by=\'val\'', () => {
-      const pgm = new iPgm('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
+      const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
       const params = [
         [0, '3s0'],
@@ -160,7 +160,7 @@ describe('iPgm Class Unit Tests', () => {
     });
 
     it('regular <parm> contains by=\'val\', with io=\'both\'', () => {
-      const pgm = new iPgm('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
+      const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
       pgm.addParam('', '1A', { by: 'val', io: 'both' });
       pgm.addReturn('', '2A', { name: 'output' });
@@ -171,7 +171,7 @@ describe('iPgm Class Unit Tests', () => {
     });
 
     it('data structure <parm> contains by=\'val\', with io=\'both\'', () => {
-      const pgm = new iPgm('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
+      const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
       const params = [
         [0, '3s0'],
@@ -190,7 +190,7 @@ describe('iPgm Class Unit Tests', () => {
 
   describe('addReturn', () => {
     it('appends return to pgm xml', () => {
-      const pgm = new iPgm('QTOCNETSTS',
+      const pgm = new ProgramCall('QTOCNETSTS',
         {
           lib: 'QSYS',
           func: 'QtoRtvTCPA',

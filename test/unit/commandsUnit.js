@@ -18,16 +18,16 @@
 
 /* eslint-env mocha */
 const { expect } = require('chai');
-const { iSh, iQsh, iCmd } = require('../../lib/itoolkit');
+const { CommandCall } = require('../../lib/itoolkit');
 
-describe('iSh, iCmd, iQsh, Unit Tests', () => {
-  describe('iSh function', () => {
+describe('Command Call Unit Tests', () => {
+  describe('SH command tests', () => {
     it('accepts command input and returns <sh> XML output', () => {
-      const sh = iSh('ls -lah');
+      const command = new CommandCall({ command: 'ls -lah', type: 'sh' });
 
       const expectedXML = '<sh error=\'fast\'>ls -lah</sh>';
 
-      expect(sh).to.be.a('string').and.to.equal(expectedXML);
+      expect(command.toXML()).to.be.a('string').and.to.equal(expectedXML);
     });
 
     it('accepts command input and options returns <sh> with optional attributes', () => {
@@ -35,21 +35,21 @@ describe('iSh, iCmd, iQsh, Unit Tests', () => {
         error: 'on', before: '65535', after: '37', rows: 'on',
       };
 
-      const sh = iSh('ls -lah', options);
+      const command = new CommandCall({ command: 'ls -lah', type: 'sh', options });
 
       const expectedXML = '<sh rows=\'on\' before=\'65535\' after=\'37\' error=\'on\'>ls -lah</sh>';
 
-      expect(sh).to.be.a('string').and.to.equal(expectedXML);
+      expect(command.toXML()).to.be.a('string').and.to.equal(expectedXML);
     });
   });
 
-  describe('iCmd function', () => {
+  describe('CL command tests', () => {
     it('accepts command input and returns <cmd> XML output', () => {
-      const cmd = iCmd('RTVJOBA USRLIBL(?) SYSLIBL(?)');
+      const command = new CommandCall({ command: 'RTVJOBA USRLIBL(?) SYSLIBL(?)', type: 'cl' });
 
       const expectedXML = '<cmd exec=\'rexx\' error=\'fast\'>RTVJOBA USRLIBL(?) SYSLIBL(?)</cmd>';
 
-      expect(cmd).to.be.a('string').and.to.equal(expectedXML);
+      expect(command.toXML()).to.be.a('string').and.to.equal(expectedXML);
     });
 
     it('accepts command input and options returns <cmd> with optional attributes', () => {
@@ -57,34 +57,33 @@ describe('iSh, iCmd, iQsh, Unit Tests', () => {
         exec: 'cmd', error: 'on', before: '65535', after: '37', hex: 'on',
       };
 
-      const cmd = iCmd('RTVJOBA USRLIBL(?) SYSLIBL(?)', options);
+      const command = new CommandCall({ command: 'RTVJOBA USRLIBL(?) SYSLIBL(?)', type: 'cl', options });
 
       const expectedXML = '<cmd exec=\'cmd\' hex=\'on\' before=\'65535\' after=\'37\' error=\'on\''
                           + '>RTVJOBA USRLIBL(?) SYSLIBL(?)</cmd>';
 
-      expect(cmd).to.be.a('string').and.to.equal(expectedXML);
+      expect(command.toXML()).to.be.a('string').and.to.equal(expectedXML);
     });
   });
 
-  describe('iQsh function', () => {
+  describe('QSH command tests', () => {
     it('accepts command input and returns <qsh> XML output', () => {
-      const qsh = iQsh('RTVJOBA USRLIBL(?) SYSLIBL(?)');
+      const command = new CommandCall({ command: 'ls -lah', type: 'qsh' });
 
-      const expectedXML = '<qsh error=\'fast\'>RTVJOBA USRLIBL(?) SYSLIBL(?)</qsh>';
+      const expectedXML = '<qsh error=\'fast\'>ls -lah</qsh>';
 
-      expect(qsh).to.be.a('string').and.to.equal(expectedXML);
+      expect(command.toXML()).to.be.a('string').and.to.equal(expectedXML);
     });
 
     it('accepts command input and options returns <qsh> with optional attributes', () => {
       const options = {
-        exec: 'cmd', error: 'on', before: '65535', after: '37', hex: 'on', rows: 'on',
+        error: 'on', before: '65535', after: '37', rows: 'on',
       };
-      const qsh = iCmd('RTVJOBA USRLIBL(?) SYSLIBL(?)', options);
+      const command = new CommandCall({ command: 'ls -lah', type: 'qsh', options });
 
-      const expectedXML = '<cmd exec=\'cmd\' hex=\'on\' before=\'65535\' after=\'37\' '
-                        + 'error=\'on\'>RTVJOBA USRLIBL(?) SYSLIBL(?)</cmd>';
+      const expectedXML = '<qsh rows=\'on\' before=\'65535\' after=\'37\' error=\'on\'>ls -lah</qsh>';
 
-      expect(qsh).to.be.a('string').and.to.equal(expectedXML);
+      expect(command.toXML()).to.be.a('string').and.to.equal(expectedXML);
     });
   });
 });

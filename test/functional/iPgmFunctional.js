@@ -20,29 +20,28 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
-const { iPgm, xmlToJson } = require('../../lib/itoolkit');
+const { ProgramCall } = require('../../lib/itoolkit');
+const { xmlToJson, returnTransports } = require('../../lib/utils');
 
 // Set Env variables or set values here.
 const opt = {
   database: process.env.TKDB || '*LOCAL',
-  user: process.env.TKUSER || '',
+  username: process.env.TKUSER || '',
   password: process.env.TKPASS || '',
   host: process.env.TKHOST || 'localhost',
   port: process.env.TKPORT || 80,
   path: process.env.TKPATH || '/cgi-bin/xmlcgi.pgm',
 };
 
-const { returnTransports } = require('../../lib/utils');
-
 const transports = returnTransports(opt);
 
-describe('iPgm Functional Tests', () => {
-  describe('Test iPgm()', () => {
+describe('ProgramCall Functional Tests', () => {
+  describe('Test ProgramCall()', () => {
     transports.forEach((transport) => {
       it(`calls QWCRSVAL program checks if it ran successfully using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const program = new iPgm('QWCRSVAL', { lib: 'QSYS' });
+        const program = new ProgramCall('QWCRSVAL', { lib: 'QSYS' });
 
         const outBuf = [
           [0, '10i0'],
@@ -60,7 +59,8 @@ describe('iPgm Functional Tests', () => {
         program.addParam('QCCSID', '10A');
         program.addParam(this.errno, { io: 'both', len: 'rec2' });
         connection.add(program);
-        connection.run((xmlOut) => {
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
 
           results.forEach((result) => {
@@ -73,12 +73,12 @@ describe('iPgm Functional Tests', () => {
   });
 
 
-  describe('Test iPgm()', () => {
+  describe('Test ProgramCall()', () => {
     transports.forEach((transport) => {
       it(`calls QWCRSVAL program and returns arbitrarily named parameter using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const program = new iPgm('QWCRSVAL', { lib: 'QSYS' });
+        const program = new ProgramCall('QWCRSVAL', { lib: 'QSYS' });
 
         const outBuf = [
           [0, '10i0'],
@@ -98,7 +98,8 @@ describe('iPgm Functional Tests', () => {
 
         program.addParam(this.errno, { io: 'both', len: 'rec2', name: paramValue });
         connection.add(program);
-        connection.run((xmlOut) => {
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
 
           results.forEach((result) => {
@@ -110,21 +111,23 @@ describe('iPgm Functional Tests', () => {
     });
   });
 
-  describe.skip('Test iPgm()', () => {
+  describe.skip('Test ProgramCall()', () => {
     // Skip for now ZZSRV6 program requires XMLSERVICE built with tests
     // Refer to test/rpg/zzsrv6.rpgle
     transports.forEach((transport) => {
       it.skip(`Should be successful with addReturn arbitrary attribute specified using using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const program = new iPgm('ZZSRV6', { lib: 'XMLSERVICE', func: 'ZZVARY4' });
+        const program = new ProgramCall('ZZSRV6', { lib: 'XMLSERVICE', func: 'ZZVARY4' });
 
         program.addParam('Gill', '10A', { letying: '4' });
         const testValue = 'NEW_NAME';
         program.addReturn('0', '20A', { letying: '4', name: testValue });
         connection.add(program);
-        connection.run((xmlOut) => {
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
+
           expect(results[0].data[1].name).to.equal(testValue);
           done();
         });
