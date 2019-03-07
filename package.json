@@ -41,11 +41,7 @@
     "eslint": "^5.12.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.15.0",
-    "mocha": "^5.2.0",
-    "sinon": "^7.2.3"
-  },
-  "optionalDependencies": {
     "idb-connector": "^1.1.8",
-    "idb-pconnector": "^1.0.2"
+    "mocha": "^5.2.0"
   }
 }
