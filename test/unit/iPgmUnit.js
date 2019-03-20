@@ -133,6 +133,58 @@ describe('iPgm Class Unit Tests', () => {
 
       expect(pgm.toXML()).to.equal(expectedXML);
     });
+
+    it('regular <parm> contains by=\'val\'', () => {
+      const pgm = new iPgm('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
+
+      pgm.addParam('', '1A', { by: 'val' });
+      pgm.addReturn('', '2A', { name: 'output' });
+
+      const lookAtXML = pgm.toXML();
+      expect(lookAtXML).to.match(/<parm .*by='val'.*>/);
+    });
+
+    it('data structure <parm> contains by=\'val\'', () => {
+      const pgm = new iPgm('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
+
+      const params = [
+        [0, '3s0'],
+        [0, '7s0', { name: 'ds_fld2' }],
+      ];
+
+      pgm.addParam(params, { name: 'inds', by: 'val' });
+      pgm.addReturn('', '2A', { name: 'output' });
+
+      const lookAtXML = pgm.toXML();
+      expect(lookAtXML).to.match(/<parm .*by='val'.*>/);
+    });
+
+    it('regular <parm> contains by=\'val\', with io=\'both\'', () => {
+      const pgm = new iPgm('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
+
+      pgm.addParam('', '1A', { by: 'val', io: 'both' });
+      pgm.addReturn('', '2A', { name: 'output' });
+
+      const lookAtXML = pgm.toXML();
+      expect(lookAtXML).to.match(/<parm .*by='val'.*>/);
+      expect(lookAtXML).to.match(/<parm .*io='both'.*>/);
+    });
+
+    it('data structure <parm> contains by=\'val\', with io=\'both\'', () => {
+      const pgm = new iPgm('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
+
+      const params = [
+        [0, '3s0'],
+        [0, '7s0', { name: 'ds_fld2' }],
+      ];
+
+      pgm.addParam(params, { name: 'inds', by: 'val', io: 'both' });
+      pgm.addReturn('', '2A', { name: 'output' });
+
+      const lookAtXML = pgm.toXML();
+      expect(lookAtXML).to.match(/<parm .*by='val'.*>/);
+      expect(lookAtXML).to.match(/<parm .*io='both'.*>/);
+    });
   });
 
 
