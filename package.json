@@ -1,7 +1,7 @@
 {
   "name": "itoolkit",
   "version": "0.1.6",
-  "description": "Wrapper over XMLSERVICE for access to all things IBM i",
+  "description": "XMLSERVICE wrapper to access to all things IBM i",
   "main": "lib/itoolkit.js",
   "directories": {
     "lib": "lib",
@@ -36,9 +36,12 @@
       "email": "aaronbartell@gmail.com"
     }
   ],
+  "dependencies": {
+    "depd": "2.0.0"
+  },
   "devDependencies": {
     "chai": "^4.1.2",
-    "eslint": "^5.12.1",
+    "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.15.0",
     "mocha": "^5.2.0",
@@ -46,6 +49,7 @@
   },
   "optionalDependencies": {
     "idb-connector": "^1.1.8",
-    "idb-pconnector": "^1.0.2"
+    "idb-pconnector": "^1.0.2",
+    "ssh2": "0.8.2"
   }
 }
