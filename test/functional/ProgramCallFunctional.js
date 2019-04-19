@@ -20,17 +20,25 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
+const { readFileSync } = require('fs');
 const { ProgramCall } = require('../../lib/itoolkit');
 const { xmlToJson, returnTransports } = require('../../lib/utils');
 
 // Set Env variables or set values here.
+let privateKey;
+if (process.env.TKPK) {
+  privateKey = readFileSync(process.env.TKPK, 'utf-8');
+}
 const opt = {
   database: process.env.TKDB || '*LOCAL',
   username: process.env.TKUSER || '',
   password: process.env.TKPASS || '',
   host: process.env.TKHOST || 'localhost',
-  port: process.env.TKPORT || 80,
+  port: process.env.TKPORT,
   path: process.env.TKPATH || '/cgi-bin/xmlcgi.pgm',
+  privateKey,
+  passphrase: process.env.TKPHRASE,
+  verbose: !!process.env.TKVERBOSE,
 };
 
 const transports = returnTransports(opt);
@@ -53,11 +61,19 @@ describe('ProgramCall Functional Tests', () => {
           [0, '10i0'],
           [0, '10i0'],
         ];
+
+        const errno = [
+          [0, '10i0'],
+          [0, '10i0', { setlen: 'rec2' }],
+          ['', '7A'],
+          ['', '1A'],
+        ];
+
         program.addParam(outBuf, { io: 'out' });
         program.addParam(66, '10i0');
         program.addParam(1, '10i0');
         program.addParam('QCCSID', '10A');
-        program.addParam(this.errno, { io: 'both', len: 'rec2' });
+        program.addParam(errno, { io: 'both', len: 'rec2' });
         connection.add(program);
         connection.run((error, xmlOut) => {
           expect(error).to.equal(null);
@@ -90,13 +106,21 @@ describe('ProgramCall Functional Tests', () => {
           [0, '10i0'],
           [0, '10i0'],
         ];
+
+        const errno = [
+          [0, '10i0'],
+          [0, '10i0', { setlen: 'rec2' }],
+          ['', '7A'],
+          ['', '1A'],
+        ];
+
         program.addParam(outBuf, { io: 'out' });
         program.addParam(66, '10i0');
         program.addParam(1, '10i0');
         program.addParam('QCCSID', '10A');
         const paramValue = 'errno';
 
-        program.addParam(this.errno, { io: 'both', len: 'rec2', name: paramValue });
+        program.addParam(errno, { io: 'both', len: 'rec2', name: paramValue });
         connection.add(program);
         connection.run((error, xmlOut) => {
           expect(error).to.equal(null);
