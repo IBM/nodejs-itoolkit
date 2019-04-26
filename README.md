@@ -1,84 +1,273 @@
-# Node.js Toolkit
-
-#### The toolkit is a Node.js wrapper over the XMLSERVICE open source project from IBM. 
+# Node.js iToolkit <!-- omit in toc -->
 
 [![NPM](https://nodei.co/npm/itoolkit.png?downloads=true&downloadRank=true)](https://nodei.co/npm/itoolkit/)
 
-# Installation  
 
-Installation is done from a PASE shell.
+`itoolkit` is a Node.js interface to [XMLSERVICE](https://github.com/IBM/xmlservice) to access all things IBM i.
+
+# Table of Contents <!-- omit in toc -->
+- [Installation](#installation)
+  - [Main Classes](#main-classes)
+    - [Connection](#connection)
+      - [Transports](#transports)
+        - [idb-connector](#idb-connector)
+        - [REST](#rest)
+        - [SSH](#ssh)
+    - [ProgramCall](#programcall)
+      - [Example](#example)
+    - [CommandCall](#commandcall)
+      - [Example](#example-1)
+    - [SqlCall](#sqlcall)
+      - [Example](#example-2)
+  - [Utility Toolkit Functions](#utility-toolkit-functions)
+- [Documentation](#documentation)
+- [Testing](#testing)
+- [Contributing](#contributing)
+- [License](#license)
+
+# Installation
+
+Before installing, download and install Node.js
 
 ```sh
     $ npm i itoolkit
 ```
 
-# Quick Example
+## Main Classes
 
-## Example 1: Basic APIs
-```js
-	var xt = require("itoolkit");
-	var conn = new xt.iConn("*LOCAL", "USERNAME", "PASSWORD");
+### Connection
+The Connection class is used to transport xml input and return xml output.
 
-	function cbJson(str) {
-	  var result = xt.xmlToJson(str);
-	  console.log(JSON.stringify(result, " ", 2))
-	}
+#### Transports
+Supported transports include [idb-connector](https://github.com/IBM/nodejs-idb-connector), REST, and SSH.
 
-	conn.add(xt.iCmd("RTVJOBA USRLIBL(?) SYSLIBL(?)"));  /* Test iCmd */
-	conn.add(xt.iSh("system -i wrksyssts"));	/* Test iSh */
-	var pgm = new xt.iPgm("QWCRSVAL", {"lib":"QSYS"}); /* Test iPgm */
-	var outBuf = [
-			[0, "10i0"],
-			[0, "10i0"],
-			["", "36h"],
-			["", "10A"],
-			["", "1A"],
-			["", "1A"],
-			[0, "10i0"],
-			[0, "10i0"]
-		];
-	pgm.addParam(outBuf, {"io":"out"});
-	pgm.addParam(66, "10i0");
-	pgm.addParam(1, "10i0");
-	pgm.addParam("QCCSID", "10A");
-	pgm.addParam(this.errno, {"io":"both", "len" : "rec2"});
-	conn.add(pgm);
+##### idb-connector
+The [idb-connector](https://github.com/IBM/nodejs-idb-connector) transport establishes a database connection and calls XMLSERVICE stored procedure.
 
-	var sql = new xt.iSql();  /* Test iSql Class */
-	sql.prepare("call qsys2.tcpip_info()");
-	sql.execute();
-	sql.fetch();
-	sql.free();
-	conn.add(sql);
-	conn.run(cbJson);
+**NOTE** the `idb-connector` transport is only supported on an IBM i system.
+
+To use the `idb-connector` transport create an instance of Connection with:
+
+```javascript
+const connection = new Connection({
+  transport: 'idb',
+  transportOptions: { database: '*LOCAL', username: 'myuser', password: 'mypass' }
+});
 ```
 
-## Example 2: Toolkit classes
-```js
-	var xt = require("itoolkit");
-	var wk = require('itoolkit/lib/iwork');
-	var nt = require('itoolkit/lib/inetwork');
+##### REST
+The REST transport makes an HTTP request to an endpoint that process the XML input and returns XML output.
 
-	var conn = new xt.iConn("*LOCAL", "USERNAME", "PASSWORD");
+Initial configuration is required for the endpoint.
 
-	var work = new wk.iWork(conn);
-	var net = new nt.iNetwork(conn);
+A quick example is to add the following to `/www/apachedft/conf/httpd.conf`
 
-	work.getSysValue("QCCSID", (output) => {
-	  console.log("QCCSID = " + output);
-	});
-
-	net.getTCPIPAttr((output) => {
-	  console.log(JSON.stringify(output, " ", 2));
-	});
+```
+ScriptAlias /cgi-bin/ /QSYS.LIB/XMLSERVICE.LIB/
+<Directory /QSYS.LIB/XMLSERVICE.LIB/>
+  AllowOverride None
+  order allow,deny
+  allow from all
+  SetHandler cgi-script
+  Options +ExecCGI
+</Directory>
 ```
 
-# API Reference
-* https://www.ibm.com/developerworks/community/wikis/home?lang=en#!/wiki/IBM%20i%20Technology%20Updates/page/Toolkit%20for%20i%20APIs
+- start the server
 
-# Contributions
+     ` STRTCPSVR SERVER(*HTTP) HTTPSVR(APACHEDFT)`
+
+- go to `http://HOSTNAME:PORT/cgi-bin/xmlcgi.pgm`
+
+you should see an XML document
+
+To use the `REST` transport create an instance of Connection with:
+
+```javascript
+const connection = new Connection({
+  transport: 'rest',
+  transportOptions: { host: 'myhost', port: 80, path:'/cgi-bin/xmlcgi.pgm' database: '*LOCAL', username: 'myuser', password: 'mypass' }
+});
+```
+
+##### SSH
+The SSH transport executes `xmlservice-cli` program via ssh.
+
+Ensure you have OpenSSH installed on your IBM i system.
+
+Also `xmlservice-cli` is required on the IBM i host with:
+
+`yum install itoolkit-utils`
+
+The [ssh2](https://www.npmjs.com/package/ssh2#client-methods) client module is used to connect and supports both private key and password authentication.
+
+To use the `SSH` transport with private key authentication create an instance of Connection with:
+
+```javascript
+const { readFileSync } = require('fs');
+
+const privateKey = readFileSync('path/to/privateKey', 'utf-8');
+
+// NOTE if your privateKey also requires a passphrase provide it
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', privateKey, passphrase: 'myphrase' }
+});
+```
+
+To use the `SSH` transport with password authentication create an instance of Connection with:
+
+```javascript
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' }
+});
+```
+
+### ProgramCall
+The ProgramCall class is used to call IBM i programs and service programs.
+
+#### Example
+```javascript
+const {
+  Connection, ProgramCall, xmlToJson,
+} = require('itoolkit');
+
+const conn = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' }
+});
+
+const program = new ProgramCall('QWCRSVAL', { lib: 'QSYS' });
+const outBuf = [
+  [0, '10i0'],
+  [0, '10i0'],
+  ['', '36h'],
+  ['', '10A'],
+  ['', '1A'],
+  ['', '1A'],
+  [0, '10i0'],
+  [0, '10i0'],
+];
+const errno = [
+  [0, '10i0'],
+  [0, '10i0', { setlen: 'rec2' }],
+  ['', '7A'],
+  ['', '1A'],
+];
+
+program.addParam(outBuf, { io: 'out' });
+program.addParam(66, '10i0');
+program.addParam(1, '10i0');
+program.addParam('QCCSID', '10A');
+program.addParam(errno, { io: 'both', len: 'rec2' });
+
+conn.add(program);
+
+
+conn.run((error, xmlOutput) => {
+  if (error) {
+    throw error;
+  }
+  const result = xmlToJson(xmlOutput);
+  console.log(result);
+});
+```
+### CommandCall
+CommandCall is used to execute a CL, QSH, or PASE command.
+
+#### Example
+```javascript
+const {
+  Connection, CommandCall, xmlToJson,
+} = require('itoolkit');
+
+const conn = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' }
+});
+
+conn.add(new CommandCall({ command: 'RTVJOBA USRLIBL(?) SYSLIBL(?)', type: 'cl' }));
+
+conn.run((error, xmlOutput) => {
+  if (error) {
+    throw error;
+  }
+  const result = xmlToJson(xmlOutput);
+  console.log(result);
+});
+```
+
+### SqlCall
+SqlCall is used to make an SQL query.
+
+#### Example
+
+```javascript
+const {
+  Connection, SqlCall, xmlToJson,
+} = require('itoolkit');
+
+const conn = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' }
+});
+
+const sql = new SqlCall();
+sql.prepare('call qsys2.tcpip_info()');
+sql.execute();
+sql.fetch();
+sql.free();
+
+conn.add(sql);
+
+conn.run((error, xmlOutput) => {
+  if (error) {
+    throw error;
+  }
+  const result = xmlToJson(xmlOutput);
+  console.log(result);
+});
+```
+## Utility Toolkit Functions
+
+Aside from the main classes this toolkit also provides helper functions to access:
+- Data Queues
+- User Space objects
+- Object info
+- Product info
+- Network info
+
+```js
+const {
+  Connection, Toolkit, xmlToJson,
+} = require('itoolkit');
+
+const conn = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' }
+});
+
+const toolkit = new Toolkit(conn);
+
+toolkit.getSysValue('QCCSID', (error, value) => {
+  if (error) {
+    throw error;
+  }
+  console.log(`QCCSID = ${value}`);
+});
+```
+
+# Documentation
+TODO port and update Docs from [developer works](https://www.ibm.com/developerworks/community/wikis/home?lang=en#!/wiki/IBM%20i%20Technology%20Updates/page/Toolkit%20for%20i%20APIs)
+
+# Testing
+Refer to the [README](test/README.md)
+
+# Contributing
 Please read the [contribution guidelines](https://github.com/IBM/nodejs-itoolkit/blob/master/CONTRIBUTING.md).
 
-
 # License
-[`MIT`](https://github.com/IBM/nodejs-itoolkit/blob/master/LICENSE) file.
+[`MIT`](https://github.com/IBM/nodejs-itoolkit/blob/master/LICENSE)
