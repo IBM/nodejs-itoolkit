@@ -35,33 +35,10 @@ If you experience timeout issue with network calls add
 within `package.json` file, where X is the number of seconds before timeout
 
 # Setup Rest interface
+- view the [README](../README.md#rest)
 
-- add to the default apache server conf: `/www/apachedft/conf/httpd.conf`
-
-    ```
-    ScriptAlias /cgi-bin/   /QSYS.LIB/QXMLSERVc .LIB/
-    <Directory  /QSYS.LIB/QXMLSERV.LIB/>
-      AllowOverride None
-      order allow,deny
-      allow from all
-      SetHandler cgi-script
-      Options +ExecCGI
-    </Directory>
-
-    ```
-
-- start the server
-
-     ` STRTCPSVR SERVER(*HTTP) HTTPSVR(APACHEDFT)`
-
-- go to `http://HOSTNAME/cgi-bin/xmlcgi.pgm`
-
-    you should see an XML document
-
-- when finished testing you can shutdown server with
-
-    ` ENDTCPSVR SERVER(*HTTP) HTTPSVR(APACHEDFT)`
-
+# Setup SSH interface
+- view the [README](../README.md#ssh)
 
 # Configuring Tests
 Each functional test contains an config object that is used to create connections
@@ -72,18 +49,45 @@ Instead of hard coding credentials with the test file.
 
 you can set environment varaibales with `export KEY='value'`
 
+
+For all tests
 ---
+- verbose `TKVERBOSE` enables verbose mode
+
+For idb-connector Tests
+---
+
 - user `TKUSER` defaults to ''
 
 - password `TKPASS` defaults to ''
 
 - database `TKDB` defaults to `*LOCAL`
 
+
 For Rest Tests
 ---
-- HOST `TKHOST` defaults to `localhost`
+- host `TKHOST` defaults to `localhost`
 
-- PORT `TKPORT` defaults to `80`
+- user `TKUSER` defaults to ''
 
-- PATH `TKPATH` defaults to `/cgi-bin/xmlcgi.pgm`
+- password `TKPASS` defaults to ''
+
+- port `TKPORT`
+
+- path `TKPATH` defaults to `/cgi-bin/xmlcgi.pgm`
+
+For SSH Tests
+---
+
+- host `TKHOST` defaults to `localhost`
+
+- user `TKUSER` defaults to ''
+
+- password `TKPASS` defaults to ''
+
+- port `TKPORT`
+
+- privateKey `TKPK`
+
+- passphrase `TKPHRASE`
 
