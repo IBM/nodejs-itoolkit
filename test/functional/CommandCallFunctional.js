@@ -38,6 +38,7 @@ const opt = {
   privateKey,
   passphrase: process.env.TKPHRASE,
   verbose: !!process.env.TKVERBOSE,
+  dsn: process.env.TKDSN,
 };
 
 const transports = returnTransports(opt);
