@@ -19,17 +19,17 @@
 /* eslint-env mocha */
 
 const { expect } = require('chai');
-const { xmlToJson } = require('../../lib/itoolkit');
+const { xmlToJs } = require('../../lib/itoolkit');
 
-describe('xmlToJson Tests', () => {
-  it('converts CL command XML output to js object', () => {
+describe('xmlToJs Tests', () => {
+  it('converts CL command XML output to js object', async () => {
     const xmlOut = '<?xml version=\'1.0\'?><myscript><cmd exec=\'rexx\' error=\'fast\'>'
       + '<success>+++ success RTVJOBA USRLIBL(?) SYSLIBL(?)</success>'
       + '<row><data desc=\'USRLIBL\'>QGPL       QTEMP      QDEVELOP   QBLDSYS'
       + '    QBLDSYSR</data></row><row><data desc=\'SYSLIBL\'>QSYS'
       + '       QSYS2      QHLPSYS    QUSRSYS</data></row></cmd></myscript>';
 
-    const result = xmlToJson(xmlOut);
+    const result = await xmlToJs(xmlOut);
     expect(result).to.be.an('array');
     expect(result.length).to.equal(1);
     expect(result[0]).to.be.an('object');
@@ -46,7 +46,7 @@ describe('xmlToJson Tests', () => {
     expect(result[0].data[0]).to.haveOwnProperty('value').and.to.equal(value);
   });
 
-  it('converts sh command XML output to js object', () => {
+  it('converts sh command XML output to js object', async () => {
     const xmlOut = '<?xml version=\'1.0\'?><myscript><sh error=\'fast\'>\n'
                    + 'bin\n'
                    + 'ccs\n'
@@ -62,7 +62,7 @@ describe('xmlToJson Tests', () => {
                    + '</sh>\n'
                    + '</myscript>';
 
-    const result = xmlToJson(xmlOut);
+    const result = await xmlToJs(xmlOut);
     expect(result).to.be.an('array');
     expect(result.length).to.equal(1);
     expect(result[0]).to.be.an('object');
@@ -73,7 +73,7 @@ describe('xmlToJson Tests', () => {
   });
 
 
-  it('converts qsh command XML output to js object', () => {
+  it('converts qsh command XML output to js object', async () => {
     const xmlOut = '<?xml version=\'1.0\'?><myscript><qsh error=\'fast\'>\n'
                    + 'bin\n'
                    + 'ccs\n'
@@ -89,7 +89,7 @@ describe('xmlToJson Tests', () => {
                    + '</qsh>\n'
                    + '</myscript>';
 
-    const result = xmlToJson(xmlOut);
+    const result = await xmlToJs(xmlOut);
     expect(result).to.be.an('array');
     expect(result.length).to.equal(1);
     expect(result[0]).to.be.an('object');
@@ -99,7 +99,7 @@ describe('xmlToJson Tests', () => {
     expect(result[0]).to.haveOwnProperty('data').and.to.equal(data);
   });
 
-  it('converts pgm command XML output to js object', () => {
+  it('converts pgm command XML output to js object', async () => {
     const xmlOut = `<?xml version='1.0'?><myscript><pgm name='QWCRSVAL' lib='QSYS' error='fast'>
     <parm io='out'>
     <ds len='rec1'>
@@ -133,27 +133,30 @@ describe('xmlToJson Tests', () => {
     </pgm>
     </myscript>`;
 
-    const result = xmlToJson(xmlOut);
-
+    const result = await xmlToJs(xmlOut);
     expect(result).to.be.an('array');
     expect(result.length).to.equal(1);
     expect(result[0]).to.be.an('object');
     expect(result[0]).to.haveOwnProperty('type').and.to.equal('pgm');
     expect(result[0]).to.haveOwnProperty('success').and.to.equal(true);
-    expect(result[0]).to.haveOwnProperty('pgm').and.to.equal('QWCRSVAL');
+    expect(result[0]).to.haveOwnProperty('name').and.to.equal('QWCRSVAL');
     expect(result[0]).to.haveOwnProperty('lib').and.to.equal('QSYS');
     expect(result[0]).to.haveOwnProperty('data');
     expect(result[0].data).to.be.an('array');
-    expect(result[0].data.length).to.equal(14);
+    expect(result[0].data[0].param.length).to.equal(7);
+    expect(result[0].data[1].param).to.be.an('object');
+    expect(result[0].data[2].param).to.be.an('object');
+    expect(result[0].data[3].param).to.be.an('object');
+    expect(result[0].data[4].param.length).to.equal(4);
 
-    result[0].data.forEach((part) => {
+    result[0].data[0].param.forEach((part) => {
       expect(part).to.be.an('object');
-      expect(result[0].data[0]).to.haveOwnProperty('value');
-      expect(result[0].data[0]).to.haveOwnProperty('type');
+      expect(part).to.haveOwnProperty('value');
+      expect(part).to.haveOwnProperty('type');
     });
   });
 
-  it('converts sql command XML output to js object', () => {
+  it('converts sql command XML output to js object', async () => {
     const xmlOut = `<?xml version='1.0'?><myscript><sql>
     <query error='fast' conn='conn1' stmt='stmt1'>
     <success><![CDATA[+++ success SELECT LSTNAM, STATE FROM QIWS.QCUSTCDT]]></success>
@@ -178,22 +181,23 @@ describe('xmlToJson Tests', () => {
     </sql>
     </myscript>`;
 
-    const result = xmlToJson(xmlOut);
-
+    const result = await xmlToJs(xmlOut);
     expect(result).to.be.an('array');
     expect(result.length).to.equal(1);
     expect(result[0]).to.be.an('object');
     expect(result[0]).to.haveOwnProperty('type').and.to.equal('sql');
-    expect(result[0]).to.haveOwnProperty('success').and.to.equal(true);
+    expect(result[0].data[0]).to.haveOwnProperty('success').and.to.equal(true);
+    expect(result[0].data[1]).to.haveOwnProperty('success').and.to.equal(true);
+    expect(result[0].data[2]).to.haveOwnProperty('success').and.to.equal(true);
     const stmt = 'SELECT LSTNAM, STATE FROM QIWS.QCUSTCDT';
-    expect(result[0]).to.haveOwnProperty('stmt').and.to.equal(stmt);
-    expect(result[0]).to.haveOwnProperty('result');
-    expect(result[0].result).to.be.an('array');
-    expect(result[0].result.length).to.equal(12);
+    expect(result[0].data[0]).to.haveOwnProperty('sql').and.to.equal(stmt);
+    expect(result[0].data[1]).to.haveOwnProperty('result');
+    expect(result[0].data[1].result).to.be.an('array');
+    expect(result[0].data[1].result.length).to.equal(12);
 
     // result is 2D array: each of its element is another array of objects
     // Propose to simplify for result to be 1D array of objects
-    result[0].result.forEach((childArray) => {
+    result[0].data[1].result.forEach((childArray) => {
       expect(childArray).to.be.an('array');
       childArray.forEach((element) => {
         expect(element).to.haveOwnProperty('desc');

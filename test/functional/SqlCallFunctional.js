@@ -22,7 +22,7 @@
 const { expect } = require('chai');
 const { readFileSync } = require('fs');
 const { SqlCall } = require('../../lib/itoolkit');
-const { xmlToJson, returnTransports } = require('../../lib/utils');
+const { xmlToJs, returnTransports } = require('../../lib/utils');
 
 // Set Env variables or set values here.
 let privateKey;
@@ -56,17 +56,24 @@ describe('SqlCall Functional Tests', () => {
         sql.fetch();
         sql.free();
         connection.add(sql);
-        connection.run((error, xmlOut) => {
+        connection.run(async (error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
+          const results = await xmlToJs(xmlOut);
 
-          results.forEach((result) => {
-            expect(result.success).to.equal(true);
-            expect(result.result).to.be.an('array');
-            result.result.forEach((row) => {
-              expect(row[0]).to.be.an('object');
-              expect(row[0]).haveOwnProperty('desc');
-              expect(row[0]).haveOwnProperty('value');
+          results.forEach((result) => {         
+            expect(result.data).to.be.an('array');
+            result.data.forEach((stmt) => {
+              expect(stmt).to.be.an('object');
+              if(stmt.success) expect(stmt.success).to.equal(true);
+              expect(stmt).haveOwnProperty('command');
+              
+              if(stmt.result && stmt.result.length > 0) {
+                stmt.result.forEach((row) => {
+                  expect(row[0]).to.be.an('object');
+                  expect(row[0]).haveOwnProperty('desc');
+                  expect(row[0]).haveOwnProperty('value');
+                });
+              }
             });
           });
           done();
@@ -86,16 +93,23 @@ describe('SqlCall Functional Tests', () => {
         sql.fetch();
         sql.free();
         connection.add(sql);
-        connection.run((error, xmlOut) => {
+        connection.run(async (error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
-          results.forEach((result) => {
-            expect(result.success).to.equal(true);
-            expect(result.result).to.be.an('array');
-            result.result.forEach((row) => {
-              expect(row[0]).to.be.an('object');
-              expect(row[0]).haveOwnProperty('desc');
-              expect(row[0]).haveOwnProperty('value');
+          const results = await xmlToJs(xmlOut);
+          results.forEach((result) => {         
+            expect(result.data).to.be.an('array');
+            result.data.forEach((stmt) => {
+              expect(stmt).to.be.an('object');
+              if(stmt.success) expect(stmt.success).to.equal(true);
+              expect(stmt).haveOwnProperty('command');
+              
+              if(stmt.result && stmt.result.length > 0) {
+                stmt.result.forEach((row) => {
+                  expect(row[0]).to.be.an('object');
+                  expect(row[0]).haveOwnProperty('desc');
+                  expect(row[0]).haveOwnProperty('value');
+                });
+              }
             });
           });
           done();
@@ -115,15 +129,23 @@ describe('SqlCall Functional Tests', () => {
         sql.fetch();
         sql.free();
         connection.add(sql);
-        connection.run((error, xmlOut) => {
+        connection.run(async (error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
-
-          results.forEach((result) => {
-            expect(result.success).to.equal(true);
-            expect(result.result).to.be.an('array');
-            result.result.forEach((row) => {
-              expect(row[0].value).to.equal('');
+          const results = await xmlToJs(xmlOut);
+          results.forEach((result) => {         
+            expect(result.data).to.be.an('array');
+            result.data.forEach((stmt) => {
+              expect(stmt).to.be.an('object');
+              if(stmt.success) expect(stmt.success).to.equal(true);
+              expect(stmt).haveOwnProperty('command');
+              if(stmt.result && stmt.result.length > 0) {
+                stmt.result.forEach((row) => {
+                  expect(row[0]).to.be.an('object');
+                  expect(row[0]).haveOwnProperty('desc');
+                  expect(row[0]).haveOwnProperty('value');
+                  expect(row[0].value).to.equal(undefined);
+                });
+              }
             });
           });
           done();
@@ -141,17 +163,24 @@ describe('SqlCall Functional Tests', () => {
         // [catalog, schema, table, table type]
         sql.tables(['', 'QIWS', 'QCUSTCDT', '']);
         connection.add(sql.toXML());
-        connection.run((error, xmlOut) => {
+        connection.run(async (error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
+          const results = await xmlToJs(xmlOut);
 
-          results.forEach((result) => {
-            expect(result.success).to.equal(true);
-            expect(result.result).to.be.an('array');
-            result.result.forEach((row) => {
-              expect(row[0]).to.be.an('object');
-              expect(row[0]).haveOwnProperty('desc');
-              expect(row[0]).haveOwnProperty('value');
+          results.forEach((result) => {         
+            expect(result.data).to.be.an('array');
+            result.data.forEach((stmt) => {
+              expect(stmt).to.be.an('object');
+              if(stmt.success) expect(stmt.success).to.equal(true);
+              expect(stmt).haveOwnProperty('command');
+              
+              if(stmt.result && stmt.result.length > 0) {
+                stmt.result.forEach((row) => {
+                  expect(row[0]).to.be.an('object');
+                  expect(row[0]).haveOwnProperty('desc');
+                  expect(row[0]).haveOwnProperty('value');
+                });
+              }
             });
           });
           done();
@@ -169,17 +198,24 @@ describe('SqlCall Functional Tests', () => {
         // [catalog, schema, table]
         sql.tablePriv(['', 'QIWS', 'QCUSTCDT']);
         connection.add(sql.toXML());
-        connection.run((error, xmlOut) => {
+        connection.run(async (error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
+          const results = await xmlToJs(xmlOut);
 
-          results.forEach((result) => {
-            expect(result.success).to.equal(true);
-            expect(result.result).to.be.an('array');
-            result.result.forEach((row) => {
-              expect(row[0]).to.be.an('object');
-              expect(row[0]).haveOwnProperty('desc');
-              expect(row[0]).haveOwnProperty('value');
+          results.forEach((result) => {         
+            expect(result.data).to.be.an('array');
+            result.data.forEach((stmt) => {
+              expect(stmt).to.be.an('object');
+              if(stmt.success) expect(stmt.success).to.equal(true);
+              expect(stmt).haveOwnProperty('command');
+              
+              if(stmt.result && stmt.result.length > 0) {
+                stmt.result.forEach((row) => {
+                  expect(row[0]).to.be.an('object');
+                  expect(row[0]).haveOwnProperty('desc');
+                  expect(row[0]).haveOwnProperty('value');
+                });
+              }
             });
           });
           done();
@@ -197,17 +233,24 @@ describe('SqlCall Functional Tests', () => {
         // catalog, schema, table, column
         sql.columns(['', 'QIWS', 'QCUSTCDT', 'CUSNUM']);
         connection.add(sql.toXML());
-        connection.run((error, xmlOut) => {
+        connection.run(async (error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
+          const results = await xmlToJs(xmlOut);
 
-          results.forEach((result) => {
-            expect(result.success).to.be.equal(true);
-            expect(result.result).to.be.an('array');
-            result.result.forEach((row) => {
-              expect(row[0]).to.be.an('object');
-              expect(row[0]).haveOwnProperty('desc');
-              expect(row[0]).haveOwnProperty('value');
+          results.forEach((result) => {         
+            expect(result.data).to.be.an('array');
+            result.data.forEach((stmt) => {
+              expect(stmt).to.be.an('object');
+              if(stmt.success) expect(stmt.success).to.equal(true);
+              expect(stmt).haveOwnProperty('command');
+              
+              if(stmt.result && stmt.result.length > 0) {
+                stmt.result.forEach((row) => {
+                  expect(row[0]).to.be.an('object');
+                  expect(row[0]).haveOwnProperty('desc');
+                  expect(row[0]).haveOwnProperty('value');
+                });
+              }
             });
           });
           done();
@@ -226,17 +269,24 @@ describe('SqlCall Functional Tests', () => {
         sql.columnPriv(['', 'QIWS', 'QCUSTCDT', 'BALDUE']);
 
         connection.add(sql.toXML());
-        connection.run((error, xmlOut) => {
+        connection.run(async (error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
+          const results = await xmlToJs(xmlOut);
 
-          results.forEach((result) => {
-            expect(result.success).to.equal(true);
-            expect(result.result).to.be.an('array');
-            result.result.forEach((row) => {
-              expect(row[0]).to.be.an('object');
-              expect(row[0]).haveOwnProperty('desc');
-              expect(row[0]).haveOwnProperty('value');
+          results.forEach((result) => {         
+            expect(result.data).to.be.an('array');
+            result.data.forEach((stmt) => {
+              expect(stmt).to.be.an('object');
+              if(stmt.success) expect(stmt.success).to.equal(true);
+              expect(stmt).haveOwnProperty('command');
+              
+              if(stmt.result && stmt.result.length > 0) {
+                stmt.result.forEach((row) => {
+                  expect(row[0]).to.be.an('object');
+                  expect(row[0]).haveOwnProperty('desc');
+                  expect(row[0]).haveOwnProperty('value');
+                });
+              }
             });
           });
           done();
@@ -254,17 +304,24 @@ describe('SqlCall Functional Tests', () => {
         // [catalog, schema, procedure]
         sql.procedures(['', 'QSYS2', 'TCPIP_INFO']);
         connection.add(sql.toXML());
-        connection.run((error, xmlOut) => {
+        connection.run(async (error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
+          const results = await xmlToJs(xmlOut);
 
-          results.forEach((result) => {
-            expect(result.success).to.equal(true);
-            expect(result.result).to.be.an('array');
-            result.result.forEach((row) => {
-              expect(row[0]).to.be.an('object');
-              expect(row[0]).haveOwnProperty('desc');
-              expect(row[0]).haveOwnProperty('value');
+          results.forEach((result) => {         
+            expect(result.data).to.be.an('array');
+            result.data.forEach((stmt) => {
+              expect(stmt).to.be.an('object');
+              if(stmt.success) expect(stmt.success).to.equal(true);
+              expect(stmt).haveOwnProperty('command');
+              
+              if(stmt.result && stmt.result.length > 0) {
+                stmt.result.forEach((row) => {
+                  expect(row[0]).to.be.an('object');
+                  expect(row[0]).haveOwnProperty('desc');
+                  expect(row[0]).haveOwnProperty('value');
+                });
+              }
             });
           });
           done();
@@ -282,17 +339,24 @@ describe('SqlCall Functional Tests', () => {
         // [catalog, schema, procedure, column]
         sql.pColumns(['', 'QSYS2', 'QCMDEXC', 'COMMAND']);
         connection.add(sql.toXML());
-        connection.run((error, xmlOut) => {
+        connection.run(async (error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
+          const results = await xmlToJs(xmlOut);
 
-          results.forEach((result) => {
-            expect(result.success).to.equal(true);
-            expect(result.result).to.be.an('array');
-            result.result.forEach((row) => {
-              expect(row[0]).to.be.an('object');
-              expect(row[0]).haveOwnProperty('desc');
-              expect(row[0]).haveOwnProperty('value');
+          results.forEach((result) => {         
+            expect(result.data).to.be.an('array');
+            result.data.forEach((stmt) => {
+              expect(stmt).to.be.an('object');
+              if(stmt.success) expect(stmt.success).to.equal(true);
+              expect(stmt).haveOwnProperty('command');
+              
+              if(stmt.result && stmt.result.length > 0) {
+                stmt.result.forEach((row) => {
+                  expect(row[0]).to.be.an('object');
+                  expect(row[0]).haveOwnProperty('desc');
+                  expect(row[0]).haveOwnProperty('value');
+                });
+              }
             });
           });
           done();
@@ -310,16 +374,24 @@ describe('SqlCall Functional Tests', () => {
         // [catalog, schema, table]
         sql.primaryKeys(['', 'QUSRSYS', 'QASZRAIRX']);
         connection.add(sql.toXML());
-        connection.run((error, xmlOut) => {
+        connection.run(async (error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
-          results.forEach((result) => {
-            expect(result.success).to.equal(true);
-            expect(result.result).to.be.an('array');
-            result.result.forEach((row) => {
-              expect(row[0]).to.be.an('object');
-              expect(row[0]).haveOwnProperty('desc');
-              expect(row[0]).haveOwnProperty('value');
+          const results = await xmlToJs(xmlOut);
+          
+          results.forEach((result) => {         
+            expect(result.data).to.be.an('array');
+            result.data.forEach((stmt) => {
+              expect(stmt).to.be.an('object');
+              if(stmt.success) expect(stmt.success).to.equal(true);
+              expect(stmt).haveOwnProperty('command');
+              
+              if(stmt.result && stmt.result.length > 0) {
+                stmt.result.forEach((row) => {
+                  expect(row[0]).to.be.an('object');
+                  expect(row[0]).haveOwnProperty('desc');
+                  expect(row[0]).haveOwnProperty('value');
+                });
+              }
             });
           });
           done();
@@ -338,16 +410,24 @@ describe('SqlCall Functional Tests', () => {
         // fk: [catalog, schema, table]
         sql.foreignKeys(['', 'QUSRSYS', 'QASZRAIRC', '', 'QUSRSYS', 'QASZRAIRX']);
         connection.add(sql.toXML());
-        connection.run((error, xmlOut) => {
+        connection.run(async (error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
-          results.forEach((result) => {
-            expect(result.success).to.equal(true);
-            expect(result.result).to.be.an('array');
-            result.result.forEach((row) => {
-              expect(row[0]).to.be.an('object');
-              expect(row[0]).haveOwnProperty('desc');
-              expect(row[0]).haveOwnProperty('value');
+          const results = await xmlToJs(xmlOut);
+
+          results.forEach((result) => {         
+            expect(result.data).to.be.an('array');
+            result.data.forEach((stmt) => {
+              expect(stmt).to.be.an('object');
+              if(stmt.success) expect(stmt.success).to.equal(true);
+              expect(stmt).haveOwnProperty('command');
+              
+              if(stmt.result && stmt.result.length > 0) {
+                stmt.result.forEach((row) => {
+                  expect(row[0]).to.be.an('object');
+                  expect(row[0]).haveOwnProperty('desc');
+                  expect(row[0]).haveOwnProperty('value');
+                });
+              }
             });
           });
           done();
@@ -365,16 +445,24 @@ describe('SqlCall Functional Tests', () => {
 
         sql.statistics(['', 'QIWS', 'QCUSTCDT', 'all']);
         connection.add(sql.toXML());
-        connection.run((error, xmlOut) => {
+        connection.run(async (error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
-          results.forEach((result) => {
-            expect(result.success).to.equal(true);
-            expect(result.result).to.be.an('array');
-            result.result.forEach((row) => {
-              expect(row[0]).to.be.an('object');
-              expect(row[0]).haveOwnProperty('desc');
-              expect(row[0]).haveOwnProperty('value');
+          const results = await xmlToJs(xmlOut);
+
+          results.forEach((result) => {         
+            expect(result.data).to.be.an('array');
+            result.data.forEach((stmt) => {
+              expect(stmt).to.be.an('object');
+              if(stmt.success) expect(stmt.success).to.equal(true);
+              expect(stmt).haveOwnProperty('command');
+              
+              if(stmt.result && stmt.result.length > 0) {
+                stmt.result.forEach((row) => {
+                  expect(row[0]).to.be.an('object');
+                  expect(row[0]).haveOwnProperty('desc');
+                  expect(row[0]).haveOwnProperty('value');
+                });
+              }
             });
           });
           done();
@@ -396,10 +484,10 @@ describe('SqlCall Functional Tests', () => {
         sql.special(['', 'QUSRSYS', 'QASZRAIRX', 'row', 'no'], { error: 'on' });
         connection.add(sql.toXML());
         connection.debug(true);
-        connection.run((error, xmlOut) => {
+        connection.run(async (error, xmlOut) => {
           // eslint-disable-next-line no-console
           console.log(`xml output: \n ${xmlOut}`);
-          const results = xmlToJson(xmlOut);
+          const results = await xmlToJs(xmlOut);
           // eslint-disable-next-line no-console
           console.log(JSON.stringify(results));
           done();
@@ -408,11 +496,9 @@ describe('SqlCall Functional Tests', () => {
     });
   });
 
-  describe.skip('rowCount', () => {
-    // xmlToJson does not add check for row count currently
-    // Skip for now until this is added.
+  describe('rowCount', () => {
     transports.forEach((transport) => {
-      it.skip(`returns the number of rows affected by statement using ${transport.name} transport`, (done) => {
+      it(`returns the number of rows affected by statement using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
         const sql = new SqlCall();
@@ -424,13 +510,21 @@ describe('SqlCall Functional Tests', () => {
         sql.rowCount();
         sql.free();
         connection.add(sql.toXML());
-        connection.run((error, xmlOut) => {
-          const results = xmlToJson(xmlOut);
-          done();
-          results.forEach((result) => {
-            expect(result.success).to.equal(true);
-            expect(result.rowCount).to.equal(1);
+        connection.run(async (error, xmlOut) => {
+          const results = await xmlToJs(xmlOut);
+          results.forEach((result) => {         
+            expect(result.data).to.be.an('array');
+            result.data.forEach((stmt) => {
+              expect(stmt).to.be.an('object');
+              if(stmt.success) if(stmt.success) expect(stmt.success).to.equal(true);
+              expect(stmt).haveOwnProperty('command');
+              
+              if(stmt.command === 'rowcount') {
+                expect(stmt.result).to.equal('1');
+              }
+            });
           });
+          done();
         });
       });
     });

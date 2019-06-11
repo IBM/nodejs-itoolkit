@@ -22,7 +22,7 @@
 const { expect } = require('chai');
 const { readFileSync } = require('fs');
 const { ProgramCall } = require('../../lib/itoolkit');
-const { xmlToJson, returnTransports } = require('../../lib/utils');
+const { xmlToJs, returnTransports } = require('../../lib/utils');
 
 // Set Env variables or set values here.
 let privateKey;
@@ -75,9 +75,9 @@ describe('ProgramCall Functional Tests', () => {
         program.addParam('QCCSID', '10A');
         program.addParam(errno, { io: 'both', len: 'rec2' });
         connection.add(program);
-        connection.run((error, xmlOut) => {
+        connection.run(async (error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
+          const results = await xmlToJs(xmlOut);
 
           results.forEach((result) => {
             expect(result.success).to.equal(true);
@@ -122,9 +122,9 @@ describe('ProgramCall Functional Tests', () => {
 
         program.addParam(errno, { io: 'both', len: 'rec2', name: paramValue });
         connection.add(program);
-        connection.run((error, xmlOut) => {
+        connection.run(async (error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
+          const results = await xmlToJs(xmlOut);
 
           results.forEach((result) => {
             expect(result.success).to.equal(true);
@@ -148,9 +148,9 @@ describe('ProgramCall Functional Tests', () => {
         const testValue = 'NEW_NAME';
         program.addReturn('0', '20A', { letying: '4', name: testValue });
         connection.add(program);
-        connection.run((error, xmlOut) => {
+        connection.run(async (error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
+          const results = await xmlToJs(xmlOut);
 
           expect(results[0].data[1].name).to.equal(testValue);
           done();

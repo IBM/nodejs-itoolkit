@@ -21,7 +21,7 @@
 const { expect } = require('chai');
 const { readFileSync } = require('fs');
 const { CommandCall } = require('../../lib/itoolkit');
-const { xmlToJson, returnTransports } = require('../../lib/utils');
+const { xmlToJs, returnTransports } = require('../../lib/utils');
 
 // Set Env variables or set values here.
 let privateKey;
@@ -48,9 +48,9 @@ describe('CommandCall Functional Tests', () => {
       it(`calls CL command using ${transport.name} transport`, (done) => {
         const connection = transport.me;
         connection.add(new CommandCall({ command: 'RTVJOBA USRLIBL(?) SYSLIBL(?)', type: 'cl' }));
-        connection.run((error, xmlOut) => {
+        connection.run(async (error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
+          const results = await xmlToJs(xmlOut);
           results.forEach((result) => {
             expect(result.success).to.equal(true);
           });
@@ -65,9 +65,9 @@ describe('CommandCall Functional Tests', () => {
       it(`calls PASE shell command using ${transport.name} transport`, (done) => {
         const connection = transport.me;
         connection.add(new CommandCall({ command: 'system -i wrksyssts', type: 'sh' }));
-        connection.run((error, xmlOut) => {
+        connection.run(async (error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
+          const results = await xmlToJs(xmlOut);
           // xs does not return success property for iSh or iQsh
           // but on error data property = '\n'
           // so lets base success on contents of data.
@@ -86,9 +86,9 @@ describe('CommandCall Functional Tests', () => {
       it(`calls QSH command using ${transport.name} transport`, (done) => {
         const connection = transport.me;
         connection.add(new CommandCall({ command: 'system wrksyssts', type: 'qsh' }));
-        connection.run((error, xmlOut) => {
+        connection.run(async (error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
+          const results = await xmlToJs(xmlOut);
           // xs does not return success property for iSh or iQsh
           // but on error data property = '\n'
           // so lets base success on contents of data.

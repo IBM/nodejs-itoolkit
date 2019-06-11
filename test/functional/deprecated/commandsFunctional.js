@@ -20,10 +20,10 @@
 
 const { expect } = require('chai');
 const {
-  iCmd, iSh, iQsh,
+  iCmd, iSh, iQsh, xmlToJson,
 } = require('../../../lib/itoolkit');
 
-const { xmlToJson, returnTransportsDeprecated } = require('../../../lib/utils');
+const { returnTransportsDeprecated } = require('../../../lib/utils');
 
 // Set Env variables or set values here.
 const opt = {

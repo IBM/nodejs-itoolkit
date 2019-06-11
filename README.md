@@ -132,7 +132,7 @@ The ProgramCall class is used to call IBM i programs and service programs.
 #### Example
 ```javascript
 const {
-  Connection, ProgramCall, xmlToJson,
+  Connection, ProgramCall, xmlToJs,
 } = require('itoolkit');
 
 const conn = new Connection({
@@ -171,7 +171,7 @@ conn.run((error, xmlOutput) => {
   if (error) {
     throw error;
   }
-  const result = xmlToJson(xmlOutput);
+  const result = await xmlToJs(xmlOutput);
   console.log(result);
 });
 ```
@@ -181,7 +181,7 @@ CommandCall is used to execute a CL, QSH, or PASE command.
 #### Example
 ```javascript
 const {
-  Connection, CommandCall, xmlToJson,
+  Connection, CommandCall, xmlToJs,
 } = require('itoolkit');
 
 const conn = new Connection({
@@ -195,7 +195,7 @@ conn.run((error, xmlOutput) => {
   if (error) {
     throw error;
   }
-  const result = xmlToJson(xmlOutput);
+  const result = await xmlToJs(xmlOutput);
   console.log(result);
 });
 ```
@@ -207,7 +207,7 @@ SqlCall is used to make an SQL query.
 
 ```javascript
 const {
-  Connection, SqlCall, xmlToJson,
+  Connection, SqlCall, xmlToJs,
 } = require('itoolkit');
 
 const conn = new Connection({
@@ -227,8 +227,9 @@ conn.run((error, xmlOutput) => {
   if (error) {
     throw error;
   }
-  const result = xmlToJson(xmlOutput);
-  console.log(result);
+  xmlToJs(xmlOutput).then(result => {
+    console.log(result);
+  });
 });
 ```
 ## Utility Toolkit Functions
@@ -242,7 +243,7 @@ Aside from the main classes this toolkit also provides helper functions to acces
 
 ```js
 const {
-  Connection, Toolkit, xmlToJson,
+  Connection, Toolkit,
 } = require('itoolkit');
 
 const conn = new Connection({
