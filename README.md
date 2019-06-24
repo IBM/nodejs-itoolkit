@@ -315,7 +315,7 @@ toolkit.getSysValue('QCCSID', (error, value) => {
 ```
 
 # Documentation
-TODO port and update Docs from [developer works](https://www.ibm.com/developerworks/community/wikis/home?lang=en#!/wiki/IBM%20i%20Technology%20Updates/page/Toolkit%20for%20i%20APIs)
+Please read the [docs](docs/README.md).
 
 # Testing
 Refer to the [README](test/README.md)
