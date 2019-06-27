@@ -1,6 +1,6 @@
 {
   "name": "itoolkit",
-  "version": "0.1.6",
+  "version": "1.0.0-alpha.0",
   "description": "XMLSERVICE wrapper to access to all things IBM i",
   "main": "lib/itoolkit.js",
   "directories": {
@@ -22,7 +22,7 @@
   ],
   "author": "IBM",
   "license": "MIT",
-  "homepage": "https://github.com/IBM/nodejs-itoolkit",
+  "homepage": "https://github.com/IBM/nodejs-itoolkit/tree/v1.0-dev",
   "contributors": [
     {
       "name": "Xu Meng",
