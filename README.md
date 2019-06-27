@@ -31,7 +31,7 @@
 Before installing, download and install Node.js
 
 ```sh
-    $ npm i itoolkit
+    $ npm i itoolkit@alpha
 ```
 
 ## Main Classes
