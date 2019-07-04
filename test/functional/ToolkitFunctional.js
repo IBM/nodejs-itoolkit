@@ -653,9 +653,6 @@ describe('Toolkit Functional Tests', () => {
     transports.forEach((transport) => {
       // eslint-disable-next-line func-names
       it(`returns info for installed products using ${transport.name} transport`, function (done) {
-        if (transport.name === 'rest') {
-          this.skip();
-        }
         const connection = transport.me;
 
         const toolkit = new Toolkit(connection);
