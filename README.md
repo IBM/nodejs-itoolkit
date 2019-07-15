@@ -226,7 +226,7 @@ conn.run((error, xmlOutput) => {
     throw error;
   }
   const result = xmlToJson(xmlOutput);
-  console.log(result);
+  console.log(JSON.stringify(result));
 });
 ```
 ### CommandCall
@@ -250,7 +250,7 @@ conn.run((error, xmlOutput) => {
     throw error;
   }
   const result = xmlToJson(xmlOutput);
-  console.log(result);
+  console.log(JSON.stringify(result));
 });
 ```
 
@@ -282,7 +282,7 @@ conn.run((error, xmlOutput) => {
     throw error;
   }
   const result = xmlToJson(xmlOutput);
-  console.log(result);
+  console.log(JSON.stringify(result));
 });
 ```
 ## Utility Toolkit Functions
