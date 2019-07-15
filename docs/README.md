@@ -416,7 +416,7 @@ connection.run((error, xmlOutput) => {
   }
   console.log(xmlOutput); // print the raw XML output
   const result = xmlToJson(xmlOutput);
-  console.log(result); // print the formatted JSON output
+  console.log(JSON.stringify(result)); // print the formatted JSON output
 });
 ```
 
@@ -443,7 +443,7 @@ connection.run((error, xmlOutput) => {
     throw error;
   }
   const result = xmlToJson(xmlOutput);
-  console.log(result);
+  console.log(JSON.stringify(result));
 });
 ```
 
@@ -559,7 +559,7 @@ connection.run((error, xmlOutput) => {
     throw error;
   }
   const result = xmlToJson(xmlOutput);
-  console.log(result);
+  console.log(JSON.stringify(result));
 });
 ```
 
