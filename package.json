@@ -40,17 +40,17 @@
     "depd": "2.0.0"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
-    "eslint": "^5.16.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.15.0",
-    "mocha": "^5.2.0",
-    "sinon": "^7.2.3"
+    "chai": "^4.2.0",
+    "eslint": "^6.2.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "mocha": "^6.2.0",
+    "sinon": "^7.4.1"
   },
   "optionalDependencies": {
-    "idb-connector": "^1.1.8",
-    "idb-pconnector": "^1.0.2",
+    "idb-connector": "^1.2.2",
+    "idb-pconnector": "^1.0.7",
     "ssh2": "0.8.2",
-    "odbc": "^2.0.0-2"
+    "odbc": "2.1.3"
   }
 }
