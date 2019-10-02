@@ -20,22 +20,20 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
-const { iConn } = require('../../lib/itoolkit');
-const { iWork } = require('../../lib/iwork');
+const { iConn, iWork } = require('../../../lib/itoolkit');
+const { returnTransportsDeprecated } = require('../../../lib/utils');
 
 // Set Env variables or set values here.
 const opt = {
   database: process.env.TKDB || '*LOCAL',
-  user: process.env.TKUSER || '',
+  username: process.env.TKUSER || '',
   password: process.env.TKPASS || '',
   host: process.env.TKHOST || 'localhost',
   port: process.env.TKPORT || 80,
   path: process.env.TKPATH || '/cgi-bin/xmlcgi.pgm',
 };
 
-const { returnTransports } = require('../../lib/utils');
-
-const transports = returnTransports(opt);
+const transports = returnTransportsDeprecated(opt);
 
 describe('iWork Functional Tests', () => {
   describe('constructor', () => {
@@ -66,10 +64,9 @@ describe('iWork Functional Tests', () => {
   describe('getSysStatus', () => {
     transports.forEach((transport) => {
       it('returns basic system status information about the signed-on users '
-         + `and batch jobs using ${transport.name} transport`,
+           + `and batch jobs using ${transport.name} transport`,
       (done) => {
         const connection = transport.me;
-
         const work = new iWork(connection);
 
         work.getSysStatus((output) => {
@@ -260,7 +257,7 @@ describe('iWork Functional Tests', () => {
 
         const work = new iWork(connection);
 
-        work.getDataArea('AMUSSE', 'TESTDA', 20, (output) => {
+        work.getDataArea('NODETKTEST', 'TESTDA', 20, (output) => {
           expect(output).to.be.an('Object');
           expect(output).to.have.a.property('Type_of_value_returned');
           expect(output).to.have.a.property('Library_name');

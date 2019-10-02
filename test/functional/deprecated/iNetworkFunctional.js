@@ -20,22 +20,21 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
-const { iConn } = require('../../lib/itoolkit');
-const { iNetwork } = require('../../lib/inetwork');
+const { iConn, iNetwork } = require('../../../lib/itoolkit');
 
 // Set Env variables or set values here.
 const opt = {
   database: process.env.TKDB || '*LOCAL',
-  user: process.env.TKUSER || '',
+  username: process.env.TKUSER || '',
   password: process.env.TKPASS || '',
   host: process.env.TKHOST || 'localhost',
   port: process.env.TKPORT || 80,
   path: process.env.TKPATH || '/cgi-bin/xmlcgi.pgm',
 };
 
-const { returnTransports } = require('../../lib/utils');
+const { returnTransportsDeprecated } = require('../../../lib/utils');
 
-const transports = returnTransports(opt);
+const transports = returnTransportsDeprecated(opt);
 
 describe('iNetwork Functional Tests', () => {
   describe('constructor', () => {

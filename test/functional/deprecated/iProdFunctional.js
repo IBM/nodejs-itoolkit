@@ -20,22 +20,20 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
-const { iConn } = require('../../lib/itoolkit');
-const { iProd } = require('../../lib/iprod');
+const { iConn, iProd } = require('../../../lib/itoolkit');
+const { returnTransportsDeprecated } = require('../../../lib/utils');
 
 // Set Env variables or set values here.
 const opt = {
   database: process.env.TKDB || '*LOCAL',
-  user: process.env.TKUSER || '',
+  username: process.env.TKUSER || '',
   password: process.env.TKPASS || '',
   host: process.env.TKHOST || 'localhost',
   port: process.env.TKPORT || 80,
   path: process.env.TKPATH || '/cgi-bin/xmlcgi.pgm',
 };
 
-const { returnTransports } = require('../../lib/utils');
-
-const transports = returnTransports(opt);
+const transports = returnTransportsDeprecated(opt);
 
 describe('iProd Functional Tests', () => {
   describe('constructor', () => {
@@ -131,9 +129,6 @@ describe('iProd Functional Tests', () => {
     transports.forEach((transport) => {
       // eslint-disable-next-line func-names
       it(`returns info for installed products using ${transport.name} transport`, function (done) {
-        if (transport.name === 'rest') {
-          this.skip();
-        }
         const connection = transport.me;
 
         const prod = new iProd(connection);

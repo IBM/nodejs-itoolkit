@@ -21,21 +21,20 @@
 
 
 const { expect } = require('chai');
-const { iSql, xmlToJson } = require('../../lib/itoolkit');
+const { iSql, xmlToJson } = require('../../../lib/itoolkit');
+const { returnTransportsDeprecated } = require('../../../lib/utils');
 
 // Set Env variables or set values here.
 const opt = {
   database: process.env.TKDB || '*LOCAL',
-  user: process.env.TKUSER || '',
+  username: process.env.TKUSER || '',
   password: process.env.TKPASS || '',
   host: process.env.TKHOST || 'localhost',
   port: process.env.TKPORT || 80,
   path: process.env.TKPATH || '/cgi-bin/xmlcgi.pgm',
 };
 
-const { returnTransports } = require('../../lib/utils');
-
-const transports = returnTransports(opt);
+const transports = returnTransportsDeprecated(opt);
 
 describe('iSql Functional Tests', () => {
   describe('prepare & execute', () => {
@@ -152,7 +151,7 @@ describe('iSql Functional Tests', () => {
 
   describe('tablePriv', () => {
     transports.forEach((transport) => {
-      it('returns privilege data for a table', (done) => {
+      it(`returns privilege data for a table using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
         const sql = new iSql();
@@ -179,7 +178,7 @@ describe('iSql Functional Tests', () => {
 
   describe('columns', () => {
     transports.forEach((transport) => {
-      it('returns meta data for a column', (done) => {
+      it(`returns meta data for a column using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
         const sql = new iSql();
@@ -206,7 +205,7 @@ describe('iSql Functional Tests', () => {
 
   describe('columnPriv', () => {
     transports.forEach((transport) => {
-      it('returns privilege data for a column', (done) => {
+      it(`returns privilege data for a column using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
         const sql = new iSql();
@@ -234,7 +233,7 @@ describe('iSql Functional Tests', () => {
 
   describe('procedures', () => {
     transports.forEach((transport) => {
-      it('returns meta data on for a procedure', (done) => {
+      it(`returns meta data on for a procedure using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
         const sql = new iSql();
@@ -261,7 +260,7 @@ describe('iSql Functional Tests', () => {
 
   describe('pColumns', () => {
     transports.forEach((transport) => {
-      it('returns meta data for procedure column', (done) => {
+      it(`returns meta data for procedure column using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
         const sql = new iSql();
@@ -314,7 +313,7 @@ describe('iSql Functional Tests', () => {
 
   describe('foreignKeys', () => {
     transports.forEach((transport) => {
-      it('returns meta data for a foreign key', (done) => {
+      it(`returns meta data for a foreign key using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
         const sql = new iSql();
@@ -341,7 +340,7 @@ describe('iSql Functional Tests', () => {
 
   describe('statistics', () => {
     transports.forEach((transport) => {
-      it('returns stats info for table', (done) => {
+      it(`returns stats info for table using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
         const sql = new iSql();

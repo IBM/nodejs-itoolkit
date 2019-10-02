@@ -20,7 +20,7 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
-const { iPgm } = require('../../lib/itoolkit');
+const { iPgm } = require('../../../lib/itoolkit');
 
 const outBuf = [
   [0, '10i0'],
@@ -135,56 +135,56 @@ describe('iPgm Class Unit Tests', () => {
     });
 
     it('regular <parm> contains by=\'val\'', () => {
-      const pgm = new iPgm("MYPGM", {lib:"MYLIB", func: "MY_PROCEDURE"});
+      const pgm = new iPgm('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
-      pgm.addParam("", "1A", {by:"val"});
-      pgm.addReturn("", "2A", {name:"output"});
+      pgm.addParam('', '1A', { by: 'val' });
+      pgm.addReturn('', '2A', { name: 'output' });
 
-      let lookAtXML=pgm.toXML();
+      const lookAtXML = pgm.toXML();
       expect(lookAtXML).to.match(/<parm .*by='val'.*>/);
-  });
+    });
 
-  it('data structure <parm> contains by=\'val\'', () => {
-      const pgm = new iPgm("MYPGM", {lib:"MYLIB", func: "MY_PROCEDURE"});
+    it('data structure <parm> contains by=\'val\'', () => {
+      const pgm = new iPgm('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
-      const p_inds=[
-        [0, "3s0"],
-        [0, "7s0", {name:"ds_fld2"}]
+      const params = [
+        [0, '3s0'],
+        [0, '7s0', { name: 'ds_fld2' }],
       ];
-      
-      pgm.addParam(p_inds, {name:"inds", by:"val"});
-      pgm.addReturn("", "2A", {name:"output"});
-      
-      let lookAtXML=pgm.toXML();
+
+      pgm.addParam(params, { name: 'inds', by: 'val' });
+      pgm.addReturn('', '2A', { name: 'output' });
+
+      const lookAtXML = pgm.toXML();
       expect(lookAtXML).to.match(/<parm .*by='val'.*>/);
-  });
+    });
 
-  it('regular <parm> contains by=\'val\', with io=\'both\'', () => {
-      const pgm = new iPgm("MYPGM", {lib:"MYLIB", func: "MY_PROCEDURE"});
+    it('regular <parm> contains by=\'val\', with io=\'both\'', () => {
+      const pgm = new iPgm('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
-      pgm.addParam("", "1A", {by:"val", io:"both"});
-      pgm.addReturn("", "2A", {name:"output"});
+      pgm.addParam('', '1A', { by: 'val', io: 'both' });
+      pgm.addReturn('', '2A', { name: 'output' });
 
-      let lookAtXML=pgm.toXML();
+      const lookAtXML = pgm.toXML();
       expect(lookAtXML).to.match(/<parm .*by='val'.*>/);
       expect(lookAtXML).to.match(/<parm .*io='both'.*>/);
-  });
+    });
 
-  it('data structure <parm> contains by=\'val\', with io=\'both\'', () => {
-      const pgm = new iPgm("MYPGM", {lib:"MYLIB", func: "MY_PROCEDURE"});
+    it('data structure <parm> contains by=\'val\', with io=\'both\'', () => {
+      const pgm = new iPgm('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
-      const p_inds=[
-        [0, "3s0"],
-        [0, "7s0", {name:"ds_fld2"}]
+      const params = [
+        [0, '3s0'],
+        [0, '7s0', { name: 'ds_fld2' }],
       ];
-      
-      pgm.addParam(p_inds, {name:"inds", by:"val", io:"both"});
-      pgm.addReturn("", "2A", {name:"output"});
-      
-      let lookAtXML=pgm.toXML();
+
+      pgm.addParam(params, { name: 'inds', by: 'val', io: 'both' });
+      pgm.addReturn('', '2A', { name: 'output' });
+
+      const lookAtXML = pgm.toXML();
       expect(lookAtXML).to.match(/<parm .*by='val'.*>/);
       expect(lookAtXML).to.match(/<parm .*io='both'.*>/);
-  });
+    });
   });
 
 

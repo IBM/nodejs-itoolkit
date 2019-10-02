@@ -19,31 +19,38 @@
 /* eslint-env mocha */
 
 const { expect } = require('chai');
-const {
-  iCmd, iSh, iQsh, xmlToJson,
-} = require('../../lib/itoolkit');
+const { readFileSync } = require('fs');
+const { CommandCall } = require('../../lib/itoolkit');
+const { xmlToJson, returnTransports } = require('../../lib/utils');
 
 // Set Env variables or set values here.
+let privateKey;
+if (process.env.TKPK) {
+  privateKey = readFileSync(process.env.TKPK, 'utf-8');
+}
 const opt = {
   database: process.env.TKDB || '*LOCAL',
-  user: process.env.TKUSER || '',
+  username: process.env.TKUSER || '',
   password: process.env.TKPASS || '',
   host: process.env.TKHOST || 'localhost',
-  port: process.env.TKPORT || 80,
+  port: process.env.TKPORT,
   path: process.env.TKPATH || '/cgi-bin/xmlcgi.pgm',
+  privateKey,
+  passphrase: process.env.TKPHRASE,
+  verbose: !!process.env.TKVERBOSE,
+  dsn: process.env.TKDSN,
 };
-
-const { returnTransports } = require('../../lib/utils');
 
 const transports = returnTransports(opt);
 
-describe('iSh, iCmd, iQsh, Functional Tests', () => {
-  describe('iCmd()', () => {
+describe('CommandCall Functional Tests', () => {
+  describe('CL command tests', () => {
     transports.forEach((transport) => {
       it(`calls CL command using ${transport.name} transport`, (done) => {
         const connection = transport.me;
-        connection.add(iCmd('RTVJOBA USRLIBL(?) SYSLIBL(?)'));
-        connection.run((xmlOut) => {
+        connection.add(new CommandCall({ command: 'RTVJOBA USRLIBL(?) SYSLIBL(?)', type: 'cl' }));
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
           results.forEach((result) => {
             expect(result.success).to.equal(true);
@@ -54,13 +61,13 @@ describe('iSh, iCmd, iQsh, Functional Tests', () => {
     });
   });
 
-  describe('iSh()', () => {
+  describe('SH command tests', () => {
     transports.forEach((transport) => {
       it(`calls PASE shell command using ${transport.name} transport`, (done) => {
         const connection = transport.me;
-
-        connection.add(iSh('system -i wrksyssts'));
-        connection.run((xmlOut) => {
+        connection.add(new CommandCall({ command: 'system -i wrksyssts', type: 'sh' }));
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
           // xs does not return success property for iSh or iQsh
           // but on error data property = '\n'
@@ -75,12 +82,13 @@ describe('iSh, iCmd, iQsh, Functional Tests', () => {
     });
   });
 
-  describe('iQsh()', () => {
+  describe('QSH command tests', () => {
     transports.forEach((transport) => {
       it(`calls QSH command using ${transport.name} transport`, (done) => {
         const connection = transport.me;
-        connection.add(iQsh('system wrksyssts'));
-        connection.run((xmlOut) => {
+        connection.add(new CommandCall({ command: 'system wrksyssts', type: 'qsh' }));
+        connection.run((error, xmlOut) => {
+          expect(error).to.equal(null);
           const results = xmlToJson(xmlOut);
           // xs does not return success property for iSh or iQsh
           // but on error data property = '\n'

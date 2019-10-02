@@ -18,7 +18,7 @@
 
 /* eslint-env mocha */
 const { expect } = require('chai');
-const { iSh, iQsh, iCmd } = require('../../lib/itoolkit');
+const { iSh, iQsh, iCmd } = require('../../../lib/itoolkit');
 
 describe('iSh, iCmd, iQsh, Unit Tests', () => {
   describe('iSh function', () => {
@@ -77,12 +77,11 @@ describe('iSh, iCmd, iQsh, Unit Tests', () => {
 
     it('accepts command input and options returns <qsh> with optional attributes', () => {
       const options = {
-        exec: 'cmd', error: 'on', before: '65535', after: '37', hex: 'on', rows: 'on',
+        error: 'on', before: '65535', after: '37', rows: 'on',
       };
-      const qsh = iCmd('RTVJOBA USRLIBL(?) SYSLIBL(?)', options);
+      const qsh = iQsh('ls -lah', options);
 
-      const expectedXML = '<cmd exec=\'cmd\' hex=\'on\' before=\'65535\' after=\'37\' '
-                        + 'error=\'on\'>RTVJOBA USRLIBL(?) SYSLIBL(?)</cmd>';
+      const expectedXML = '<qsh rows=\'on\' before=\'65535\' after=\'37\' error=\'on\'>ls -lah</qsh>';
 
       expect(qsh).to.be.a('string').and.to.equal(expectedXML);
     });

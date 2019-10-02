@@ -20,21 +20,21 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
-const { iPgm, xmlToJson } = require('../../lib/itoolkit');
+const { iPgm, xmlToJson } = require('../../../lib/itoolkit');
+const { returnTransportsDeprecated } = require('../../../lib/utils');
 
 // Set Env variables or set values here.
 const opt = {
   database: process.env.TKDB || '*LOCAL',
-  user: process.env.TKUSER || '',
+  username: process.env.TKUSER || '',
   password: process.env.TKPASS || '',
   host: process.env.TKHOST || 'localhost',
   port: process.env.TKPORT || 80,
   path: process.env.TKPATH || '/cgi-bin/xmlcgi.pgm',
 };
 
-const { returnTransports } = require('../../lib/utils');
 
-const transports = returnTransports(opt);
+const transports = returnTransportsDeprecated(opt);
 
 describe('iPgm Functional Tests', () => {
   describe('Test iPgm()', () => {
@@ -125,6 +125,7 @@ describe('iPgm Functional Tests', () => {
         connection.add(program);
         connection.run((xmlOut) => {
           const results = xmlToJson(xmlOut);
+
           expect(results[0].data[1].name).to.equal(testValue);
           done();
         });

@@ -1,14 +1,14 @@
 {
   "name": "itoolkit",
-  "version": "0.1.6",
-  "description": "Wrapper over XMLSERVICE for access to all things IBM i",
+  "version": "1.0.0-alpha.1",
+  "description": "XMLSERVICE wrapper to access to all things IBM i",
   "main": "lib/itoolkit.js",
   "directories": {
     "lib": "lib",
     "test": "test"
   },
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha"
+    "test": "./node_modules/mocha/bin/mocha --timeout 3s"
   },
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
   ],
   "author": "IBM",
   "license": "MIT",
-  "homepage": "https://github.com/IBM/nodejs-itoolkit",
+  "homepage": "https://github.com/IBM/nodejs-itoolkit/tree/v1.0-dev",
   "contributors": [
     {
       "name": "Xu Meng",
@@ -36,13 +36,21 @@
       "email": "aaronbartell@gmail.com"
     }
   ],
+  "dependencies": {
+    "depd": "2.0.0"
+  },
   "devDependencies": {
-    "chai": "^4.1.2",
-    "mocha": "^5.2.0",
-    "sinon": "^7.2.3"
+    "chai": "^4.2.0",
+    "eslint": "^6.2.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "mocha": "^6.2.0",
+    "sinon": "^7.4.1"
   },
   "optionalDependencies": {
-    "idb-connector": "^1.1.8",
-    "idb-pconnector": "^1.0.2"
+    "idb-connector": "^1.2.2",
+    "idb-pconnector": "^1.0.7",
+    "ssh2": "0.8.2",
+    "odbc": "2.1.3"
   }
 }

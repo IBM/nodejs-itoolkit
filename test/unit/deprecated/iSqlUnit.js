@@ -20,7 +20,7 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
-const { iSql } = require('../../lib/itoolkit');
+const { iSql } = require('../../../lib/itoolkit');
 
 describe('iSql Class Unit Tests', () => {
   describe('constructor', () => {
