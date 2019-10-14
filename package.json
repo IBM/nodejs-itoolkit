@@ -8,7 +8,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha --timeout 3s"
+    "test": "./node_modules/mocha/bin/mocha --timeout 3s",
+    "release": "standard-version"
   },
   "repository": {
     "type": "git",
@@ -45,7 +46,8 @@
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
     "mocha": "^6.2.0",
-    "sinon": "^7.4.1"
+    "sinon": "^7.4.1",
+    "standard-version": "^7.0.0"
   },
   "optionalDependencies": {
     "idb-connector": "^1.2.2",
