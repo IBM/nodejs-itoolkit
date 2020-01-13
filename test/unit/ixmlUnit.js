@@ -274,14 +274,6 @@ describe('ixml Unit Tests', () => {
       expect(xml.iXmlNodeSqlClose()).to.equal('</sql>');
     });
   });
-  describe.skip('iXmlNodeSqlConnect', () => {
-    it('returns the XMLSERVICE qsh open tag with default attributes', () => {
-    });
-  });
-  describe.skip('iXmlNodeSqlOptions', () => {
-    it('', () => {
-    });
-  });
   describe('iXmlNodeSqlQueryOpen', () => {
     it('returns the XMLSERVICE query open tag with default attributes', () => {
       expect(xml.iXmlNodeSqlQueryOpen()).to.equal('<query error=\'fast\'>');
