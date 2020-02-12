@@ -180,36 +180,6 @@ describe('SqlCall Class Unit Tests', () => {
       expect(sql.toXML()).to.equal(expectedXML);
     });
   });
-  describe('connect', () => {
-    it('appends connect to sql XML', () => {
-      const sql = new SqlCall();
-
-
-      const expectedXML = '<sql><connect db=\'local\' uid=\'me\' pwd=\'mypass\' options=\'opt1\'></connect></sql>';
-
-      sql.connect({ db: 'local', uid: 'me', pwd: 'mypass' });
-      expect(sql.toXML()).to.equal(expectedXML);
-    });
-  });
-  describe('setOptions', () => {
-    it('appends options to sql XML', () => {
-      const sql = new SqlCall();
-
-      const expectedXML = '<sql><options autocommit=\'on\' naming=\'system\'></options></sql>';
-
-      sql.setOptions([{ desc: 'autocommit', value: 'on' },
-        { desc: 'naming', value: 'system' }]);
-      expect(sql.toXML()).to.equal(expectedXML);
-    });
-    it('appends options without options object to sql XML', () => {
-      const sql = new SqlCall();
-
-      const expectedXML = '<sql></sql>';
-
-      sql.setOptions();
-      expect(sql.toXML()).to.equal(expectedXML);
-    });
-  });
   describe('tables', () => {
     it('appends tables to sql XML', () => {
       const sql = new SqlCall();
