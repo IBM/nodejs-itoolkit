@@ -24,17 +24,18 @@ simple and free of external dependencies as you can.
 * **Node.js version**:
 * **itoolkit version**:
 * **IBM i version**:
-* **XMLSERVICE version***:
+* **XMLSERVICE version**:
 
 **Describe the bug**
 A clear and concise description of what the bug is.
 
 **To Reproduce**
 Steps to reproduce the behavior:
-1.
+1. 
 2. 
-3.
+3. 
 4. 
+5. 
 
 **Expected behavior**
 A clear and concise description of what you expected to happen.
