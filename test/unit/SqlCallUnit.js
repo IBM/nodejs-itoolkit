@@ -63,7 +63,7 @@ describe('SqlCall Class Unit Tests', () => {
     it('appends fetch without options object to sql XML', () => {
       const sql = new SqlCall();
 
-      const expectedXML = '<sql><fetch block=\'all\' desc=\'on\'></fetch></sql>';
+      const expectedXML = '<sql><fetch block=\'all\' desc=\'on\' error=\'fast\'></fetch></sql>';
 
       sql.fetch();
       expect(sql.toXML()).to.equal(expectedXML);
@@ -71,7 +71,7 @@ describe('SqlCall Class Unit Tests', () => {
     it('appends fetch with block is 10 to sql XML', () => {
       const sql = new SqlCall();
 
-      const expectedXML = '<sql><fetch block=\'10\' desc=\'on\'></fetch></sql>';
+      const expectedXML = '<sql><fetch block=\'10\' desc=\'on\' error=\'fast\'></fetch></sql>';
 
       sql.fetch({ block: '10' });
       expect(sql.toXML()).to.equal(expectedXML);
@@ -79,7 +79,7 @@ describe('SqlCall Class Unit Tests', () => {
     it('appends fetch with desc is off to sql XML', () => {
       const sql = new SqlCall();
 
-      const expectedXML = '<sql><fetch block=\'all\' desc=\'off\'></fetch></sql>';
+      const expectedXML = '<sql><fetch block=\'all\' desc=\'off\' error=\'fast\'></fetch></sql>';
 
       sql.fetch({ desc: 'off' });
       expect(sql.toXML()).to.equal(expectedXML);
@@ -97,7 +97,7 @@ describe('SqlCall Class Unit Tests', () => {
     it('appends commit with action commit to sql XML', () => {
       const sql = new SqlCall();
 
-      const expectedXML = '<sql><commit action=\'commit\'></commit></sql>';
+      const expectedXML = '<sql><commit action=\'commit\' error=\'fast\'></commit></sql>';
 
       sql.commit({ action: 'commit' });
       expect(sql.toXML()).to.equal(expectedXML);
@@ -105,15 +105,15 @@ describe('SqlCall Class Unit Tests', () => {
     it('appends commit with action rollback to sql XML', () => {
       const sql = new SqlCall();
 
-      const expectedXML = '<sql><commit action=\'rollback\'></commit></sql>';
+      const expectedXML = '<sql><commit action=\'rollback\' error=\'fast\'></commit></sql>';
 
       sql.commit({ action: 'rollback' });
       expect(sql.toXML()).to.equal(expectedXML);
     });
-    it('appends commit without action to sql XML', () => {
+    it('appends commit with default action to sql XML', () => {
       const sql = new SqlCall();
 
-      const expectedXML = '<sql></sql>';
+      const expectedXML = '<sql><commit action=\'commit\' error=\'fast\'></commit></sql>';
 
       sql.commit();
       expect(sql.toXML()).to.equal(expectedXML);
@@ -184,7 +184,7 @@ describe('SqlCall Class Unit Tests', () => {
     it('appends tables to sql XML', () => {
       const sql = new SqlCall();
 
-      const expectedXML = '<sql><tables><parm></parm><parm>QIWS</parm><parm></parm><parm></parm></tables></sql>';
+      const expectedXML = '<sql><tables error=\'fast\'><parm></parm><parm>QIWS</parm><parm></parm><parm></parm></tables></sql>';
       // catalog, schema, table, table type
       sql.tables(['', 'QIWS', '', '']);
       expect(sql.toXML()).to.equal(expectedXML);
@@ -202,7 +202,7 @@ describe('SqlCall Class Unit Tests', () => {
     it('appends tablepriv to sql XML', () => {
       const sql = new SqlCall();
 
-      const expectedXML = '<sql><tablepriv><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm></tablepriv></sql>';
+      const expectedXML = '<sql><tablepriv error=\'fast\'><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm></tablepriv></sql>';
       // catalog, schema, table
       sql.tablePriv(['', 'QIWS', 'QCUSTCDT']);
       expect(sql.toXML()).to.equal(expectedXML);
@@ -220,7 +220,7 @@ describe('SqlCall Class Unit Tests', () => {
     it('appends columns to sql XML', () => {
       const sql = new SqlCall();
 
-      const expectedXML = '<sql><columns><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm><parm></parm></columns></sql>';
+      const expectedXML = '<sql><columns error=\'fast\'><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm><parm></parm></columns></sql>';
       // catalog, schema, table, column
       sql.columns(['', 'QIWS', 'QCUSTCDT', '']);
       expect(sql.toXML()).to.equal(expectedXML);
@@ -238,7 +238,7 @@ describe('SqlCall Class Unit Tests', () => {
     it('appends columnpriv to sql XML', () => {
       const sql = new SqlCall();
 
-      const expectedXML = '<sql><columnpriv><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm><parm></parm></columnpriv></sql>';
+      const expectedXML = '<sql><columnpriv error=\'fast\'><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm><parm></parm></columnpriv></sql>';
       // catalog, schema, table, column
       sql.columnPriv(['', 'QIWS', 'QCUSTCDT', '']);
       expect(sql.toXML()).to.equal(expectedXML);
@@ -256,7 +256,7 @@ describe('SqlCall Class Unit Tests', () => {
     it('appends procedures to sql XML', () => {
       const sql = new SqlCall();
 
-      const expectedXML = '<sql><procedures><parm></parm><parm>QSYS2</parm><parm>TCPIP_INFO</parm></procedures></sql>';
+      const expectedXML = '<sql><procedures error=\'fast\'><parm></parm><parm>QSYS2</parm><parm>TCPIP_INFO</parm></procedures></sql>';
       // catalog, schema, procedure
       sql.procedures(['', 'QSYS2', 'TCPIP_INFO']);
       expect(sql.toXML()).to.equal(expectedXML);
@@ -275,7 +275,7 @@ describe('SqlCall Class Unit Tests', () => {
       // procedure columns:
       const sql = new SqlCall();
 
-      const expectedXML = '<sql><pcolumns><parm></parm><parm>QSYS2</parm><parm>QCMDEXC</parm><parm>COMMAND</parm></pcolumns></sql>';
+      const expectedXML = '<sql><pcolumns error=\'fast\'><parm></parm><parm>QSYS2</parm><parm>QCMDEXC</parm><parm>COMMAND</parm></pcolumns></sql>';
       // catalog, schema, procedure, column
       sql.pColumns(['', 'QSYS2', 'QCMDEXC', 'COMMAND']);
       expect(sql.toXML()).to.equal(expectedXML);
@@ -294,7 +294,7 @@ describe('SqlCall Class Unit Tests', () => {
     it('appends primarykeys to sql XML', () => {
       const sql = new SqlCall();
 
-      const expectedXML = '<sql><primarykeys><parm></parm><parm>QUSRSYS</parm><parm>QASZRAIRX</parm></primarykeys></sql>';
+      const expectedXML = '<sql><primarykeys error=\'fast\'><parm></parm><parm>QUSRSYS</parm><parm>QASZRAIRX</parm></primarykeys></sql>';
       // catalog, schema, table
       sql.primaryKeys(['', 'QUSRSYS', 'QASZRAIRX']);
       expect(sql.toXML()).to.equal(expectedXML);
@@ -312,7 +312,7 @@ describe('SqlCall Class Unit Tests', () => {
     it('appends foreignkeys to sql XML', () => {
       const sql = new SqlCall();
 
-      const expectedXML = '<sql><foreignkeys><parm></parm><parm>QUSRSYS</parm><parm>QASZRAIRC</parm><parm></parm><parm>QUSRSYS</parm><parm>QASZRAIRX</parm></foreignkeys></sql>';
+      const expectedXML = '<sql><foreignkeys error=\'fast\'><parm></parm><parm>QUSRSYS</parm><parm>QASZRAIRC</parm><parm></parm><parm>QUSRSYS</parm><parm>QASZRAIRX</parm></foreignkeys></sql>';
 
       // pk: catalog, schema, table
       // fk: catalog, schema, table
@@ -334,7 +334,7 @@ describe('SqlCall Class Unit Tests', () => {
     it('appends statistics to sql XML', () => {
       const sql = new SqlCall();
 
-      const expectedXML = '<sql><statistics><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm><parm>all</parm></statistics></sql>';
+      const expectedXML = '<sql><statistics error=\'fast\'><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm><parm>all</parm></statistics></sql>';
       // catalog, schema, table, all | unique
       sql.statistics(['', 'QIWS', 'QCUSTCDT', 'all']);
       expect(sql.toXML()).to.equal(expectedXML);
@@ -352,7 +352,7 @@ describe('SqlCall Class Unit Tests', () => {
     it('appends special to sql XML', () => {
       const sql = new SqlCall();
 
-      const expectedXML = '<sql><special><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm><parm>row</parm><parm>no</parm></special></sql>';
+      const expectedXML = '<sql><special error=\'fast\'><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm><parm>row</parm><parm>no</parm></special></sql>';
       // catalog, schema, table, row | transaction | session, no | unique
       sql.special(['', 'QIWS', 'QCUSTCDT', 'row', 'no']);
       expect(sql.toXML()).to.equal(expectedXML);
@@ -370,14 +370,14 @@ describe('SqlCall Class Unit Tests', () => {
     it('appends count to sql XML', () => {
       const sql = new SqlCall();
 
-      const expectedXML = '<sql><count desc=\'both\'></count></sql>';
+      const expectedXML = '<sql><count desc=\'both\' error=\'fast\'></count></sql>';
       sql.count({ desc: 'both' });
       expect(sql.toXML()).to.equal(expectedXML);
     });
     it('appends count without options object to sql XML', () => {
       const sql = new SqlCall();
 
-      const expectedXML = '<sql><count desc=\'both\'></count></sql>';
+      const expectedXML = '<sql><count desc=\'both\' error=\'fast\'></count></sql>';
       sql.count();
       expect(sql.toXML()).to.equal(expectedXML);
     });
@@ -393,7 +393,7 @@ describe('SqlCall Class Unit Tests', () => {
     it('appends rowcount to sql XML', () => {
       const sql = new SqlCall();
 
-      const expectedXML = '<sql><rowcount></rowcount></sql>';
+      const expectedXML = '<sql><rowcount error=\'fast\'></rowcount></sql>';
       sql.rowCount();
       expect(sql.toXML()).to.equal(expectedXML);
     });
@@ -418,7 +418,7 @@ describe('SqlCall Class Unit Tests', () => {
     it('appends describe to sql XML', () => {
       const sql = new SqlCall();
 
-      const expectedXML = '<sql><describe desc=\'both\'></describe></sql>';
+      const expectedXML = '<sql><describe desc=\'both\' error=\'fast\'></describe></sql>';
 
       sql.describe({ desc: 'both' });
       expect(sql.toXML()).to.equal(expectedXML);
@@ -426,7 +426,7 @@ describe('SqlCall Class Unit Tests', () => {
     it('appends describe without options object to sql XML', () => {
       const sql = new SqlCall();
 
-      const expectedXML = '<sql><describe desc=\'both\'></describe></sql>';
+      const expectedXML = '<sql><describe desc=\'both\' error=\'fast\'></describe></sql>';
 
       sql.describe();
       expect(sql.toXML()).to.equal(expectedXML);
