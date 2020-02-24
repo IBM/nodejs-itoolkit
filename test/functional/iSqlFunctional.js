@@ -21,7 +21,7 @@
 
 const { expect } = require('chai');
 const { readFileSync } = require('fs');
-const { SqlCall } = require('../../lib/itoolkit');
+const { iSql } = require('../../lib/itoolkit');
 const { xmlToJson, returnTransports } = require('../../lib/utils');
 
 // Set Env variables or set values here.
@@ -44,13 +44,13 @@ const opt = {
 
 const transports = returnTransports(opt);
 
-describe('SqlCall Functional Tests', () => {
+describe('iSql Functional Tests', () => {
   describe('prepare & execute', () => {
     transports.forEach((transport) => {
       it(`prepares & executes stored procedure then fetch results using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const sql = new SqlCall();
+        const sql = new iSql();
 
         sql.prepare('call qsys2.tcpip_info()');
         sql.execute();
@@ -81,7 +81,7 @@ describe('SqlCall Functional Tests', () => {
       it(`runs a query and fetches results using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const sql = new SqlCall();
+        const sql = new iSql();
 
         sql.addQuery('SELECT LSTNAM, STATE FROM QIWS.QCUSTCDT');
         sql.fetch();
@@ -110,7 +110,7 @@ describe('SqlCall Functional Tests', () => {
       it(`should parse SQL result set empty data tags correctly using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const sql = new SqlCall();
+        const sql = new iSql();
 
         sql.addQuery('SELECT \'\' AS BLANK, STATE FROM QIWS.QCUSTCDT');
         sql.fetch();
@@ -138,7 +138,7 @@ describe('SqlCall Functional Tests', () => {
       it(`returns meta data for specified table using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const sql = new SqlCall();
+        const sql = new iSql();
         // [catalog, schema, table, table type]
         sql.tables(['', 'QIWS', 'QCUSTCDT', '']);
         connection.add(sql.toXML());
@@ -166,7 +166,7 @@ describe('SqlCall Functional Tests', () => {
       it(`returns privilege data for a table using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const sql = new SqlCall();
+        const sql = new iSql();
         // [catalog, schema, table]
         sql.tablePriv(['', 'QIWS', 'QCUSTCDT']);
         connection.add(sql.toXML());
@@ -194,7 +194,7 @@ describe('SqlCall Functional Tests', () => {
       it(`returns meta data for a column using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const sql = new SqlCall();
+        const sql = new iSql();
         // catalog, schema, table, column
         sql.columns(['', 'QIWS', 'QCUSTCDT', 'CUSNUM']);
         connection.add(sql.toXML());
@@ -222,7 +222,7 @@ describe('SqlCall Functional Tests', () => {
       it(`returns privilege data for a column using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const sql = new SqlCall();
+        const sql = new iSql();
 
         sql.columnPriv(['', 'QIWS', 'QCUSTCDT', 'BALDUE']);
 
@@ -251,7 +251,7 @@ describe('SqlCall Functional Tests', () => {
       it(`returns meta data on for a procedure using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const sql = new SqlCall();
+        const sql = new iSql();
         // [catalog, schema, procedure]
         sql.procedures(['', 'QSYS2', 'TCPIP_INFO']);
         connection.add(sql.toXML());
@@ -279,7 +279,7 @@ describe('SqlCall Functional Tests', () => {
       it(`returns meta data for procedure column using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const sql = new SqlCall();
+        const sql = new iSql();
         // [catalog, schema, procedure, column]
         sql.pColumns(['', 'QSYS2', 'QCMDEXC', 'COMMAND']);
         connection.add(sql.toXML());
@@ -307,7 +307,7 @@ describe('SqlCall Functional Tests', () => {
       it(`returns meta data for a primary key using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const sql = new SqlCall();
+        const sql = new iSql();
         // [catalog, schema, table]
         sql.primaryKeys(['', 'QUSRSYS', 'QASZRAIRX']);
         connection.add(sql.toXML());
@@ -334,7 +334,7 @@ describe('SqlCall Functional Tests', () => {
       it(`returns meta data for a foreign key using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const sql = new SqlCall();
+        const sql = new iSql();
         // pk: [catalog, schema, table]
         // fk: [catalog, schema, table]
         sql.foreignKeys(['', 'QUSRSYS', 'QASZRAIRC', '', 'QUSRSYS', 'QASZRAIRX']);
@@ -362,7 +362,7 @@ describe('SqlCall Functional Tests', () => {
       it(`returns stats info for table using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const sql = new SqlCall();
+        const sql = new iSql();
 
         sql.statistics(['', 'QIWS', 'QCUSTCDT', 'all']);
         connection.add(sql.toXML());
@@ -392,7 +392,7 @@ describe('SqlCall Functional Tests', () => {
         // [catalog, schema, table, row | transaction |session, no | nullable]
         const connection = transport.me;
 
-        const sql = new SqlCall();
+        const sql = new iSql();
 
         sql.special(['', 'QUSRSYS', 'QASZRAIRX', 'row', 'no'], { error: 'on' });
         connection.add(sql.toXML());
@@ -416,7 +416,7 @@ describe('SqlCall Functional Tests', () => {
       it.skip(`returns the number of rows affected by statement using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
-        const sql = new SqlCall();
+        const sql = new iSql();
 
         const insert = 'INSERT INTO QIWS.QCUSTCDT (CUSNUM,LSTNAM,INIT,STREET,CITY,STATE,ZIPCOD,CDTLMT,CHGCOD,BALDUE,CDTDUE) '
                        + 'VALUES (8798,\'TURNER\',\'TT\',\'MAIN\',\'NYC\',\'NY\',10001, 500, 3, 40.00, 0.00) with NONE';
