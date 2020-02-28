@@ -21,8 +21,9 @@
 
 const { expect } = require('chai');
 const { readFileSync } = require('fs');
+const { parseString } = require('xml2js');
 const { ProgramCall } = require('../../lib/itoolkit');
-const { xmlToJson, returnTransports } = require('../../lib/utils');
+const { returnTransports } = require('../../lib/utils');
 
 // Set Env variables or set values here.
 let privateKey;
@@ -78,12 +79,11 @@ describe('ProgramCall Functional Tests', () => {
         connection.add(program);
         connection.run((error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
-
-          results.forEach((result) => {
-            expect(result.success).to.equal(true);
+          parseString(xmlOut, (parseError, result) => {
+            expect(parseError).to.equal(null);
+            expect(result.myscript.pgm[0].success[0]).to.include('+++ success QSYS QWCRSVAL');
+            done();
           });
-          done();
         });
       });
     });
@@ -125,36 +125,37 @@ describe('ProgramCall Functional Tests', () => {
         connection.add(program);
         connection.run((error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
-
-          results.forEach((result) => {
-            expect(result.success).to.equal(true);
+          parseString(xmlOut, (parseError, result) => {
+            expect(parseError).to.equal(null);
+            expect(result.myscript.pgm[0].success[0]).to.include('+++ success QSYS QWCRSVAL');
+            done();
           });
-          done();
         });
       });
     });
   });
 
   describe.skip('Test ProgramCall()', () => {
-    // Skip for now ZZSRV6 program requires XMLSERVICE built with tests
-    // Refer to test/rpg/zzsrv6.rpgle
+    // ZZSRV6 program requires XMLSERVICE built with tests
+    // Skip for now, we need to add before hook to check ZZSRV6 is available
     transports.forEach((transport) => {
       it.skip(`Should be successful with addReturn arbitrary attribute specified using using ${transport.name} transport`, (done) => {
         const connection = transport.me;
 
         const program = new ProgramCall('ZZSRV6', { lib: 'XMLSERVICE', func: 'ZZVARY4' });
 
-        program.addParam('Gill', '10A', { letying: '4' });
+        program.addParam('Gill', '10A', { varying: '4' });
         const testValue = 'NEW_NAME';
-        program.addReturn('0', '20A', { letying: '4', name: testValue });
+        program.addReturn('0', '20A', { varying: '4', name: testValue });
         connection.add(program);
         connection.run((error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
-
-          expect(results[0].data[1].name).to.equal(testValue);
-          done();
+          parseString(xmlOut, (parseError, result) => {
+            expect(parseError).to.equal(null);
+            expect(result.myscript.pgm[0].success[0]).to.include('+++ success');
+            expect(result.myscript.pgm[0].return[0].data[0]._).to.equal('my name is Gill');
+            done();
+          });
         });
       });
     });
