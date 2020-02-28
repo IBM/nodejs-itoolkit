@@ -19,11 +19,12 @@
 /* eslint-env mocha */
 
 const { expect } = require('chai');
+const { parseString } = require('xml2js');
 const {
   iCmd, iSh, iQsh,
 } = require('../../../lib/itoolkit');
 
-const { xmlToJson, returnTransportsDeprecated } = require('../../../lib/utils');
+const { returnTransportsDeprecated } = require('../../../lib/utils');
 
 // Set Env variables or set values here.
 const opt = {
@@ -44,11 +45,11 @@ describe('iSh, iCmd, iQsh, Functional Tests', () => {
         const connection = transport.me;
         connection.add(iCmd('RTVJOBA USRLIBL(?) SYSLIBL(?)'));
         connection.run((xmlOut) => {
-          const results = xmlToJson(xmlOut);
-          results.forEach((result) => {
-            expect(result.success).to.equal(true);
+          parseString(xmlOut, (parseError, result) => {
+            expect(parseError).to.equal(null);
+            expect(result.myscript.cmd[0].success[0]).to.include('+++ success RTVJOBA USRLIBL(?) SYSLIBL(?)');
+            done();
           });
-          done();
         });
       });
     });
@@ -61,15 +62,15 @@ describe('iSh, iCmd, iQsh, Functional Tests', () => {
 
         connection.add(iSh('system -i wrksyssts'));
         connection.run((xmlOut) => {
-          const results = xmlToJson(xmlOut);
           // xs does not return success property for iSh or iQsh
           // but on error data property = '\n'
           // so lets base success on contents of data.
-          results.forEach((result) => {
-            expect(result.data).not.to.equal('\n');
-            expect(result.data).to.match(/(System\sStatus\sInformation)/);
+          parseString(xmlOut, (parseError, result) => {
+            expect(parseError).to.equal(null);
+            expect(result.myscript.sh[0]._).not.to.equal('\n');
+            expect(result.myscript.sh[0]._).to.match(/(System\sStatus\sInformation)/);
+            done();
           });
-          done();
         });
       });
     });
@@ -81,15 +82,15 @@ describe('iSh, iCmd, iQsh, Functional Tests', () => {
         const connection = transport.me;
         connection.add(iQsh('system wrksyssts'));
         connection.run((xmlOut) => {
-          const results = xmlToJson(xmlOut);
           // xs does not return success property for iSh or iQsh
           // but on error data property = '\n'
           // so lets base success on contents of data.
-          results.forEach((result) => {
-            expect(result.data).not.to.equal('\n');
-            expect(result.data).to.match(/(System\sStatus\sInformation)/);
+          parseString(xmlOut, (parseError, result) => {
+            expect(parseError).to.equal(null);
+            expect(result.myscript.qsh[0]._).not.to.equal('\n');
+            expect(result.myscript.qsh[0]._).to.match(/(System\sStatus\sInformation)/);
+            done();
           });
-          done();
         });
       });
     });

@@ -20,8 +20,9 @@
 
 const { expect } = require('chai');
 const { readFileSync } = require('fs');
+const { parseString } = require('xml2js');
 const { CommandCall } = require('../../lib/itoolkit');
-const { xmlToJson, returnTransports } = require('../../lib/utils');
+const { returnTransports } = require('../../lib/utils');
 
 // Set Env variables or set values here.
 let privateKey;
@@ -51,11 +52,11 @@ describe('CommandCall Functional Tests', () => {
         connection.add(new CommandCall({ command: 'RTVJOBA USRLIBL(?) SYSLIBL(?)', type: 'cl' }));
         connection.run((error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
-          results.forEach((result) => {
-            expect(result.success).to.equal(true);
+          parseString(xmlOut, (parseError, result) => {
+            expect(parseError).to.equal(null);
+            expect(result.myscript.cmd[0].success[0]).to.include('+++ success RTVJOBA USRLIBL(?) SYSLIBL(?)');
+            done();
           });
-          done();
         });
       });
     });
@@ -68,15 +69,15 @@ describe('CommandCall Functional Tests', () => {
         connection.add(new CommandCall({ command: 'system -i wrksyssts', type: 'sh' }));
         connection.run((error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
           // xs does not return success property for iSh or iQsh
           // but on error data property = '\n'
           // so lets base success on contents of data.
-          results.forEach((result) => {
-            expect(result.data).not.to.equal('\n');
-            expect(result.data).to.match(/(System\sStatus\sInformation)/);
+          parseString(xmlOut, (parseError, result) => {
+            expect(parseError).to.equal(null);
+            expect(result.myscript.sh[0]._).not.to.equal('\n');
+            expect(result.myscript.sh[0]._).to.match(/(System\sStatus\sInformation)/);
+            done();
           });
-          done();
         });
       });
     });
@@ -89,15 +90,15 @@ describe('CommandCall Functional Tests', () => {
         connection.add(new CommandCall({ command: 'system wrksyssts', type: 'qsh' }));
         connection.run((error, xmlOut) => {
           expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
           // xs does not return success property for iSh or iQsh
           // but on error data property = '\n'
           // so lets base success on contents of data.
-          results.forEach((result) => {
-            expect(result.data).not.to.equal('\n');
-            expect(result.data).to.match(/(System\sStatus\sInformation)/);
+          parseString(xmlOut, (parseError, result) => {
+            expect(parseError).to.equal(null);
+            expect(result.myscript.qsh[0]._).not.to.equal('\n');
+            expect(result.myscript.qsh[0]._).to.match(/(System\sStatus\sInformation)/);
+            done();
           });
-          done();
         });
       });
     });
