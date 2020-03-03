@@ -22,7 +22,7 @@
 
 const { expect } = require('chai');
 const { parseString } = require('xml2js');
-const { iSql, xmlToJson } = require('../../../lib/itoolkit');
+const { iSql } = require('../../../lib/itoolkit');
 const { returnTransportsDeprecated } = require('../../../lib/utils');
 
 // Set Env variables or set values here.
