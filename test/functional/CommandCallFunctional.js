@@ -69,12 +69,11 @@ describe('CommandCall Functional Tests', () => {
         connection.add(new CommandCall({ command: 'system -i wrksyssts', type: 'sh' }));
         connection.run((error, xmlOut) => {
           expect(error).to.equal(null);
-          // xs does not return success property for iSh or iQsh
+          // xs does not return success property for sh or qsh command calls
           // but on error data property = '\n'
           // so lets base success on contents of data.
           parseString(xmlOut, (parseError, result) => {
             expect(parseError).to.equal(null);
-            expect(result.myscript.sh[0]._).not.to.equal('\n');
             expect(result.myscript.sh[0]._).to.match(/(System\sStatus\sInformation)/);
             done();
           });
@@ -90,12 +89,11 @@ describe('CommandCall Functional Tests', () => {
         connection.add(new CommandCall({ command: 'system wrksyssts', type: 'qsh' }));
         connection.run((error, xmlOut) => {
           expect(error).to.equal(null);
-          // xs does not return success property for iSh or iQsh
+          // xs does not return success property for sh or qsh command calls
           // but on error data property = '\n'
           // so lets base success on contents of data.
           parseString(xmlOut, (parseError, result) => {
             expect(parseError).to.equal(null);
-            expect(result.myscript.qsh[0]._).not.to.equal('\n');
             expect(result.myscript.qsh[0]._).to.match(/(System\sStatus\sInformation)/);
             done();
           });

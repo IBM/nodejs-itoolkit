@@ -62,12 +62,11 @@ describe('iSh, iCmd, iQsh, Functional Tests', () => {
 
         connection.add(iSh('system -i wrksyssts'));
         connection.run((xmlOut) => {
-          // xs does not return success property for iSh or iQsh
+          // xs does not return success property for sh or qsh command calls
           // but on error data property = '\n'
           // so lets base success on contents of data.
           parseString(xmlOut, (parseError, result) => {
             expect(parseError).to.equal(null);
-            expect(result.myscript.sh[0]._).not.to.equal('\n');
             expect(result.myscript.sh[0]._).to.match(/(System\sStatus\sInformation)/);
             done();
           });
@@ -82,12 +81,11 @@ describe('iSh, iCmd, iQsh, Functional Tests', () => {
         const connection = transport.me;
         connection.add(iQsh('system wrksyssts'));
         connection.run((xmlOut) => {
-          // xs does not return success property for iSh or iQsh
+          // xs does not return success property for sh or qsh command calls
           // but on error data property = '\n'
           // so lets base success on contents of data.
           parseString(xmlOut, (parseError, result) => {
             expect(parseError).to.equal(null);
-            expect(result.myscript.qsh[0]._).not.to.equal('\n');
             expect(result.myscript.qsh[0]._).to.match(/(System\sStatus\sInformation)/);
             done();
           });
