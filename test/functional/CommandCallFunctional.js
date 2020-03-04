@@ -70,8 +70,7 @@ describe('CommandCall Functional Tests', () => {
         connection.run((error, xmlOut) => {
           expect(error).to.equal(null);
           // xs does not return success property for sh or qsh command calls
-          // but on error data property = '\n'
-          // so lets base success on contents of data.
+          // but on error sh or qsh node will not have any inner data
           parseString(xmlOut, (parseError, result) => {
             expect(parseError).to.equal(null);
             expect(result.myscript.sh[0]._).to.match(/(System\sStatus\sInformation)/);
@@ -90,8 +89,7 @@ describe('CommandCall Functional Tests', () => {
         connection.run((error, xmlOut) => {
           expect(error).to.equal(null);
           // xs does not return success property for sh or qsh command calls
-          // but on error data property = '\n'
-          // so lets base success on contents of data.
+          // but on error sh or qsh node will not have any inner data
           parseString(xmlOut, (parseError, result) => {
             expect(parseError).to.equal(null);
             expect(result.myscript.qsh[0]._).to.match(/(System\sStatus\sInformation)/);
