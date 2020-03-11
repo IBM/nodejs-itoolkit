@@ -25,31 +25,6 @@
   - [ProgramCall.addParam(value, [options])](#ProgramCalladdParamvalue-options)
   - [ProgramCall.addReturn(value, type[, options])](#ProgramCalladdReturnvalue-type-options)
   - [ProgramCall.toXML()](#ProgramCalltoXML)
-- [Class iSql](#Class-iSql)
-    - [Examples](#Examples)
-      - [run a query](#run-a-query)
-      - [call a procedure](#call-a-procedure)
-  - [Constructor: iSql()](#Constructor-iSql)
-  - [iSql.addQuery(statement[,options])](#iSqladdQuerystatementoptions)
-  - [iSql.tables(params[,options])](#iSqltablesparamsoptions)
-  - [iSql.tablePriv(params[,options])](#iSqltablePrivparamsoptions)
-  - [iSql.columns(params[,options])](#iSqlcolumnsparamsoptions)
-  - [iSql.special(params[,options])](#iSqlspecialparamsoptions)
-  - [iSql.statistics(params[,options])](#iSqlstatisticsparamsoptions)
-  - [iSql.columnPriv(params[,options])](#iSqlcolumnPrivparamsoptions)
-  - [iSql.procedures(params[, options])](#iSqlproceduresparams-options)
-  - [iSql.pColumns(params[, options])](#iSqlpColumnsparams-options)
-  - [iSql.primaryKeys(params[, options])](#iSqlprimaryKeysparams-options)
-  - [iSql.foreignKeys(params[, options])](#iSqlforeignKeysparams-options)
-  - [iSql.rowCount([options])](#iSqlrowCountoptions)
-  - [iSql.count([options])](#iSqlcountoptions)
-  - [iSql.describe([options])](#iSqldescribeoptions)
-  - [iSql.free()](#iSqlfree)
-  - [iSql.fetch([options])](#iSqlfetchoptions)
-  - [iSql.commit(options)](#iSqlcommitoptions)
-  - [iSql.prepare(statement[, options])](#iSqlpreparestatement-options)
-  - [iSql.execute([params,[options]])](#iSqlexecuteparamsoptions)
-  - [iSql.toXML()](#iSqltoXML)
 - [Class Toolkit](#Class-Toolkit)
   - [Constructor: Toolkit(connection)](#Constructor-Toolkitconnection)
   - [Toolkit.getSysValue(value, callback)](#ToolkitgetSysValuevalue-callback)
@@ -90,6 +65,30 @@
   - [iQsh](#iQsh)
   - [iSh](#iSh)
   - [iSql](#iSql)
+    - [Examples](#Examples)
+      - [run a query](#run-a-query)
+      - [call a procedure](#call-a-procedure)
+  - [Constructor: iSql()](#Constructor-iSql)
+  - [iSql.addQuery(statement[,options])](#iSqladdQuerystatementoptions)
+  - [iSql.tables(params[,options])](#iSqltablesparamsoptions)
+  - [iSql.tablePriv(params[,options])](#iSqltablePrivparamsoptions)
+  - [iSql.columns(params[,options])](#iSqlcolumnsparamsoptions)
+  - [iSql.special(params[,options])](#iSqlspecialparamsoptions)
+  - [iSql.statistics(params[,options])](#iSqlstatisticsparamsoptions)
+  - [iSql.columnPriv(params[,options])](#iSqlcolumnPrivparamsoptions)
+  - [iSql.procedures(params[, options])](#iSqlproceduresparams-options)
+  - [iSql.pColumns(params[, options])](#iSqlpColumnsparams-options)
+  - [iSql.primaryKeys(params[, options])](#iSqlprimaryKeysparams-options)
+  - [iSql.foreignKeys(params[, options])](#iSqlforeignKeysparams-options)
+  - [iSql.rowCount([options])](#iSqlrowCountoptions)
+  - [iSql.count([options])](#iSqlcountoptions)
+  - [iSql.describe([options])](#iSqldescribeoptions)
+  - [iSql.free()](#iSqlfree)
+  - [iSql.fetch([options])](#iSqlfetchoptions)
+  - [iSql.commit(options)](#iSqlcommitoptions)
+  - [iSql.prepare(statement[, options])](#iSqlpreparestatement-options)
+  - [iSql.execute([params,[options]])](#iSqlexecuteparamsoptions)
+  - [iSql.toXML()](#iSqltoXML)
   - [iUserSpace](#iUserSpace)
   - [iWork](#iWork)
 
@@ -700,625 +699,7 @@ const program = new ProgramCall('QWCRSVAL', { lib: 'QSYS' });
 console.log(program.toXML());
 ```
 
-# Class iSql
 
-Generates input xml used by XMLSERVICE to run an SQL query.
-
-iSql works well when performing simple database queries.
-
-For advanced database operations you should use [odbc](https://www.npmjs.com/package/odbc) or [idb-connector](https://www.npmjs.com/package/idb-connector) pacakges.
-
-### Examples
-
-#### run a query
-
-```js
-const { Connection, iSql, xmlToJson } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const sql = new iSql();
-
-sql.addQuery('SELECT LSTNAM, STATE FROM QIWS.QCUSTCDT');
-sql.free();
-
-connection.add(sql);
-
-connection.run((error, xmlOutput) => {
-  if (error) {
-    throw error;
-  }
-  const result = xmlToJson(xmlOutput);
-  console.log(result);
-});
-```
-
-#### call a procedure
-
-```js
-const { Connection, iSql, xmlToJson } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const sql = new iSql();
-
-sql.prepare('call qsys2.tcpip_info()');
-sql.execute();
-sql.fetch();
-sql.free();
-
-connection.add(sql);
-
-connection.run((error, xmlOutput) => {
-  if (error) {
-    throw error;
-  }
-  const result = xmlToJson(xmlOutput);
-  console.log(result);
-});
-```
-
-## Constructor: iSql()
-
-**Description:**
-
-Constructs a new iSql object.
-
-
-**Returns:**
-
-<object> a iSql object.
-
-## iSql.addQuery(statement[,options])
-
-**Description:**
-
-Adds `query` element to the iSql object.
-
-This element runs an SQL query.
-
-**Syntax:**
-
-addQuery(statement[,options])
-
-**Parameters:**
-
-- **statement** `<string>` The SQL statement.
-
-- **[options]** `<object>` in the format outlined below
-
-| Key        | Type    | Value       |
-| ----       | ------- | -------     |
-| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log. This is the default value|
-
-**Example:**
-
-See the [example](#run-a-query) above.
-
-
-## iSql.tables(params[,options])
-
-**Description:**
-
-Adds `table` element to the iSql object.
-
-This element retrieves table metadata.
-
-**Syntax:**
-
-tables(params[,options])
-
-**Parameters:**
-
-- **params** `<array>` in the format outlined below
-  
- | Index  | Type    | Description                                                             |
- | ----   | ------- | -------                                                                 |
- | 0      | string  | The qualifer or catalog for the table.<br>This may be  an empty string. |
- | 1      | string  | The schema name for the table.                                          |
- | 2      | string  | The name of the table.                                                  |
- | 3      | string  | The type of the table.<br>This may be  an empty string.                 |
-
-- **[options]** `<object>` in the format outlined below
-
-| Key        | Type    | Value       |
-| ----       | ------- | -------     |
-| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
-
-
-## iSql.tablePriv(params[,options])
-
-**Description:**
-
-Adds `tablepriv` element to the iSql object.
-
-This element retrieves table privledge metadata.
-
-**Syntax:**
-
-tablePriv(params[,options])
-
-**Parameters:**
-
-- **params** `<array>` in the format outlined below
-  
- | Index  | Type    | Description                                                                  |
- | ----   | ------- | -------                                                                      |
- | 0      | string  | The qualifer or catalog for the table.<br>This may be  an empty string.      |
- | 1      | string  | The schema name for the table.                                               |
- | 2      | string  | The name of the table.                                                       |
-
-- **[options]** `<object>` in the format outlined below
-
-| Key        | Type    | Value       |
-| ----       | ------- | -------     |
-| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log. |
-
-## iSql.columns(params[,options])
-
-**Description:**
-
-Adds `column` element to iSql object.
-
-This element retrieves metadata on a column.
-
-**Syntax:**
-
-columns(params[,options])
-
-**Parameters:**
-
-- **params** `<array>` in the format outlined below:
-  
- | Index  | Type    | Value                                                                        |
- | ----   | ------- | -------                                                                      |
- | 0      | string  | The qualifer or catalog for the table.<br>This may be  an empty string.      |
- | 1      | string  | The schema name for the column.                                              |
- | 2      | string  | The name of the table.                                                       |
- | 3      | string  | The name of the column.                                                      |
-
-- **[options]** `<object>` in the format outlined below:
-
-| Key        | Type    | Value |
-| ----       | ------- | -------     |
-| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log. |
-
-
-## iSql.special(params[,options])
-
-**Description:**
-
-Adds `special` element to iSql object.
-
-This element retrieves metadata on special column.
-
-**Syntax:**
-
-special(params[,options])
-
-**Parameters:**
-
-- **params** `<array>` in the format outlined below:
-  
- | Index  | Type    | Value                                                                        |
- | ----   | ------- | -------                                                                      |
- | 0      | string  | The qualifer or catalog for the table.<br>This may be  an empty string.      |
- | 1      | string  | The schema name for the column.                                              |
- | 2      | string  | `row \| transaction \| session`                                                 |
- | 3      | string  | `no \| nullable`                                                              |
-
-- **[options]** `<object>` in the format outlined below
-
-| Key        | Type    | Value |
-| ----       | ------- | -------     |
-| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
-
-
-## iSql.statistics(params[,options])
-
-**Description:**
-
-Adds `statistics` element to iSql object.
-
-This element retrieves statistics on a table.
-
-Retrieves a list of statistics about a table and the indexes associated with the table.
-
-
-**Syntax:**
-
-statistics(params[,options])
-
-**Parameters:**
-
-- **params** `<array>` in the format outlined below:
-  
- | Index  | Type    | Value                                                                   |
- | ----   | ------- | -------                                                                 |
- | 0      | string  | The qualifer or catalog for the table.<br>This may be  an empty string. |
- | 1      | string  | The schema name for the column.                                         |
- | 2      | string  | The name of the table.                                                  |
- | 3      | string  | `all \| unique` specifies level of stats returned                        |
-
-- **[options]** `<object>` in the format outlined below
-
-| Key        | Type    | Description |
-| ----       | ------- | -------     |
-| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
-
-
-## iSql.columnPriv(params[,options])
-
-**Description:**
-
-Adds `columnpriv` element to the iSql object.
-
-This element retrieves column privledge metadata.
-
-**Syntax:**
-
-columnPriv(params[,options])
-
-**Parameters:**
-
-- **params** `<array>` in the format outlined below:
-  
- | Index  | Type    | Value                                                                   |
- | ----   | ------- | -------                                                                 |
- | 0      | string  | The qualifer or catalog for the table.<br>This may be  an empty string. |
- | 1      | string  | The schema name for the column.                                         |
- | 2      | string  | The name of the table.                                                  |
- | 3      | string  | The name of the column.                                                 |
-
-- **[options]** `<object>` in the format outlined below
-
-| Key        | Type    | Description |
-| ----       | ------- | -------     |
-| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
-
-
-## iSql.procedures(params[, options])
-
-**Description:**
-
-Adds `procedures` element to the iSql object.
-
-This element retrieves procedure metadata.
-
-**Syntax:**
-
-procedures(params[, options])
-
-**Parameters:**
-
-- **params** `<array>` in the format outlined below:
-  
- | Index  | Type    | Value                                                                        |
- | ----   | ------- | -------                                                                      |
- | 0      | string  | The qualifer or catalog for the table.<br>This may be  an empty string.      |
- | 1      | string  | The schema name for the column.                                              |
- | 2      | string  | The name of the procedure.                                                   |
-
-- **[options]** `<object>` in the format outlined below
-
-| Key        | Type    | Description |
-| ----       | ------- | -------     |
-| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
-
-
-## iSql.pColumns(params[, options])
-
-**Description:**
-
-Adds `pColumns` element to the iSql object.
-
-This column retrieves procedure columns metadata.
-
-**Syntax:**
-
-pColumns(params[, options])
-
-**Parameters:**
-
-- **params** `<array>` in the format outlined below:
-  
- | Index  | Type    | Value                                                                        |
- | ----   | ------- | -------                                                                      |
- | 0      | string  | The qualifer or catalog for the table.<br>This may be  an empty string.      |
- | 1      | string  | The schema name for the column.                                              |
- | 2      | string  | The name of the procedure.                                                   |
- | 2      | string  | The name of the column.                                                      |
-
-- **[options]** `<object>` in the format outlined below:
-
-| Key        | Type    | Description |
-| ----       | ------- | -------     |
-| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
-
-
-## iSql.primaryKeys(params[, options])
-
-**Description:**
-
-Adds `primaryKeys` element to the iSql object.
-
-This element retrieves primary key metadata.
-
-**Syntax:**
-
-primaryKeys(params[, options])
-
-**Parameters:**
-
-- **params** `<array>` in the format outlined below:
-  
- | Index  | Type    | Value                                                                        |
- | ----   | ------- | -------                                                                      |
- | 0      | string  | The qualifer or catalog for the table.<br>This may be  an empty string.      |
- | 1      | string  | The schema name for the column.                                              |
- | 2      | string  | The name of the table.                                                       |
-
-- **[options]** `<object>` in the format outlined below
-
-| Key        | Type    | Value       |
-| ----       | ------- | -------     |
-| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
-
-
-## iSql.foreignKeys(params[, options])
-
-**Description:**
-
-Adds `foreignKeys` element to the iSql object.
-
-This element Retrieves foreign key metadata.
-
-**Syntax:**
-
-foreignKeys(params[, options])
-
-**Parameters:**
-
-- **params** `<array>` in the format outlined below:
-  
- | Index  | Type    | Value                                                                                    |
- | ----   | ------- | -------                                                                                  |
- | 0      | string  | The primary key qualifer or catalog for the table.<br>This may be  an empty string.      |
- | 1      | string  | The primary key schema name for the column.                                              |
- | 2      | string  | The primary name of the table.                                                           |
- | 3      | string  | The foreign key qualifer or catalog for the table.<br>This may be  an empty string.      |
- | 4      | string  | The foreign key schema name for the column.                                              |
- | 5      | string  | The foreign name of the table.                                                           |
-
-- **[options]** `<object>` in the format outlined below
-
-| Key        | Type    | Value       |
-| ----       | ------- | -------     |
-| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log. |
-
-
-## iSql.rowCount([options])
-
-**Description:**
-
-Adds `rowCount` element to the iSql object.
-
-This element retrieves rows affected by a change. This should be performed after  UPDATE, INSERT, or DELETE statement.
-
-**Syntax:**
-
-rowCount([options])
-
-**Parameters:**
-
-- **[options]** `<object>` in the format outlined below
-
-| Key        | Type    | Value       |
-| ----       | ------- | -------     |
-| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
-
-
-## iSql.count([options])
-
-**Description:**
-
-Adds `count` element to the iSql object.
-
-This element counts the number of column results, params, or both depending on the option set.
-
-count([options])
-
-**Syntax:**
-
-count([options])
-
-**Parameters:**
-
-- **[options]** `<object>` in the format outlined below
-
-| Key        | Type    | Value       |
-| ----       | ------- | -------     |
-| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
-
-
-## iSql.describe([options])
-
-**Description:**
-
-**Syntax:**
-
-describe([options])
-
-Adds `describe` element to the iSql object.
-
-This element describes a parameter.
-
-**Parameters:**
-
-- **[options]** `<object>` in the format outlined below
-
-| Key        | Type    | Value       |
-| ----       | ------- | -------     |
-| desc       | string  | `param` - describe parameters<br>`col` - describe columns<br>`both` - describe both. This is the default. |
-| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
-
-**Example:**
-
-## iSql.free()
-
-**Description:**
-
-Adds `free` element to the iSql object.
-
-This element releases resources.
-
-**Syntax:**
-
-free()
-
-**Example:**
-
-See the [example](#run-a-query) above.
-
-## iSql.fetch([options])
-
-**Description:**
-
-Adds `fetch` element to the iSql object.
-
-This element retrieves a result set.
-
-**Syntax:**
-
-fetch([options])
-
-**Parameters:**
-
-- **[options]** `<object>` in the format outlined below
-
-| Key        | Type    | Value                          |
-| ----       | ------- | -------                        |
-| block      | string  | `all \| n`<br>The default is `all` |
-| desc       | string  | `on \| off`<br>The default is `on` |
-| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
-
-**Example:**
-
-See the [example](#call-a-prodecure) above.
-
-## iSql.commit(options)
-
-**Description:**
-
-Adds `commit` element to the iSql object.
-
-This element commits or rolls back a transaction.
-
-**Syntax:**
-
-commit(options)
-
-**Parameters:**
-
-- **options** `<object>` in the format outlined below:
-
-| Key        | Type    | Value |
-| ----       | ------- | -------     |
-| action     | string  | `commit` - Commit the operations.<br>`rollback` - Rollback the operations.<br>This key is required. |
-| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log<br>This key is optional |
-
-
-## iSql.prepare(statement[, options])
-
-**Description:**
-
-Adds `prepare` element to the iSql object.
-
-This element prepares a SQL statement.
-
-**Syntax:**
-
-prepare(statement[,options])
-
-**Parameters:**
-
-- **statement** `<string>` the SQL statement to prepare.
-
-- **[options]** `<object>` in the format outlined below:
-
-| Key        | Type    | Value       |
-| ----       | ------- | -------     |
-| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log. This is the default value |
-
-**Example:**
-
-See the [example](#call-a-prodecure) above.
-
-## iSql.execute([params,[options]])
-
-**Description:**
-
-Adds `execute` element to the iSql object.
-
-This element executes a prepared statement.
-
-**Syntax:**
-
-execute([params[,options]])
-
-**Parameters:**
-
-- **params** `<array>` the parameter list. Each item of the list contains two fields:
-   - io `<string>` valid values include `(in, out, both)`
-   - value `<string>` - the value of the parameter.
-
-- **[options]** `<object>`
-
-| Key        | Type    | Value       |
-| ----       | ------- | -------     |
-| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log. This is the default value |
-
-**Example:**
-
-See the [example](#call-a-prodecure) above.
-
-
-## iSql.toXML()
-
-**Description:**
-
-Returns the iSql in xml format
-
-**Syntax:**
-
-toXML()
-
-**Returns:**
-
-`<string>` the iSql in xml format
-
-**Example:**
-
-```js
-const { Connection, iSql, xmlToJson } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const sql = new iSql();
-
-sql.addQuery('SELECT LSTNAM, STATE FROM QIWS.QCUSTCDT');
-
-console.log(sql.toXML());
-```
 
 # Class Toolkit
 
@@ -3136,7 +2517,623 @@ The `iSh` class is deprecated. Use the [CommandCall](#Class-CommandCall) class i
 
 ## iSql
 
-The `iSql` class is deprecated.
+Generates input xml used by XMLSERVICE to run an SQL query.
+
+iSql works well when performing simple database queries.
+
+For advanced database operations you should use [odbc](https://www.npmjs.com/package/odbc) or [idb-connector](https://www.npmjs.com/package/idb-connector) pacakges.
+
+### Examples
+
+#### run a query
+
+```js
+const { Connection, iSql, xmlToJson } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const sql = new iSql();
+
+sql.addQuery('SELECT LSTNAM, STATE FROM QIWS.QCUSTCDT');
+sql.free();
+
+connection.add(sql);
+
+connection.run((error, xmlOutput) => {
+  if (error) {
+    throw error;
+  }
+  const result = xmlToJson(xmlOutput);
+  console.log(result);
+});
+```
+
+#### call a procedure
+
+```js
+const { Connection, iSql, xmlToJson } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const sql = new iSql();
+
+sql.prepare('call qsys2.tcpip_info()');
+sql.execute();
+sql.fetch();
+sql.free();
+
+connection.add(sql);
+
+connection.run((error, xmlOutput) => {
+  if (error) {
+    throw error;
+  }
+  const result = xmlToJson(xmlOutput);
+  console.log(result);
+});
+```
+
+## Constructor: iSql()
+
+**Description:**
+
+Constructs a new iSql object.
+
+
+**Returns:**
+
+<object> a iSql object.
+
+## iSql.addQuery(statement[,options])
+
+**Description:**
+
+Adds `query` element to the iSql object.
+
+This element runs an SQL query.
+
+**Syntax:**
+
+addQuery(statement[,options])
+
+**Parameters:**
+
+- **statement** `<string>` The SQL statement.
+
+- **[options]** `<object>` in the format outlined below
+
+| Key        | Type    | Value       |
+| ----       | ------- | -------     |
+| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log. This is the default value|
+
+**Example:**
+
+See the [example](#run-a-query) above.
+
+
+## iSql.tables(params[,options])
+
+**Description:**
+
+Adds `table` element to the iSql object.
+
+This element retrieves table metadata.
+
+**Syntax:**
+
+tables(params[,options])
+
+**Parameters:**
+
+- **params** `<array>` in the format outlined below
+  
+ | Index  | Type    | Description                                                             |
+ | ----   | ------- | -------                                                                 |
+ | 0      | string  | The qualifer or catalog for the table.<br>This may be  an empty string. |
+ | 1      | string  | The schema name for the table.                                          |
+ | 2      | string  | The name of the table.                                                  |
+ | 3      | string  | The type of the table.<br>This may be  an empty string.                 |
+
+- **[options]** `<object>` in the format outlined below
+
+| Key        | Type    | Value       |
+| ----       | ------- | -------     |
+| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
+
+
+## iSql.tablePriv(params[,options])
+
+**Description:**
+
+Adds `tablepriv` element to the iSql object.
+
+This element retrieves table privledge metadata.
+
+**Syntax:**
+
+tablePriv(params[,options])
+
+**Parameters:**
+
+- **params** `<array>` in the format outlined below
+  
+ | Index  | Type    | Description                                                                  |
+ | ----   | ------- | -------                                                                      |
+ | 0      | string  | The qualifer or catalog for the table.<br>This may be  an empty string.      |
+ | 1      | string  | The schema name for the table.                                               |
+ | 2      | string  | The name of the table.                                                       |
+
+- **[options]** `<object>` in the format outlined below
+
+| Key        | Type    | Value       |
+| ----       | ------- | -------     |
+| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log. |
+
+## iSql.columns(params[,options])
+
+**Description:**
+
+Adds `column` element to iSql object.
+
+This element retrieves metadata on a column.
+
+**Syntax:**
+
+columns(params[,options])
+
+**Parameters:**
+
+- **params** `<array>` in the format outlined below:
+  
+ | Index  | Type    | Value                                                                        |
+ | ----   | ------- | -------                                                                      |
+ | 0      | string  | The qualifer or catalog for the table.<br>This may be  an empty string.      |
+ | 1      | string  | The schema name for the column.                                              |
+ | 2      | string  | The name of the table.                                                       |
+ | 3      | string  | The name of the column.                                                      |
+
+- **[options]** `<object>` in the format outlined below:
+
+| Key        | Type    | Value |
+| ----       | ------- | -------     |
+| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log. |
+
+
+## iSql.special(params[,options])
+
+**Description:**
+
+Adds `special` element to iSql object.
+
+This element retrieves metadata on special column.
+
+**Syntax:**
+
+special(params[,options])
+
+**Parameters:**
+
+- **params** `<array>` in the format outlined below:
+  
+ | Index  | Type    | Value                                                                        |
+ | ----   | ------- | -------                                                                      |
+ | 0      | string  | The qualifer or catalog for the table.<br>This may be  an empty string.      |
+ | 1      | string  | The schema name for the column.                                              |
+ | 2      | string  | `row \| transaction \| session`                                                 |
+ | 3      | string  | `no \| nullable`                                                              |
+
+- **[options]** `<object>` in the format outlined below
+
+| Key        | Type    | Value |
+| ----       | ------- | -------     |
+| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
+
+
+## iSql.statistics(params[,options])
+
+**Description:**
+
+Adds `statistics` element to iSql object.
+
+This element retrieves statistics on a table.
+
+Retrieves a list of statistics about a table and the indexes associated with the table.
+
+
+**Syntax:**
+
+statistics(params[,options])
+
+**Parameters:**
+
+- **params** `<array>` in the format outlined below:
+  
+ | Index  | Type    | Value                                                                   |
+ | ----   | ------- | -------                                                                 |
+ | 0      | string  | The qualifer or catalog for the table.<br>This may be  an empty string. |
+ | 1      | string  | The schema name for the column.                                         |
+ | 2      | string  | The name of the table.                                                  |
+ | 3      | string  | `all \| unique` specifies level of stats returned                        |
+
+- **[options]** `<object>` in the format outlined below
+
+| Key        | Type    | Description |
+| ----       | ------- | -------     |
+| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
+
+
+## iSql.columnPriv(params[,options])
+
+**Description:**
+
+Adds `columnpriv` element to the iSql object.
+
+This element retrieves column privledge metadata.
+
+**Syntax:**
+
+columnPriv(params[,options])
+
+**Parameters:**
+
+- **params** `<array>` in the format outlined below:
+  
+ | Index  | Type    | Value                                                                   |
+ | ----   | ------- | -------                                                                 |
+ | 0      | string  | The qualifer or catalog for the table.<br>This may be  an empty string. |
+ | 1      | string  | The schema name for the column.                                         |
+ | 2      | string  | The name of the table.                                                  |
+ | 3      | string  | The name of the column.                                                 |
+
+- **[options]** `<object>` in the format outlined below
+
+| Key        | Type    | Description |
+| ----       | ------- | -------     |
+| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
+
+
+## iSql.procedures(params[, options])
+
+**Description:**
+
+Adds `procedures` element to the iSql object.
+
+This element retrieves procedure metadata.
+
+**Syntax:**
+
+procedures(params[, options])
+
+**Parameters:**
+
+- **params** `<array>` in the format outlined below:
+  
+ | Index  | Type    | Value                                                                        |
+ | ----   | ------- | -------                                                                      |
+ | 0      | string  | The qualifer or catalog for the table.<br>This may be  an empty string.      |
+ | 1      | string  | The schema name for the column.                                              |
+ | 2      | string  | The name of the procedure.                                                   |
+
+- **[options]** `<object>` in the format outlined below
+
+| Key        | Type    | Description |
+| ----       | ------- | -------     |
+| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
+
+
+## iSql.pColumns(params[, options])
+
+**Description:**
+
+Adds `pColumns` element to the iSql object.
+
+This column retrieves procedure columns metadata.
+
+**Syntax:**
+
+pColumns(params[, options])
+
+**Parameters:**
+
+- **params** `<array>` in the format outlined below:
+  
+ | Index  | Type    | Value                                                                        |
+ | ----   | ------- | -------                                                                      |
+ | 0      | string  | The qualifer or catalog for the table.<br>This may be  an empty string.      |
+ | 1      | string  | The schema name for the column.                                              |
+ | 2      | string  | The name of the procedure.                                                   |
+ | 2      | string  | The name of the column.                                                      |
+
+- **[options]** `<object>` in the format outlined below:
+
+| Key        | Type    | Description |
+| ----       | ------- | -------     |
+| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
+
+
+## iSql.primaryKeys(params[, options])
+
+**Description:**
+
+Adds `primaryKeys` element to the iSql object.
+
+This element retrieves primary key metadata.
+
+**Syntax:**
+
+primaryKeys(params[, options])
+
+**Parameters:**
+
+- **params** `<array>` in the format outlined below:
+  
+ | Index  | Type    | Value                                                                        |
+ | ----   | ------- | -------                                                                      |
+ | 0      | string  | The qualifer or catalog for the table.<br>This may be  an empty string.      |
+ | 1      | string  | The schema name for the column.                                              |
+ | 2      | string  | The name of the table.                                                       |
+
+- **[options]** `<object>` in the format outlined below
+
+| Key        | Type    | Value       |
+| ----       | ------- | -------     |
+| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
+
+
+## iSql.foreignKeys(params[, options])
+
+**Description:**
+
+Adds `foreignKeys` element to the iSql object.
+
+This element Retrieves foreign key metadata.
+
+**Syntax:**
+
+foreignKeys(params[, options])
+
+**Parameters:**
+
+- **params** `<array>` in the format outlined below:
+  
+ | Index  | Type    | Value                                                                                    |
+ | ----   | ------- | -------                                                                                  |
+ | 0      | string  | The primary key qualifer or catalog for the table.<br>This may be  an empty string.      |
+ | 1      | string  | The primary key schema name for the column.                                              |
+ | 2      | string  | The primary name of the table.                                                           |
+ | 3      | string  | The foreign key qualifer or catalog for the table.<br>This may be  an empty string.      |
+ | 4      | string  | The foreign key schema name for the column.                                              |
+ | 5      | string  | The foreign name of the table.                                                           |
+
+- **[options]** `<object>` in the format outlined below
+
+| Key        | Type    | Value       |
+| ----       | ------- | -------     |
+| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log. |
+
+
+## iSql.rowCount([options])
+
+**Description:**
+
+Adds `rowCount` element to the iSql object.
+
+This element retrieves rows affected by a change. This should be performed after  UPDATE, INSERT, or DELETE statement.
+
+**Syntax:**
+
+rowCount([options])
+
+**Parameters:**
+
+- **[options]** `<object>` in the format outlined below
+
+| Key        | Type    | Value       |
+| ----       | ------- | -------     |
+| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
+
+
+## iSql.count([options])
+
+**Description:**
+
+Adds `count` element to the iSql object.
+
+This element counts the number of column results, params, or both depending on the option set.
+
+count([options])
+
+**Syntax:**
+
+count([options])
+
+**Parameters:**
+
+- **[options]** `<object>` in the format outlined below
+
+| Key        | Type    | Value       |
+| ----       | ------- | -------     |
+| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
+
+
+## iSql.describe([options])
+
+**Description:**
+
+**Syntax:**
+
+describe([options])
+
+Adds `describe` element to the iSql object.
+
+This element describes a parameter.
+
+**Parameters:**
+
+- **[options]** `<object>` in the format outlined below
+
+| Key        | Type    | Value       |
+| ----       | ------- | -------     |
+| desc       | string  | `param` - describe parameters<br>`col` - describe columns<br>`both` - describe both. This is the default. |
+| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
+
+**Example:**
+
+## iSql.free()
+
+**Description:**
+
+Adds `free` element to the iSql object.
+
+This element releases resources.
+
+**Syntax:**
+
+free()
+
+**Example:**
+
+See the [example](#run-a-query) above.
+
+## iSql.fetch([options])
+
+**Description:**
+
+Adds `fetch` element to the iSql object.
+
+This element retrieves a result set.
+
+**Syntax:**
+
+fetch([options])
+
+**Parameters:**
+
+- **[options]** `<object>` in the format outlined below
+
+| Key        | Type    | Value                          |
+| ----       | ------- | -------                        |
+| block      | string  | `all \| n`<br>The default is `all` |
+| desc       | string  | `on \| off`<br>The default is `on` |
+| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
+
+**Example:**
+
+See the [example](#call-a-prodecure) above.
+
+## iSql.commit(options)
+
+**Description:**
+
+Adds `commit` element to the iSql object.
+
+This element commits or rolls back a transaction.
+
+**Syntax:**
+
+commit(options)
+
+**Parameters:**
+
+- **options** `<object>` in the format outlined below:
+
+| Key        | Type    | Value |
+| ----       | ------- | -------     |
+| action     | string  | `commit` - Commit the operations.<br>`rollback` - Rollback the operations.<br>This key is required. |
+| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log<br>This key is optional |
+
+
+## iSql.prepare(statement[, options])
+
+**Description:**
+
+Adds `prepare` element to the iSql object.
+
+This element prepares a SQL statement.
+
+**Syntax:**
+
+prepare(statement[,options])
+
+**Parameters:**
+
+- **statement** `<string>` the SQL statement to prepare.
+
+- **[options]** `<object>` in the format outlined below:
+
+| Key        | Type    | Value       |
+| ----       | ------- | -------     |
+| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log. This is the default value |
+
+**Example:**
+
+See the [example](#call-a-prodecure) above.
+
+## iSql.execute([params,[options]])
+
+**Description:**
+
+Adds `execute` element to the iSql object.
+
+This element executes a prepared statement.
+
+**Syntax:**
+
+execute([params[,options]])
+
+**Parameters:**
+
+- **params** `<array>` the parameter list. Each item of the list contains two fields:
+   - io `<string>` valid values include `(in, out, both)`
+   - value `<string>` - the value of the parameter.
+
+- **[options]** `<object>`
+
+| Key        | Type    | Value       |
+| ----       | ------- | -------     |
+| error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log. This is the default value |
+
+**Example:**
+
+See the [example](#call-a-prodecure) above.
+
+
+## iSql.toXML()
+
+**Description:**
+
+Returns the iSql in xml format
+
+**Syntax:**
+
+toXML()
+
+**Returns:**
+
+`<string>` the iSql in xml format
+
+**Example:**
+
+```js
+const { Connection, iSql, xmlToJson } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const sql = new iSql();
+
+sql.addQuery('SELECT LSTNAM, STATE FROM QIWS.QCUSTCDT');
+
+console.log(sql.toXML());
+```
 
 ## iUserSpace
 
