@@ -25,31 +25,31 @@
   - [ProgramCall.addParam(value, [options])](#ProgramCalladdParamvalue-options)
   - [ProgramCall.addReturn(value, type[, options])](#ProgramCalladdReturnvalue-type-options)
   - [ProgramCall.toXML()](#ProgramCalltoXML)
-- [Class SqlCall](#Class-SqlCall)
+- [Class iSql](#Class-iSql)
     - [Examples](#Examples)
       - [run a query](#run-a-query)
       - [call a procedure](#call-a-procedure)
-  - [Constructor: SqlCall()](#Constructor-SqlCall)
-  - [SqlCall.addQuery(statement[,options])](#SqlCalladdQuerystatementoptions)
-  - [SqlCall.tables(params[,options])](#SqlCalltablesparamsoptions)
-  - [SqlCall.tablePriv(params[,options])](#SqlCalltablePrivparamsoptions)
-  - [SqlCall.columns(params[,options])](#SqlCallcolumnsparamsoptions)
-  - [SqlCall.special(params[,options])](#SqlCallspecialparamsoptions)
-  - [SqlCall.statistics(params[,options])](#SqlCallstatisticsparamsoptions)
-  - [SqlCall.columnPriv(params[,options])](#SqlCallcolumnPrivparamsoptions)
-  - [SqlCall.procedures(params[, options])](#SqlCallproceduresparams-options)
-  - [SqlCall.pColumns(params[, options])](#SqlCallpColumnsparams-options)
-  - [SqlCall.primaryKeys(params[, options])](#SqlCallprimaryKeysparams-options)
-  - [SqlCall.foreignKeys(params[, options])](#SqlCallforeignKeysparams-options)
-  - [SqlCall.rowCount([options])](#SqlCallrowCountoptions)
-  - [SqlCall.count([options])](#SqlCallcountoptions)
-  - [SqlCall.describe([options])](#SqlCalldescribeoptions)
-  - [SqlCall.free()](#SqlCallfree)
-  - [SqlCall.fetch([options])](#SqlCallfetchoptions)
-  - [SqlCall.commit(options)](#SqlCallcommitoptions)
-  - [SqlCall.prepare(statement[, options])](#SqlCallpreparestatement-options)
-  - [SqlCall.execute([params,[options]])](#SqlCallexecuteparamsoptions)
-  - [SqlCall.toXML()](#SqlCalltoXML)
+  - [Constructor: iSql()](#Constructor-iSql)
+  - [iSql.addQuery(statement[,options])](#iSqladdQuerystatementoptions)
+  - [iSql.tables(params[,options])](#iSqltablesparamsoptions)
+  - [iSql.tablePriv(params[,options])](#iSqltablePrivparamsoptions)
+  - [iSql.columns(params[,options])](#iSqlcolumnsparamsoptions)
+  - [iSql.special(params[,options])](#iSqlspecialparamsoptions)
+  - [iSql.statistics(params[,options])](#iSqlstatisticsparamsoptions)
+  - [iSql.columnPriv(params[,options])](#iSqlcolumnPrivparamsoptions)
+  - [iSql.procedures(params[, options])](#iSqlproceduresparams-options)
+  - [iSql.pColumns(params[, options])](#iSqlpColumnsparams-options)
+  - [iSql.primaryKeys(params[, options])](#iSqlprimaryKeysparams-options)
+  - [iSql.foreignKeys(params[, options])](#iSqlforeignKeysparams-options)
+  - [iSql.rowCount([options])](#iSqlrowCountoptions)
+  - [iSql.count([options])](#iSqlcountoptions)
+  - [iSql.describe([options])](#iSqldescribeoptions)
+  - [iSql.free()](#iSqlfree)
+  - [iSql.fetch([options])](#iSqlfetchoptions)
+  - [iSql.commit(options)](#iSqlcommitoptions)
+  - [iSql.prepare(statement[, options])](#iSqlpreparestatement-options)
+  - [iSql.execute([params,[options]])](#iSqlexecuteparamsoptions)
+  - [iSql.toXML()](#iSqltoXML)
 - [Class Toolkit](#Class-Toolkit)
   - [Constructor: Toolkit(connection)](#Constructor-Toolkitconnection)
   - [Toolkit.getSysValue(value, callback)](#ToolkitgetSysValuevalue-callback)
@@ -294,7 +294,7 @@ add(input)
 
 **Parameters:**
 
-- **input** `<object> | <string>` an instance of class [CommandCall](#Class-CommandCall), [ProgramCall](#Class-ProgramCall), [SqlCall](#Class-SqlCall) , or XML string.
+- **input** `<object> | <string>` an instance of class [CommandCall](#Class-CommandCall), [ProgramCall](#Class-ProgramCall), [iSql](#Class-iSql) , or XML string.
 
 **Example:**
 
@@ -511,7 +511,7 @@ console.log(command.toXML());
 
 The ProgramCall is used to call a Programs and Service Programs.
 
-ProgramCall requests are more complicated than CommandCall or SqlCall.
+ProgramCall requests are more complicated than CommandCall or iSql.
 
 It is recommended to read the `XMLSERVICE call PGM` part of the [XMLSERVICE manual](http://youngiprofessionals.com/wiki/index.php/XMLSERVICE/XMLSERVICE) first.
 
@@ -700,11 +700,11 @@ const program = new ProgramCall('QWCRSVAL', { lib: 'QSYS' });
 console.log(program.toXML());
 ```
 
-# Class SqlCall
+# Class iSql
 
 Generates input xml used by XMLSERVICE to run an SQL query.
 
-SqlCall works well when performing simple database queries.
+iSql works well when performing simple database queries.
 
 For advanced database operations you should use [odbc](https://www.npmjs.com/package/odbc) or [idb-connector](https://www.npmjs.com/package/idb-connector) pacakges.
 
@@ -713,14 +713,14 @@ For advanced database operations you should use [odbc](https://www.npmjs.com/pac
 #### run a query
 
 ```js
-const { Connection, SqlCall, xmlToJson } = require('itoolkit');
+const { Connection, iSql, xmlToJson } = require('itoolkit');
 
 const connection = new Connection({
   transport: 'ssh',
   transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
 });
 
-const sql = new SqlCall();
+const sql = new iSql();
 
 sql.addQuery('SELECT LSTNAM, STATE FROM QIWS.QCUSTCDT');
 sql.free();
@@ -739,14 +739,14 @@ connection.run((error, xmlOutput) => {
 #### call a procedure
 
 ```js
-const { Connection, SqlCall, xmlToJson } = require('itoolkit');
+const { Connection, iSql, xmlToJson } = require('itoolkit');
 
 const connection = new Connection({
   transport: 'ssh',
   transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
 });
 
-const sql = new SqlCall();
+const sql = new iSql();
 
 sql.prepare('call qsys2.tcpip_info()');
 sql.execute();
@@ -764,22 +764,22 @@ connection.run((error, xmlOutput) => {
 });
 ```
 
-## Constructor: SqlCall()
+## Constructor: iSql()
 
 **Description:**
 
-Constructs a new SqlCall object.
+Constructs a new iSql object.
 
 
 **Returns:**
 
-<object> a SqlCall object.
+<object> a iSql object.
 
-## SqlCall.addQuery(statement[,options])
+## iSql.addQuery(statement[,options])
 
 **Description:**
 
-Adds `query` element to the SqlCall object.
+Adds `query` element to the iSql object.
 
 This element runs an SQL query.
 
@@ -802,11 +802,11 @@ addQuery(statement[,options])
 See the [example](#run-a-query) above.
 
 
-## SqlCall.tables(params[,options])
+## iSql.tables(params[,options])
 
 **Description:**
 
-Adds `table` element to the SqlCall object.
+Adds `table` element to the iSql object.
 
 This element retrieves table metadata.
 
@@ -832,11 +832,11 @@ tables(params[,options])
 | error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
 
 
-## SqlCall.tablePriv(params[,options])
+## iSql.tablePriv(params[,options])
 
 **Description:**
 
-Adds `tablepriv` element to the SqlCall object.
+Adds `tablepriv` element to the iSql object.
 
 This element retrieves table privledge metadata.
 
@@ -860,11 +860,11 @@ tablePriv(params[,options])
 | ----       | ------- | -------     |
 | error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log. |
 
-## SqlCall.columns(params[,options])
+## iSql.columns(params[,options])
 
 **Description:**
 
-Adds `column` element to SqlCall object.
+Adds `column` element to iSql object.
 
 This element retrieves metadata on a column.
 
@@ -890,11 +890,11 @@ columns(params[,options])
 | error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log. |
 
 
-## SqlCall.special(params[,options])
+## iSql.special(params[,options])
 
 **Description:**
 
-Adds `special` element to SqlCall object.
+Adds `special` element to iSql object.
 
 This element retrieves metadata on special column.
 
@@ -920,11 +920,11 @@ special(params[,options])
 | error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
 
 
-## SqlCall.statistics(params[,options])
+## iSql.statistics(params[,options])
 
 **Description:**
 
-Adds `statistics` element to SqlCall object.
+Adds `statistics` element to iSql object.
 
 This element retrieves statistics on a table.
 
@@ -953,11 +953,11 @@ statistics(params[,options])
 | error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
 
 
-## SqlCall.columnPriv(params[,options])
+## iSql.columnPriv(params[,options])
 
 **Description:**
 
-Adds `columnpriv` element to the SqlCall object.
+Adds `columnpriv` element to the iSql object.
 
 This element retrieves column privledge metadata.
 
@@ -983,11 +983,11 @@ columnPriv(params[,options])
 | error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
 
 
-## SqlCall.procedures(params[, options])
+## iSql.procedures(params[, options])
 
 **Description:**
 
-Adds `procedures` element to the SqlCall object.
+Adds `procedures` element to the iSql object.
 
 This element retrieves procedure metadata.
 
@@ -1012,11 +1012,11 @@ procedures(params[, options])
 | error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
 
 
-## SqlCall.pColumns(params[, options])
+## iSql.pColumns(params[, options])
 
 **Description:**
 
-Adds `pColumns` element to the SqlCall object.
+Adds `pColumns` element to the iSql object.
 
 This column retrieves procedure columns metadata.
 
@@ -1042,11 +1042,11 @@ pColumns(params[, options])
 | error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
 
 
-## SqlCall.primaryKeys(params[, options])
+## iSql.primaryKeys(params[, options])
 
 **Description:**
 
-Adds `primaryKeys` element to the SqlCall object.
+Adds `primaryKeys` element to the iSql object.
 
 This element retrieves primary key metadata.
 
@@ -1071,11 +1071,11 @@ primaryKeys(params[, options])
 | error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
 
 
-## SqlCall.foreignKeys(params[, options])
+## iSql.foreignKeys(params[, options])
 
 **Description:**
 
-Adds `foreignKeys` element to the SqlCall object.
+Adds `foreignKeys` element to the iSql object.
 
 This element Retrieves foreign key metadata.
 
@@ -1103,11 +1103,11 @@ foreignKeys(params[, options])
 | error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log. |
 
 
-## SqlCall.rowCount([options])
+## iSql.rowCount([options])
 
 **Description:**
 
-Adds `rowCount` element to the SqlCall object.
+Adds `rowCount` element to the iSql object.
 
 This element retrieves rows affected by a change. This should be performed after  UPDATE, INSERT, or DELETE statement.
 
@@ -1124,11 +1124,11 @@ rowCount([options])
 | error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
 
 
-## SqlCall.count([options])
+## iSql.count([options])
 
 **Description:**
 
-Adds `count` element to the SqlCall object.
+Adds `count` element to the iSql object.
 
 This element counts the number of column results, params, or both depending on the option set.
 
@@ -1147,7 +1147,7 @@ count([options])
 | error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log.|
 
 
-## SqlCall.describe([options])
+## iSql.describe([options])
 
 **Description:**
 
@@ -1155,7 +1155,7 @@ count([options])
 
 describe([options])
 
-Adds `describe` element to the SqlCall object.
+Adds `describe` element to the iSql object.
 
 This element describes a parameter.
 
@@ -1170,11 +1170,11 @@ This element describes a parameter.
 
 **Example:**
 
-## SqlCall.free()
+## iSql.free()
 
 **Description:**
 
-Adds `free` element to the SqlCall object.
+Adds `free` element to the iSql object.
 
 This element releases resources.
 
@@ -1186,11 +1186,11 @@ free()
 
 See the [example](#run-a-query) above.
 
-## SqlCall.fetch([options])
+## iSql.fetch([options])
 
 **Description:**
 
-Adds `fetch` element to the SqlCall object.
+Adds `fetch` element to the iSql object.
 
 This element retrieves a result set.
 
@@ -1212,11 +1212,11 @@ fetch([options])
 
 See the [example](#call-a-prodecure) above.
 
-## SqlCall.commit(options)
+## iSql.commit(options)
 
 **Description:**
 
-Adds `commit` element to the SqlCall object.
+Adds `commit` element to the iSql object.
 
 This element commits or rolls back a transaction.
 
@@ -1234,11 +1234,11 @@ commit(options)
 | error      | string  | `on` - script stops, full error report<br>`off` - script continues, job error log<br>`fast` - script continues, brief error log<br>This key is optional |
 
 
-## SqlCall.prepare(statement[, options])
+## iSql.prepare(statement[, options])
 
 **Description:**
 
-Adds `prepare` element to the SqlCall object.
+Adds `prepare` element to the iSql object.
 
 This element prepares a SQL statement.
 
@@ -1260,11 +1260,11 @@ prepare(statement[,options])
 
 See the [example](#call-a-prodecure) above.
 
-## SqlCall.execute([params,[options]])
+## iSql.execute([params,[options]])
 
 **Description:**
 
-Adds `execute` element to the SqlCall object.
+Adds `execute` element to the iSql object.
 
 This element executes a prepared statement.
 
@@ -1289,11 +1289,11 @@ execute([params[,options]])
 See the [example](#call-a-prodecure) above.
 
 
-## SqlCall.toXML()
+## iSql.toXML()
 
 **Description:**
 
-Returns the SqlCall in xml format
+Returns the iSql in xml format
 
 **Syntax:**
 
@@ -1301,19 +1301,19 @@ toXML()
 
 **Returns:**
 
-`<string>` the SqlCall in xml format
+`<string>` the iSql in xml format
 
 **Example:**
 
 ```js
-const { Connection, SqlCall, xmlToJson } = require('itoolkit');
+const { Connection, iSql, xmlToJson } = require('itoolkit');
 
 const connection = new Connection({
   transport: 'ssh',
   transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
 });
 
-const sql = new SqlCall();
+const sql = new iSql();
 
 sql.addQuery('SELECT LSTNAM, STATE FROM QIWS.QCUSTCDT');
 
@@ -3136,7 +3136,7 @@ The `iSh` class is deprecated. Use the [CommandCall](#Class-CommandCall) class i
 
 ## iSql
 
-The `iSql` class is deprecated. Use the [SqlCall](#Class-SqlCall) class instead.
+The `iSql` class is deprecated.
 
 ## iUserSpace
 
