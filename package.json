@@ -8,7 +8,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha --timeout 3s",
+    "test": "./node_modules/mocha/bin/mocha --recursive test/unit",
+    "test-integration": "./node_modules/mocha/bin/mocha --timeout 3s test/functional/*.js",
     "release": "standard-version"
   },
   "repository": {
