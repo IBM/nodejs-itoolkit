@@ -400,7 +400,8 @@ run(callback)
 **Example:**
 
 ```js
-const { Connection, CommandCall, xmlToJson } = require('itoolkit');
+const { Connection, CommandCall } = require('itoolkit');
+const { parseString } = require('xml2js');
 
 const connection = new Connection({
   transport: 'ssh',
@@ -413,9 +414,12 @@ connection.run((error, xmlOutput) => {
   if (error) {
     throw error;
   }
-  console.log(xmlOutput); // print the raw XML output
-  const result = xmlToJson(xmlOutput);
-  console.log(JSON.stringify(result)); // print the formatted JSON output
+  parseString(xmlOutput, (parseError, result) => {
+    if (parseError) {
+      throw parseError;
+    }
+    console.log(JSON.stringify(result));
+  });
 });
 ```
 
@@ -426,7 +430,9 @@ The CommandCall class is used to construct a `CL`, `QSH`, or `PASE Shell` comman
 ### Example
 
 ```js
-const { Connection, CommandCall, xmlToJson } = require('itoolkit');
+const { Connection, CommandCall } = require('itoolkit');
+const { parseString } = require('xml2js');
+
 
 const connection = new Connection({
   transport: 'ssh',
@@ -441,8 +447,12 @@ connection.run((error, xmlOutput) => {
   if (error) {
     throw error;
   }
-  const result = xmlToJson(xmlOutput);
-  console.log(JSON.stringify(result));
+  parseString(xmlOutput, (parseError, result) => {
+    if (parseError) {
+      throw parseError;
+    }
+    console.log(JSON.stringify(result));
+  });
 });
 ```
 
@@ -519,7 +529,9 @@ For calling system programs it is recommended to review the [API manual](https:/
 ## Example
 
 ```js
-const { Connection, ProgramCall, xmlToJson } = require('itoolkit');
+const { Connection, ProgramCall } = require('itoolkit');
+const { parseString } = require('xml2js');
+
 
 const connection = new Connection({
   transport: 'ssh',
@@ -557,8 +569,12 @@ connection.run((error, xmlOutput) => {
   if (error) {
     throw error;
   }
-  const result = xmlToJson(xmlOutput);
-  console.log(JSON.stringify(result));
+  parseString(xmlOutput, (parseError, result) => {
+    if (parseError) {
+      throw parseError;
+    }
+    console.log(JSON.stringify(result));
+  });
 });
 ```
 
@@ -645,7 +661,9 @@ addReturn(value, type[, options])
 **Example:**
 
 ```js
-const { Connection, ProgramCall, xmlToJson } = require('itoolkit');
+const { Connection, ProgramCall } = require('itoolkit');
+const { parseString } = require('xml2js');
+
 
 const connection = new Connection({
   transport: 'ssh',
@@ -665,9 +683,12 @@ connection.run((error, xmlOutput) => {
   if (error) {
     throw error;
   }
-  console.log(xmlOutput);
-  const results = xmlToJson(xmlOutput);
-  console.log(results[0].data[1].value); // my name is Clark Jones
+  parseString(xmlOutput, (parseError, result) => {
+    if (parseError) {
+      throw parseError;
+    }
+    console.log(result.myscript.pgm[0].return[0].data[0]._); // my name is Clark Jones
+  });
 });
 ```
 
@@ -2528,7 +2549,8 @@ For advanced database operations you should use [odbc](https://www.npmjs.com/pac
 #### run a query
 
 ```js
-const { Connection, iSql, xmlToJson } = require('itoolkit');
+const { Connection, iSql } = require('itoolkit');
+const { parseString } = require('xml2js');
 
 const connection = new Connection({
   transport: 'ssh',
@@ -2538,6 +2560,7 @@ const connection = new Connection({
 const sql = new iSql();
 
 sql.addQuery('SELECT LSTNAM, STATE FROM QIWS.QCUSTCDT');
+sql.fetch();
 sql.free();
 
 connection.add(sql);
@@ -2546,15 +2569,20 @@ connection.run((error, xmlOutput) => {
   if (error) {
     throw error;
   }
-  const result = xmlToJson(xmlOutput);
-  console.log(result);
+  parseString(xmlOutput, (parseError, result) => {
+    if (parseError) {
+      throw parseError;
+    }
+    console.log(JSON.stringify(result));
+  });
 });
 ```
 
 #### call a procedure
 
 ```js
-const { Connection, iSql, xmlToJson } = require('itoolkit');
+const { Connection, iSql } = require('itoolkit');
+const { parseString } = require('xml2js');
 
 const connection = new Connection({
   transport: 'ssh',
@@ -2574,8 +2602,12 @@ connection.run((error, xmlOutput) => {
   if (error) {
     throw error;
   }
-  const result = xmlToJson(xmlOutput);
-  console.log(result);
+  parseString(xmlOutput, (parseError, result) => {
+    if (parseError) {
+      throw parseError;
+    }
+    console.log(JSON.stringify(result));
+  });
 });
 ```
 
@@ -3121,7 +3153,8 @@ toXML()
 **Example:**
 
 ```js
-const { Connection, iSql, xmlToJson } = require('itoolkit');
+const { Connection, iSql } = require('itoolkit');
+const { parseString } = require('xml2js');
 
 const connection = new Connection({
   transport: 'ssh',

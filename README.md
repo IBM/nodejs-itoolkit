@@ -186,8 +186,10 @@ The ProgramCall class is used to call IBM i programs and service programs.
 #### Example
 ```javascript
 const {
-  Connection, ProgramCall, xmlToJson,
+  Connection, ProgramCall,
 } = require('itoolkit');
+
+const { parseString } = require('xml2js');
 
 const conn = new Connection({
   transport: 'ssh',
@@ -225,8 +227,12 @@ conn.run((error, xmlOutput) => {
   if (error) {
     throw error;
   }
-  const result = xmlToJson(xmlOutput);
-  console.log(JSON.stringify(result));
+  parseString(xmlOutput, (parseError, result) => {
+    if (parseError) {
+      throw parseError;
+    }
+    console.log(JSON.stringify(result));
+  });
 });
 ```
 ### CommandCall
@@ -235,8 +241,10 @@ CommandCall is used to execute a CL, QSH, or PASE command.
 #### Example
 ```javascript
 const {
-  Connection, CommandCall, xmlToJson,
+  Connection, CommandCall,
 } = require('itoolkit');
+
+const { parseString } = require('xml2js');
 
 const conn = new Connection({
   transport: 'ssh',
@@ -249,8 +257,12 @@ conn.run((error, xmlOutput) => {
   if (error) {
     throw error;
   }
-  const result = xmlToJson(xmlOutput);
-  console.log(JSON.stringify(result));
+  parseString(xmlOutput, (parseError, result) => {
+    if (parseError) {
+      throw parseError;
+    }
+    console.log(JSON.stringify(result));
+  });
 });
 ```
 
@@ -261,8 +273,10 @@ SqlCall is used to make an SQL query.
 
 ```javascript
 const {
-  Connection, SqlCall, xmlToJson,
+  Connection, SqlCall,
 } = require('itoolkit');
+
+const { parseString } = require('xml2js');
 
 const conn = new Connection({
   transport: 'ssh',
@@ -281,8 +295,12 @@ conn.run((error, xmlOutput) => {
   if (error) {
     throw error;
   }
-  const result = xmlToJson(xmlOutput);
-  console.log(JSON.stringify(result));
+  parseString(xmlOutput, (parseError, result) => {
+    if (parseError) {
+      throw parseError;
+    }
+    console.log(JSON.stringify(result));
+  });
 });
 ```
 ## Utility Toolkit Functions
@@ -296,7 +314,7 @@ Aside from the main classes this toolkit also provides helper functions to acces
 
 ```js
 const {
-  Connection, Toolkit, xmlToJson,
+  Connection, Toolkit,
 } = require('itoolkit');
 
 const conn = new Connection({
