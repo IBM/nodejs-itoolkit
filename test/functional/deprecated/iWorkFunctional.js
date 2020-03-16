@@ -20,24 +20,24 @@
 
 const { expect } = require('chai');
 const { iConn, iWork } = require('../../../lib/itoolkit');
-const { returnTransportsDeprecated } = require('../../../lib/utils');
+const { config } = require('../config');
 
-// Set Env variables or set values here.
-const opt = {
-  database: process.env.TKDB || '*LOCAL',
-  username: process.env.TKUSER || '',
-  password: process.env.TKPASS || '',
-  host: process.env.TKHOST || 'localhost',
-  port: process.env.TKPORT || 80,
-  path: process.env.TKPATH || '/cgi-bin/xmlcgi.pgm',
-};
+if (config.transport !== 'idb' && config.transport !== 'rest') {
+  throw new Error('Only idb and rest transports are available for deprecated tests');
+}
 
-const transports = returnTransportsDeprecated(opt);
+const { database, username, password } = config.transportOptions;
+
+let restOptions = null;
+
+if (config.transport === 'rest') {
+  restOptions = config.restOptions;
+}
 
 describe('iWork Functional Tests', () => {
   describe('constructor', () => {
     it('creates and returns an instance of iWork', () => {
-      const connection = new iConn(opt.database, opt.user, opt.password);
+      const connection = new iConn(database, config.user, password);
 
       const work = new iWork(connection);
 
@@ -46,163 +46,153 @@ describe('iWork Functional Tests', () => {
   });
 
   describe('getSysValue', () => {
-    transports.forEach((transport) => {
-      it(`returns the value of system variable using ${transport.name} transport`, (done) => {
-        const connection = transport.me;
+    it(`returns the value of system variable using ${config.transport} transport`, (done) => {
+      const connection = new iConn(database, username, password, restOptions);
 
-        const work = new iWork(connection);
+      const work = new iWork(connection);
 
-        work.getSysValue('QCENTURY', (output) => {
-          expect(output).to.be.a('string').and.to.equal('1');
-          done();
-        });
+      work.getSysValue('QCENTURY', (output) => {
+        expect(output).to.be.a('string').and.to.equal('1');
+        done();
       });
     });
   });
 
   describe('getSysStatus', () => {
-    transports.forEach((transport) => {
-      it('returns basic system status information about the signed-on users '
-           + `and batch jobs using ${transport.name} transport`,
-      (done) => {
-        const connection = transport.me;
-        const work = new iWork(connection);
+    it('returns basic system status information about the signed-on users '
+           + `and batch jobs using ${config.transport} transport`,
+    (done) => {
+      const connection = new iConn(database, username, password, restOptions);
+      const work = new iWork(connection);
 
-        work.getSysStatus((output) => {
-          expect(output).to.be.an('Object');
-          expect(output).to.have.a.property('Current_date_and_time');
-          expect(output).to.have.a.property('System_name');
-          expect(output).to.have.a.property('Users_currently_signed_on');
-          expect(output).to.have.a.property('Users_temporarily_signed_off_(disconnected)');
-          expect(output).to.have.a.property('Users_suspended_by_system_request');
-          expect(output).to.have.a.property('Users_suspended_by_group_jobs');
-          expect(output).to.have.a.property('Users_signed_off_with_printer_output_waiting_to_print');
-          expect(output).to.have.a.property('Batch_jobs_waiting_for_messages');
-          expect(output).to.have.a.property('Batch_jobs_running');
-          expect(output).to.have.a.property('Batch_jobs_held_while_running');
-          expect(output).to.have.a.property('Batch_jobs_ending');
-          expect(output).to.have.a.property('Batch_jobs_waiting_to_run_or_already_scheduled');
-          expect(output).to.have.a.property('Batch_jobs_held_on_a_job_queue');
-          expect(output).to.have.a.property('Batch_jobs_on_a_held_job_queue');
-          expect(output).to.have.a.property('Batch_jobs_on_an_unassigned_job_queue');
-          expect(output).to.have.a.property('Batch_jobs_ended_with_printer_output_waiting_to_print');
-          done();
-        });
+      work.getSysStatus((output) => {
+        expect(output).to.be.an('Object');
+        expect(output).to.have.a.property('Current_date_and_time');
+        expect(output).to.have.a.property('System_name');
+        expect(output).to.have.a.property('Users_currently_signed_on');
+        expect(output).to.have.a.property('Users_temporarily_signed_off_(disconnected)');
+        expect(output).to.have.a.property('Users_suspended_by_system_request');
+        expect(output).to.have.a.property('Users_suspended_by_group_jobs');
+        expect(output).to.have.a.property('Users_signed_off_with_printer_output_waiting_to_print');
+        expect(output).to.have.a.property('Batch_jobs_waiting_for_messages');
+        expect(output).to.have.a.property('Batch_jobs_running');
+        expect(output).to.have.a.property('Batch_jobs_held_while_running');
+        expect(output).to.have.a.property('Batch_jobs_ending');
+        expect(output).to.have.a.property('Batch_jobs_waiting_to_run_or_already_scheduled');
+        expect(output).to.have.a.property('Batch_jobs_held_on_a_job_queue');
+        expect(output).to.have.a.property('Batch_jobs_on_a_held_job_queue');
+        expect(output).to.have.a.property('Batch_jobs_on_an_unassigned_job_queue');
+        expect(output).to.have.a.property('Batch_jobs_ended_with_printer_output_waiting_to_print');
+        done();
       });
     });
   });
 
   describe('getSysStatusExt', () => {
-    transports.forEach((transport) => {
-      it(`returns more detailed system status info using ${transport.name} transport`,
-        (done) => {
-          const connection = transport.me;
-
-          const work = new iWork(connection);
-
-          work.getSysStatusExt((output) => {
-            expect(output).to.be.an('Object');
-            expect(output).to.have.a.property('Current_date_and_time');
-            expect(output).to.have.a.property('System_name');
-            expect(output).to.have.a.property('Elapsed_time');
-            expect(output).to.have.a.property('Restricted_state_flag');
-            expect(output).to.have.a.property('%_processing_unit_used');
-            expect(output).to.have.a.property('Jobs_in_system');
-            expect(output).to.have.a.property('%_permanent_addresses');
-            expect(output).to.have.a.property('%_temporary_addresses');
-            expect(output).to.have.a.property('System_ASP');
-            expect(output).to.have.a.property('%_system_ASP_used');
-            expect(output).to.have.a.property('Total_auxiliary_storage');
-            expect(output).to.have.a.property('Current_unprotected_storage_used');
-            expect(output).to.have.a.property('Maximum_unprotected_storage_used');
-            expect(output).to.have.a.property('%_DB_capability');
-            expect(output).to.have.a.property('Main_storage_size');
-            expect(output).to.have.a.property('Number_of_partitions');
-            expect(output).to.have.a.property('Partition_identifier');
-            expect(output).to.have.a.property('Current_processing_capacity');
-            expect(output).to.have.a.property('Processor_sharing_attribute');
-            expect(output).to.have.a.property('Number_of_processors');
-            expect(output).to.have.a.property('Active_jobs_in_system');
-            expect(output).to.have.a.property('Active_threads_in_system');
-            expect(output).to.have.a.property('Maximum_jobs_in_system');
-            expect(output).to.have.a.property('%_temporary_256MB_segments_used');
-            expect(output).to.have.a.property('%_temporary_4GB_segments_used');
-            expect(output).to.have.a.property('%_permanent_256MB_segments_used');
-            expect(output).to.have.a.property('%_permanent_4GB_segments_used');
-            expect(output).to.have.a.property('%_current_interactive_performance');
-            expect(output).to.have.a.property('%_uncapped_CPU_capacity_used');
-            expect(output).to.have.a.property('%_shared_processor_pool_used');
-            expect(output).to.have.a.property('Main_storage_size_(long)');
-            done();
-          });
-        });
-    });
-  });
-
-  describe('getJobStatus', () => {
-    transports.forEach((transport) => {
-      it(`returns status of specified job using ${transport.name} transport`,
-        (done) => {
-          const connection = transport.me;
-
-          const work = new iWork(connection);
-
-          work.getJobStatus('000000', (output) => {
-            expect(output).to.be.an('Object');
-            expect(output).to.have.a.property('Job_status');
-            expect(output).to.have.a.property('Fully_qualified_job_name');
-            done();
-          });
-        });
-    });
-  });
-
-  describe('getJobInfo', () => {
-    transports.forEach((transport) => {
-      it(`returns info on specfed job using ${transport.name} transport`, (done) => {
-        const connection = transport.me;
+    it(`returns more detailed system status info using ${config.transport} transport`,
+      (done) => {
+        const connection = new iConn(database, username, password, restOptions);
 
         const work = new iWork(connection);
 
-        work.getJobInfo('SCPF', 'QSYS', '000000', (output) => {
+        work.getSysStatusExt((output) => {
           expect(output).to.be.an('Object');
-          expect(output).to.have.a.property('Job_name');
-          expect(output).to.have.a.property('User_name');
-          expect(output).to.have.a.property('Job_number');
-          expect(output).to.have.a.property('Job_status');
-          expect(output).to.have.a.property('Job_type');
-          expect(output).to.have.a.property('Job_subtype');
-          expect(output).to.have.a.property('Subsystem_description_name');
-          expect(output).to.have.a.property('Run_priority_(job)');
-          expect(output).to.have.a.property('System_pool_identifier');
-          expect(output).to.have.a.property('Processing_unit_time_used,_if_less_than_2,147,483,647_milliseconds');
-          expect(output).to.have.a.property('Number_of_auxiliary_I/O_requests,_if_less_than_2,147,483,647');
-          expect(output).to.have.a.property('Number_of_interactive_transactions');
-          expect(output).to.have.a.property('Response_time_total');
-          expect(output).to.have.a.property('Function_type');
-          expect(output).to.have.a.property('Function_name');
-          expect(output).to.have.a.property('Active_job_status');
-          expect(output).to.have.a.property('Number_of_database_lock_waits');
-          expect(output).to.have.a.property('Number_of_internal_machine_lock_waits');
-          expect(output).to.have.a.property('Number_of_nondatabase_lock_waits');
-          expect(output).to.have.a.property('Time_spent_on_database_lock_waits');
-          expect(output).to.have.a.property('Time_spent_on_internal_machine_lock_waits');
-          expect(output).to.have.a.property('Time_spent_on_nondatabase_lock_waits');
-          expect(output).to.have.a.property('Current_system_pool_identifier');
-          expect(output).to.have.a.property('Thread_count');
-          expect(output).to.have.a.property('Processing_unit_time_used_-_total_for_the_job');
-          expect(output).to.have.a.property('Number_of_auxiliary_I/O_requests');
-          expect(output).to.have.a.property('Processing_unit_time_used_for_database_-_total_for_the_job');
-          expect(output).to.have.a.property('Page_faults');
-          expect(output).to.have.a.property('Active_job_status_for_jobs_ending');
-          expect(output).to.have.a.property('Memory_pool_name');
-          expect(output).to.have.a.property('Message_reply');
-          expect(output).to.have.a.property('Message_key,_when_active_job_waiting_for_a_message');
-          expect(output).to.have.a.property('Message_queue_name,_when_active_job_waiting_for_a_message');
-          expect(output).to.have.a.property('Message_queue_library_name,_when_active_job_waiting_for_a_message');
-          expect(output).to.have.a.property('Message_queue_library_ASP_device_name,_when_active_job_waiting_for_a_message');
+          expect(output).to.have.a.property('Current_date_and_time');
+          expect(output).to.have.a.property('System_name');
+          expect(output).to.have.a.property('Elapsed_time');
+          expect(output).to.have.a.property('Restricted_state_flag');
+          expect(output).to.have.a.property('%_processing_unit_used');
+          expect(output).to.have.a.property('Jobs_in_system');
+          expect(output).to.have.a.property('%_permanent_addresses');
+          expect(output).to.have.a.property('%_temporary_addresses');
+          expect(output).to.have.a.property('System_ASP');
+          expect(output).to.have.a.property('%_system_ASP_used');
+          expect(output).to.have.a.property('Total_auxiliary_storage');
+          expect(output).to.have.a.property('Current_unprotected_storage_used');
+          expect(output).to.have.a.property('Maximum_unprotected_storage_used');
+          expect(output).to.have.a.property('%_DB_capability');
+          expect(output).to.have.a.property('Main_storage_size');
+          expect(output).to.have.a.property('Number_of_partitions');
+          expect(output).to.have.a.property('Partition_identifier');
+          expect(output).to.have.a.property('Current_processing_capacity');
+          expect(output).to.have.a.property('Processor_sharing_attribute');
+          expect(output).to.have.a.property('Number_of_processors');
+          expect(output).to.have.a.property('Active_jobs_in_system');
+          expect(output).to.have.a.property('Active_threads_in_system');
+          expect(output).to.have.a.property('Maximum_jobs_in_system');
+          expect(output).to.have.a.property('%_temporary_256MB_segments_used');
+          expect(output).to.have.a.property('%_temporary_4GB_segments_used');
+          expect(output).to.have.a.property('%_permanent_256MB_segments_used');
+          expect(output).to.have.a.property('%_permanent_4GB_segments_used');
+          expect(output).to.have.a.property('%_current_interactive_performance');
+          expect(output).to.have.a.property('%_uncapped_CPU_capacity_used');
+          expect(output).to.have.a.property('%_shared_processor_pool_used');
+          expect(output).to.have.a.property('Main_storage_size_(long)');
           done();
         });
+      });
+  });
+
+  describe('getJobStatus', () => {
+    it(`returns status of specified job using ${config.transport} transport`,
+      (done) => {
+        const connection = new iConn(database, username, password, restOptions);
+
+        const work = new iWork(connection);
+
+        work.getJobStatus('000000', (output) => {
+          expect(output).to.be.an('Object');
+          expect(output).to.have.a.property('Job_status');
+          expect(output).to.have.a.property('Fully_qualified_job_name');
+          done();
+        });
+      });
+  });
+
+  describe('getJobInfo', () => {
+    it(`returns info on specfed job using ${config.transport} transport`, (done) => {
+      const connection = new iConn(database, username, password, restOptions);
+
+      const work = new iWork(connection);
+
+      work.getJobInfo('SCPF', 'QSYS', '000000', (output) => {
+        expect(output).to.be.an('Object');
+        expect(output).to.have.a.property('Job_name');
+        expect(output).to.have.a.property('User_name');
+        expect(output).to.have.a.property('Job_number');
+        expect(output).to.have.a.property('Job_status');
+        expect(output).to.have.a.property('Job_type');
+        expect(output).to.have.a.property('Job_subtype');
+        expect(output).to.have.a.property('Subsystem_description_name');
+        expect(output).to.have.a.property('Run_priority_(job)');
+        expect(output).to.have.a.property('System_pool_identifier');
+        expect(output).to.have.a.property('Processing_unit_time_used,_if_less_than_2,147,483,647_milliseconds');
+        expect(output).to.have.a.property('Number_of_auxiliary_I/O_requests,_if_less_than_2,147,483,647');
+        expect(output).to.have.a.property('Number_of_interactive_transactions');
+        expect(output).to.have.a.property('Response_time_total');
+        expect(output).to.have.a.property('Function_type');
+        expect(output).to.have.a.property('Function_name');
+        expect(output).to.have.a.property('Active_job_status');
+        expect(output).to.have.a.property('Number_of_database_lock_waits');
+        expect(output).to.have.a.property('Number_of_internal_machine_lock_waits');
+        expect(output).to.have.a.property('Number_of_nondatabase_lock_waits');
+        expect(output).to.have.a.property('Time_spent_on_database_lock_waits');
+        expect(output).to.have.a.property('Time_spent_on_internal_machine_lock_waits');
+        expect(output).to.have.a.property('Time_spent_on_nondatabase_lock_waits');
+        expect(output).to.have.a.property('Current_system_pool_identifier');
+        expect(output).to.have.a.property('Thread_count');
+        expect(output).to.have.a.property('Processing_unit_time_used_-_total_for_the_job');
+        expect(output).to.have.a.property('Number_of_auxiliary_I/O_requests');
+        expect(output).to.have.a.property('Processing_unit_time_used_for_database_-_total_for_the_job');
+        expect(output).to.have.a.property('Page_faults');
+        expect(output).to.have.a.property('Active_job_status_for_jobs_ending');
+        expect(output).to.have.a.property('Memory_pool_name');
+        expect(output).to.have.a.property('Message_reply');
+        expect(output).to.have.a.property('Message_key,_when_active_job_waiting_for_a_message');
+        expect(output).to.have.a.property('Message_queue_name,_when_active_job_waiting_for_a_message');
+        expect(output).to.have.a.property('Message_queue_library_name,_when_active_job_waiting_for_a_message');
+        expect(output).to.have.a.property('Message_queue_library_ASP_device_name,_when_active_job_waiting_for_a_message');
+        done();
       });
     });
   });
@@ -250,21 +240,19 @@ describe('iWork Functional Tests', () => {
         console.log('CREATED DA!');
       }
     });
-    transports.forEach((transport) => {
-      it(`returns contents of a data area using ${transport.name} transport`, (done) => {
-        const connection = transport.me;
+    it(`returns contents of a data area using ${config.transport} transport`, (done) => {
+      const connection = new iConn(database, username, password, restOptions);
 
-        const work = new iWork(connection);
+      const work = new iWork(connection);
 
-        work.getDataArea('NODETKTEST', 'TESTDA', 20, (output) => {
-          expect(output).to.be.an('Object');
-          expect(output).to.have.a.property('Type_of_value_returned');
-          expect(output).to.have.a.property('Library_name');
-          expect(output).to.have.a.property('Length_of_value_returned');
-          expect(output).to.have.a.property('Number_of_decimal_positions');
-          expect(output).to.have.a.property('Value');
-          done();
-        });
+      work.getDataArea('NODETKTEST', 'TESTDA', 20, (output) => {
+        expect(output).to.be.an('Object');
+        expect(output).to.have.a.property('Type_of_value_returned');
+        expect(output).to.have.a.property('Library_name');
+        expect(output).to.have.a.property('Length_of_value_returned');
+        expect(output).to.have.a.property('Number_of_decimal_positions');
+        expect(output).to.have.a.property('Value');
+        done();
       });
     });
   });

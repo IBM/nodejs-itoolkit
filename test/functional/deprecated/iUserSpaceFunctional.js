@@ -20,25 +20,26 @@
 
 const { expect } = require('chai');
 const { iConn, iUserSpace } = require('../../../lib/itoolkit');
-const { returnTransportsDeprecated } = require('../../../lib/utils');
+const { config } = require('../config');
 
-// Set Env variables or set values here.
-const opt = {
-  database: process.env.TKDB || '*LOCAL',
-  username: process.env.TKUSER || '',
-  password: process.env.TKPASS || '',
-  host: process.env.TKHOST || 'localhost',
-  port: process.env.TKPORT || 80,
-  path: process.env.TKPATH || '/cgi-bin/xmlcgi.pgm',
-};
+if (config.transport !== 'idb' && config.transport !== 'rest') {
+  throw new Error('Only idb and rest transports are available for deprecated tests');
+}
+
+const { database, username, password } = config.transportOptions;
+
+let restOptions = null;
+
+if (config.transport === 'rest') {
+  restOptions = config.restOptions;
+}
 
 const lib = 'NODETKTEST';
-const transports = returnTransportsDeprecated(opt);
 
 describe('iUserSpace Functional Tests', () => {
   describe('constructor', () => {
     it('returns an instance of iUserSpace', () => {
-      const connection = new iConn(opt.database, opt.user, opt.password);
+      const connection = new iConn(database, config.user, password);
 
       const userSpace = new iUserSpace(connection);
 
@@ -47,76 +48,67 @@ describe('iUserSpace Functional Tests', () => {
   });
 
   describe('createUserSpace', () => {
-    transports.forEach((transport) => {
-      it(`creates a user space using ${transport.name} transport`, (done) => {
-        const connection = transport.me;
+    it(`creates a user space using ${config.transport} transport`, (done) => {
+      const connection = new iConn(database, username, password, restOptions);
 
-        const userSpace = new iUserSpace(connection);
+      const userSpace = new iUserSpace(connection);
 
-        const description = 'Node toolkit test user space';
+      const description = 'Node toolkit test user space';
 
-        const userSpaceName = `USP${(transport.name).toUpperCase()}`;
+      const userSpaceName = `USP${(config.transport).toUpperCase()}`;
 
-        userSpace.createUserSpace(userSpaceName, lib, 'LOG', 50, '*EXCLUDE',
-          description, (output) => {
-            expect(output).to.be.a('boolean').and.to.equal(true);
-            done();
-          });
-      });
+      userSpace.createUserSpace(userSpaceName, lib, 'LOG', 50, '*EXCLUDE',
+        description, (output) => {
+          expect(output).to.be.a('boolean').and.to.equal(true);
+          done();
+        });
     });
   });
 
   describe('setUserSpaceData', () => {
-    transports.forEach((transport) => {
-      it(`sets data within the user space using ${transport.name} transport`, (done) => {
-        const connection = transport.me;
+    it(`sets data within the user space using ${config.transport} transport`, (done) => {
+      const connection = new iConn(database, username, password, restOptions);
 
-        const userSpace = new iUserSpace(connection);
+      const userSpace = new iUserSpace(connection);
 
-        const msg = 'Hello from userspace!';
+      const msg = 'Hello from userspace!';
 
-        const userSpaceName = `USP${(transport.name).toUpperCase()}`;
+      const userSpaceName = `USP${(config.transport).toUpperCase()}`;
 
-        userSpace.setUserSpaceData(userSpaceName, lib, msg.length, msg,
-          (output) => {
-            expect(output).to.be.a('boolean').and.to.equal(true);
-            done();
-          });
-      });
+      userSpace.setUserSpaceData(userSpaceName, lib, msg.length, msg,
+        (output) => {
+          expect(output).to.be.a('boolean').and.to.equal(true);
+          done();
+        });
     });
   });
 
   describe('getUserSpaceData', () => {
-    transports.forEach((transport) => {
-      it(`returns specified length of data using ${transport.name} transport`,
-        (done) => {
-          const connection = transport.me;
+    it(`returns specified length of data using ${config.transport} transport`, (done) => {
+      const connection = new iConn(database, username, password, restOptions);
 
-          const userSpace = new iUserSpace(connection);
+      const userSpace = new iUserSpace(connection);
 
-          const userSpaceName = `USP${(transport.name).toUpperCase()}`;
+      const userSpaceName = `USP${(config.transport).toUpperCase()}`;
 
-          userSpace.getUserSpaceData(userSpaceName, lib, 21, (output) => {
-            expect(output).to.be.a('string').and.to.equal('Hello from userspace!');
-            done();
-          });
-        });
+      userSpace.getUserSpaceData(userSpaceName, lib, 21, (output) => {
+        expect(output).to.be.a('string').and.to.equal('Hello from userspace!');
+        done();
+      });
     });
   });
 
   describe('deleteUserSpace', () => {
-    transports.forEach((transport) => {
-      it(`removes a user space using ${transport.name} transport`, (done) => {
-        const connection = transport.me;
+    it(`removes a user space using ${config.transport} transport`, (done) => {
+      const connection = new iConn(database, username, password, restOptions);
 
-        const userSpace = new iUserSpace(connection);
+      const userSpace = new iUserSpace(connection);
 
-        const userSpaceName = `USP${(transport.name).toUpperCase()}`;
+      const userSpaceName = `USP${(config.transport).toUpperCase()}`;
 
-        userSpace.deleteUserSpace(userSpaceName, lib, (output) => {
-          expect(output).to.be.a('boolean').and.to.equal(true);
-          done();
-        });
+      userSpace.deleteUserSpace(userSpaceName, lib, (output) => {
+        expect(output).to.be.a('boolean').and.to.equal(true);
+        done();
       });
     });
   });

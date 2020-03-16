@@ -16,76 +16,69 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /* eslint-env mocha */
+/* eslint-disable new-cap */
+
 
 const { expect } = require('chai');
 const { parseString } = require('xml2js');
 const {
-  iCmd, iSh, iQsh,
+  iCmd, iSh, iQsh, iConn,
 } = require('../../../lib/itoolkit');
 
-const { returnTransportsDeprecated } = require('../../../lib/utils');
+const { config } = require('../config');
 
-// Set Env variables or set values here.
-const opt = {
-  database: process.env.TKDB || '*LOCAL',
-  username: process.env.TKUSER || '',
-  password: process.env.TKPASS || '',
-  host: process.env.TKHOST || 'localhost',
-  port: process.env.TKPORT || 80,
-  path: process.env.TKPATH || '/cgi-bin/xmlcgi.pgm',
-};
+if (config.transport !== 'idb' && config.transport !== 'rest') {
+  throw new Error('Only idb and rest transports are available for deprecated tests');
+}
+const { database, username, password } = config.transportOptions;
 
-const transports = returnTransportsDeprecated(opt);
+let restOptions = null;
+if (config.transport === 'rest') {
+  restOptions = config.restOptions;
+}
 
 describe('iSh, iCmd, iQsh, Functional Tests', () => {
   describe('iCmd()', () => {
-    transports.forEach((transport) => {
-      it(`calls CL command using ${transport.name} transport`, (done) => {
-        const connection = transport.me;
-        connection.add(iCmd('RTVJOBA USRLIBL(?) SYSLIBL(?)'));
-        connection.run((xmlOut) => {
-          parseString(xmlOut, (parseError, result) => {
-            expect(parseError).to.equal(null);
-            expect(result.myscript.cmd[0].success[0]).to.include('+++ success RTVJOBA USRLIBL(?) SYSLIBL(?)');
-            done();
-          });
+    it(`calls CL command using ${config.transport} transport`, (done) => {
+      const connection = new iConn(database, username, password, restOptions);
+      connection.add(iCmd('RTVJOBA USRLIBL(?) SYSLIBL(?)'));
+      connection.run((xmlOut) => {
+        parseString(xmlOut, (parseError, result) => {
+          expect(parseError).to.equal(null);
+          expect(result.myscript.cmd[0].success[0]).to.include('+++ success RTVJOBA USRLIBL(?) SYSLIBL(?)');
+          done();
         });
       });
     });
   });
 
   describe('iSh()', () => {
-    transports.forEach((transport) => {
-      it(`calls PASE shell command using ${transport.name} transport`, (done) => {
-        const connection = transport.me;
-
-        connection.add(iSh('system -i wrksyssts'));
-        connection.run((xmlOut) => {
-          // xs does not return success property for sh or qsh command calls
-          // but on error sh or qsh node will not have any inner data
-          parseString(xmlOut, (parseError, result) => {
-            expect(parseError).to.equal(null);
-            expect(result.myscript.sh[0]._).to.match(/(System\sStatus\sInformation)/);
-            done();
-          });
+    it(`calls PASE shell command using ${config.transport} transport`, (done) => {
+      const connection = new iConn(database, username, password, restOptions);
+      connection.add(iSh('system -i wrksyssts'));
+      connection.run((xmlOut) => {
+        // xs does not return success property for sh or qsh command calls
+        // but on error sh or qsh node will not have any inner data
+        parseString(xmlOut, (parseError, result) => {
+          expect(parseError).to.equal(null);
+          expect(result.myscript.sh[0]._).to.match(/(System\sStatus\sInformation)/);
+          done();
         });
       });
     });
   });
 
   describe('iQsh()', () => {
-    transports.forEach((transport) => {
-      it(`calls QSH command using ${transport.name} transport`, (done) => {
-        const connection = transport.me;
-        connection.add(iQsh('system wrksyssts'));
-        connection.run((xmlOut) => {
-          // xs does not return success property for sh or qsh command calls
-          // but on error sh or qsh node will not have any inner data
-          parseString(xmlOut, (parseError, result) => {
-            expect(parseError).to.equal(null);
-            expect(result.myscript.qsh[0]._).to.match(/(System\sStatus\sInformation)/);
-            done();
-          });
+    it(`calls QSH command using ${config.transport} transport`, (done) => {
+      const connection = new iConn(database, username, password, restOptions);
+      connection.add(iQsh('system wrksyssts'));
+      connection.run((xmlOut) => {
+        // xs does not return success property for sh or qsh command calls
+        // but on error sh or qsh node will not have any inner data
+        parseString(xmlOut, (parseError, result) => {
+          expect(parseError).to.equal(null);
+          expect(result.myscript.qsh[0]._).to.match(/(System\sStatus\sInformation)/);
+          done();
         });
       });
     });

@@ -20,52 +20,48 @@
 
 const { expect } = require('chai');
 const { parseString } = require('xml2js');
-const { iPgm } = require('../../../lib/itoolkit');
-const { returnTransportsDeprecated } = require('../../../lib/utils');
+const { iPgm, iConn } = require('../../../lib/itoolkit');
+const { config } = require('../config');
 
-// Set Env variables or set values here.
-const opt = {
-  database: process.env.TKDB || '*LOCAL',
-  username: process.env.TKUSER || '',
-  password: process.env.TKPASS || '',
-  host: process.env.TKHOST || 'localhost',
-  port: process.env.TKPORT || 80,
-  path: process.env.TKPATH || '/cgi-bin/xmlcgi.pgm',
-};
+if (config.transport !== 'idb' && config.transport !== 'rest') {
+  throw new Error('Only idb and rest transports are available for deprecated tests');
+}
 
+const { database, username, password } = config.transportOptions;
 
-const transports = returnTransportsDeprecated(opt);
+let restOptions = null;
+if (config.transport === 'rest') {
+  restOptions = config.restOptions;
+}
 
 describe('iPgm Functional Tests', () => {
   describe('Test iPgm()', () => {
-    transports.forEach((transport) => {
-      it(`calls QWCRSVAL program checks if it ran successfully using ${transport.name} transport`, (done) => {
-        const connection = transport.me;
+    it(`calls QWCRSVAL program checks if it ran successfully using ${config.transport} transport`, (done) => {
+      const connection = new iConn(database, username, password, restOptions);
 
-        const program = new iPgm('QWCRSVAL', { lib: 'QSYS' });
+      const program = new iPgm('QWCRSVAL', { lib: 'QSYS' });
 
-        const outBuf = [
-          [0, '10i0'],
-          [0, '10i0'],
-          ['', '36h'],
-          ['', '10A'],
-          ['', '1A'],
-          ['', '1A'],
-          [0, '10i0'],
-          [0, '10i0'],
-        ];
-        program.addParam(outBuf, { io: 'out' });
-        program.addParam(66, '10i0');
-        program.addParam(1, '10i0');
-        program.addParam('QCCSID', '10A');
-        program.addParam(this.errno, { io: 'both', len: 'rec2' });
-        connection.add(program);
-        connection.run((xmlOut) => {
-          parseString(xmlOut, (parseError, result) => {
-            expect(parseError).to.equal(null);
-            expect(result.myscript.pgm[0].success[0]).to.include('+++ success QSYS QWCRSVAL');
-            done();
-          });
+      const outBuf = [
+        [0, '10i0'],
+        [0, '10i0'],
+        ['', '36h'],
+        ['', '10A'],
+        ['', '1A'],
+        ['', '1A'],
+        [0, '10i0'],
+        [0, '10i0'],
+      ];
+      program.addParam(outBuf, { io: 'out' });
+      program.addParam(66, '10i0');
+      program.addParam(1, '10i0');
+      program.addParam('QCCSID', '10A');
+      program.addParam(this.errno, { io: 'both', len: 'rec2' });
+      connection.add(program);
+      connection.run((xmlOut) => {
+        parseString(xmlOut, (parseError, result) => {
+          expect(parseError).to.equal(null);
+          expect(result.myscript.pgm[0].success[0]).to.include('+++ success QSYS QWCRSVAL');
+          done();
         });
       });
     });
@@ -73,36 +69,34 @@ describe('iPgm Functional Tests', () => {
 
 
   describe('Test iPgm()', () => {
-    transports.forEach((transport) => {
-      it(`calls QWCRSVAL program and returns arbitrarily named parameter using ${transport.name} transport`, (done) => {
-        const connection = transport.me;
+    it(`calls QWCRSVAL program and returns arbitrarily named parameter using ${config.transport} transport`, (done) => {
+      const connection = new iConn(database, username, password, restOptions);
 
-        const program = new iPgm('QWCRSVAL', { lib: 'QSYS' });
+      const program = new iPgm('QWCRSVAL', { lib: 'QSYS' });
 
-        const outBuf = [
-          [0, '10i0'],
-          [0, '10i0'],
-          ['', '36h'],
-          ['', '10A'],
-          ['', '1A'],
-          ['', '1A'],
-          [0, '10i0'],
-          [0, '10i0'],
-        ];
-        program.addParam(outBuf, { io: 'out' });
-        program.addParam(66, '10i0');
-        program.addParam(1, '10i0');
-        program.addParam('QCCSID', '10A');
-        const paramValue = 'errno';
+      const outBuf = [
+        [0, '10i0'],
+        [0, '10i0'],
+        ['', '36h'],
+        ['', '10A'],
+        ['', '1A'],
+        ['', '1A'],
+        [0, '10i0'],
+        [0, '10i0'],
+      ];
+      program.addParam(outBuf, { io: 'out' });
+      program.addParam(66, '10i0');
+      program.addParam(1, '10i0');
+      program.addParam('QCCSID', '10A');
+      const paramValue = 'errno';
 
-        program.addParam(this.errno, { io: 'both', len: 'rec2', name: paramValue });
-        connection.add(program);
-        connection.run((xmlOut) => {
-          parseString(xmlOut, (parseError, result) => {
-            expect(parseError).to.equal(null);
-            expect(result.myscript.pgm[0].success[0]).to.include('+++ success QSYS QWCRSVAL');
-            done();
-          });
+      program.addParam(this.errno, { io: 'both', len: 'rec2', name: paramValue });
+      connection.add(program);
+      connection.run((xmlOut) => {
+        parseString(xmlOut, (parseError, result) => {
+          expect(parseError).to.equal(null);
+          expect(result.myscript.pgm[0].success[0]).to.include('+++ success QSYS QWCRSVAL');
+          done();
         });
       });
     });
@@ -111,23 +105,21 @@ describe('iPgm Functional Tests', () => {
   describe.skip('Test iPgm()', () => {
     // ZZSRV6 program requires XMLSERVICE built with tests
     // Skip for now, we need to add before hook to check if ZZSRV6 is available
-    transports.forEach((transport) => {
-      it.skip(`Should be successful with addReturn arbitrary attribute specified using using ${transport.name} transport`, (done) => {
-        const connection = transport.me;
+    it.skip(`Should be successful with addReturn arbitrary attribute specified using using ${config.transport} transport`, (done) => {
+      const connection = new iConn(database, username, password, restOptions);
 
-        const program = new iPgm('ZZSRV6', { lib: 'XMLSERVICE', func: 'ZZVARY4' });
+      const program = new iPgm('ZZSRV6', { lib: 'XMLSERVICE', func: 'ZZVARY4' });
 
-        program.addParam('Gill', '10A', { varying: '4' });
-        const testValue = 'NEW_NAME';
-        program.addReturn('0', '20A', { varying: '4', name: testValue });
-        connection.add(program);
-        connection.run((xmlOut) => {
-          parseString(xmlOut, (parseError, result) => {
-            expect(parseError).to.equal(null);
-            expect(result.myscript.pgm[0].success[0]).to.include('+++ success');
-            expect(result.myscript.pgm[0].return[0].data[0]._).to.equal('my name is Gill');
-            done();
-          });
+      program.addParam('Gill', '10A', { varying: '4' });
+      const testValue = 'NEW_NAME';
+      program.addReturn('0', '20A', { varying: '4', name: testValue });
+      connection.add(program);
+      connection.run((xmlOut) => {
+        parseString(xmlOut, (parseError, result) => {
+          expect(parseError).to.equal(null);
+          expect(result.myscript.pgm[0].success[0]).to.include('+++ success');
+          expect(result.myscript.pgm[0].return[0].data[0]._).to.equal('my name is Gill');
+          done();
         });
       });
     });
