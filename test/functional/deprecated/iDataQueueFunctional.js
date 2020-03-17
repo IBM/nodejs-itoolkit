@@ -19,7 +19,11 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
-const { iConn, iDataQueue } = require('../../../lib/itoolkit');
+const { parseString } = require('xml2js');
+const {
+  iConn, iDataQueue, CommandCall, Connection,
+} = require('../../../lib/itoolkit');
+
 
 // Set Env variables or set values here.
 const opt = {
@@ -38,44 +42,63 @@ const { returnTransportsDeprecated } = require('../../../lib/utils');
 const transports = returnTransportsDeprecated(opt);
 
 describe('iDataQueue Functional Tests', () => {
-  before('setup library for tests and create DQ', async () => {
-    // eslint-disable-next-line global-require
-    const { DBPool } = require('idb-pconnector');
+  before('setup library for tests and create DQ', (done) => {
+    const connection = new Connection({
+      transport: 'ssh',
+      transportOptions: {
+        host: process.env.TKHOST,
+        username: process.env.TKUSER,
+        password: process.env.TKPASS,
+      },
+    });
+    const checkLib = new CommandCall({ command: `CHKOBJ OBJ(QSYS/${lib}) OBJTYPE(*LIB)`, type: 'cl' });
+    const createLib = new CommandCall({ command: `CRTLIB LIB(${lib}) TYPE(*TEST) TEXT('Used to test Node.js toolkit')`, type: 'cl' });
+    const checkDataQueue = new CommandCall({ command: `CHKOBJ OBJ(${lib}/${dqName}) OBJTYPE(*DTAQ)`, type: 'cl' });
+    const createDataQueue = new CommandCall({ command: `CRTDTAQ DTAQ(${lib}/${dqName}) MAXLEN(100) AUT(*EXCLUDE) TEXT('TEST DQ FOR NODE TOOLKIT TESTS')`, type: 'cl' });
 
-    const pool = new DBPool({ url: '*LOCAL' }, { incrementSize: 2 });
-
-    const qcmdexec = 'CALL QSYS2.QCMDEXC(?)';
-
-    const createLib = `CRTLIB LIB(${lib}) TYPE(*TEST) TEXT('Used to test Node.js toolkit')`;
-
-    const createDQ = `CRTDTAQ DTAQ(${lib}/${dqName}) MAXLEN(100) AUT(*EXCLUDE) TEXT('TEST DQ FOR NODE TOOLKIT TESTS')`;
-
-    const findLib = 'SELECT SCHEMA_NAME FROM qsys2.sysschemas WHERE SCHEMA_NAME = \'NODETKTEST\'';
-
-    const findDQ = 'SELECT OBJLONGNAME FROM TABLE (QSYS2.OBJECT_STATISTICS(\'NODETKTEST\', \'*DTAQ\')) AS X';
-
-    const libResult = await pool.runSql(findLib);
-
-    const dqResult = await pool.runSql(findDQ);
-
-    if (!libResult.length) {
-      await pool.prepareExecute(qcmdexec, [createLib]).catch((error) => {
-        // eslint-disable-next-line no-console
-        console.log('Unable to Create Lib!');
-        throw error;
+    connection.add(checkLib);
+    connection.run((checkLibError, checkLibOutput) => { // check if LIB exists
+      if (checkLibError) { throw checkLibError; }
+      parseString(checkLibOutput, (parseCheckLibError, checkLibResult) => {
+        if (parseCheckLibError) { throw parseCheckLibError; }
+        if (checkLibResult.myscript.cmd[0].success) { // LIB already exists
+          connection.add(checkDataQueue);
+          connection.run((checkDataQueueError, checkDataQueueOutput) => { // check if DTAQ exists
+            if (checkDataQueueError) { throw checkDataQueueError; }
+            parseString(checkDataQueueOutput, (parseCheckDataQueueError, checkDataQueueResult) => {
+              if (parseCheckDataQueueError) { throw parseCheckDataQueueError; }
+              if (!checkDataQueueResult.myscript.cmd[0].success) {
+                connection.add(createDataQueue);
+                connection.run((createDataQueueError, createDataQueueOutput) => {
+                  if (createDataQueueError) { throw createDataQueueError; }
+                  // eslint-disable-next-line max-len
+                  parseString(createDataQueueOutput, (parseCreateDataQueueError, createDataQueueResult) => {
+                    if (parseCreateDataQueueError) { throw parseCreateDataQueueError; }
+                    if (!createDataQueueResult.myscript.cmd[0].success) {
+                      throw new Error('Unable to create DTAQ');
+                    }
+                    done();
+                  });
+                });
+              }
+              done();
+            });
+          });
+        } else { // LIB does not exist
+          connection.add(createLib);
+          connection.add(createDataQueue);
+          connection.run((createBothError, createBothOutput) => { // add LIB and DTAQ
+            if (createBothError) { throw createBothError; }
+            parseString(createBothOutput, (parseCreateBothError, createBothResult) => {
+              if (parseCreateBothError) { throw parseCreateBothError; }
+              if (!createBothResult.myscript.cmd[0].success) { throw new Error('Unable to create LIB'); }
+              if (!createBothResult.myscript.cmd[1].success) { throw new Error('Unable to create DTAQ'); }
+              done();
+            });
+          });
+        }
       });
-      // eslint-disable-next-line no-console
-      console.log('CREATED LIB!');
-    }
-    if (!dqResult.length) {
-      await pool.prepareExecute(qcmdexec, [createDQ]).catch((error) => {
-        // eslint-disable-next-line no-console
-        console.log('Unable to Create DQ!');
-        throw error;
-      });
-      // eslint-disable-next-line no-console
-      console.log('CREATED DQ!');
-    }
+    });
   });
   describe('constructor', () => {
     it('creates and returns an instance of iDataQueue', () => {

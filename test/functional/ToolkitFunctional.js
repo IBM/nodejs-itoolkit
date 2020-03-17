@@ -19,8 +19,9 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
+const { parseString } = require('xml2js');
 const { readFileSync } = require('fs');
-const { Toolkit } = require('../../lib/itoolkit');
+const { Toolkit, CommandCall, Connection } = require('../../lib/itoolkit');
 const { returnTransports } = require('../../lib/utils');
 
 // Set Env variables or set values here.
@@ -48,44 +49,64 @@ describe('Toolkit Functional Tests', () => {
   describe('DataQueue Functional Tests', () => {
     const dqName = 'TESTQ';
 
-    before('setup library for tests and create DQ', async () => {
-      // eslint-disable-next-line global-require
-      const { DBPool } = require('idb-pconnector');
+    before('setup library for tests and create DQ', (done) => {
+      const connection = new Connection({
+        transport: 'ssh',
+        transportOptions: {
+          host: process.env.TKHOST,
+          username: process.env.TKUSER,
+          password: process.env.TKPASS,
+        },
+      });
+      const checkLib = new CommandCall({ command: `CHKOBJ OBJ(QSYS/${lib}) OBJTYPE(*LIB)`, type: 'cl' });
+      const createLib = new CommandCall({ command: `CRTLIB LIB(${lib}) TYPE(*TEST) TEXT('Used to test Node.js toolkit')`, type: 'cl' });
+      const checkDataQueue = new CommandCall({ command: `CHKOBJ OBJ(${lib}/${dqName}) OBJTYPE(*DTAQ)`, type: 'cl' });
+      const createDataQueue = new CommandCall({ command: `CRTDTAQ DTAQ(${lib}/${dqName}) MAXLEN(100) AUT(*EXCLUDE) TEXT('TEST DQ FOR NODE TOOLKIT TESTS')`, type: 'cl' });
 
-      const pool = new DBPool({ url: '*LOCAL' }, { incrementSize: 2 });
-
-      const qcmdexec = 'CALL QSYS2.QCMDEXC(?)';
-
-      const createLib = `CRTLIB LIB(${lib}) TYPE(*TEST) TEXT('Used to test Node.js toolkit')`;
-
-      const createDQ = `CRTDTAQ DTAQ(${lib}/${dqName}) MAXLEN(100) AUT(*EXCLUDE) TEXT('TEST DQ FOR NODE TOOLKIT TESTS')`;
-
-      const findLib = 'SELECT SCHEMA_NAME FROM qsys2.sysschemas WHERE SCHEMA_NAME = \'NODETKTEST\'';
-
-      const findDQ = 'SELECT OBJLONGNAME FROM TABLE (QSYS2.OBJECT_STATISTICS(\'NODETKTEST\', \'*DTAQ\')) AS X';
-
-      const libResult = await pool.runSql(findLib);
-
-      const dqResult = await pool.runSql(findDQ);
-
-      if (!libResult.length) {
-        await pool.prepareExecute(qcmdexec, [createLib]).catch((error) => {
-          // eslint-disable-next-line no-console
-          console.log('Unable to Create Lib!');
-          throw error;
+      connection.add(checkLib);
+      connection.run((checkLibError, checkLibOutput) => { // check if LIB exists
+        if (checkLibError) { throw checkLibError; }
+        parseString(checkLibOutput, (parseCheckLibError, checkLibResult) => {
+          if (parseCheckLibError) { throw parseCheckLibError; }
+          if (checkLibResult.myscript.cmd[0].success) { // LIB already exists
+            connection.add(checkDataQueue);
+            connection.run((checkDataQueueError, checkDataQueueOutput) => { // check if DTAQ exists
+              if (checkDataQueueError) { throw checkDataQueueError; }
+              // eslint-disable-next-line max-len
+              parseString(checkDataQueueOutput, (parseCheckDataQueueError, checkDataQueueResult) => {
+                if (parseCheckDataQueueError) { throw parseCheckDataQueueError; }
+                if (!checkDataQueueResult.myscript.cmd[0].success) {
+                  connection.add(createDataQueue);
+                  connection.run((createDataQueueError, createDataQueueOutput) => {
+                    if (createDataQueueError) { throw createDataQueueError; }
+                    // eslint-disable-next-line max-len
+                    parseString(createDataQueueOutput, (parseCreateDataQueueError, createDataQueueResult) => {
+                      if (parseCreateDataQueueError) { throw parseCreateDataQueueError; }
+                      if (!createDataQueueResult.myscript.cmd[0].success) {
+                        throw new Error('Unable to create DTAQ');
+                      }
+                      done();
+                    });
+                  });
+                }
+                done();
+              });
+            });
+          } else { // LIB does not exist
+            connection.add(createLib);
+            connection.add(createDataQueue);
+            connection.run((createBothError, createBothOutput) => { // add LIB and DTAQ
+              if (createBothError) { throw createBothError; }
+              parseString(createBothOutput, (parseCreateBothError, createBothResult) => {
+                if (parseCreateBothError) { throw parseCreateBothError; }
+                if (!createBothResult.myscript.cmd[0].success) { throw new Error('Unable to create LIB'); }
+                if (!createBothResult.myscript.cmd[1].success) { throw new Error('Unable to create DTAQ'); }
+                done();
+              });
+            });
+          }
         });
-        // eslint-disable-next-line no-console
-        console.log('CREATED LIB!');
-      }
-      if (!dqResult.length) {
-        await pool.prepareExecute(qcmdexec, [createDQ]).catch((error) => {
-          // eslint-disable-next-line no-console
-          console.log('Unable to Create DQ!');
-          throw error;
-        });
-        // eslint-disable-next-line no-console
-        console.log('CREATED DQ!');
-      }
+      });
     });
 
     describe('sendToDataQueue', () => {
@@ -929,46 +950,65 @@ describe('Toolkit Functional Tests', () => {
   });
 
   describe('getDataArea', () => {
-    before('init lib, data area, and add data', async () => {
-      // eslint-disable-next-line global-require
-      const { DBPool } = require('idb-pconnector');
-      const pool = new DBPool({ url: '*LOCAL' }, { incrementSize: 2 });
-
-      const qcmdexec = 'CALL QSYS2.QCMDEXC(?)';
+    before('init lib, data area, and add data', (done) => {
       const dataArea = 'TESTDA';
 
-      const createLib = `CRTLIB LIB(${lib}) TYPE(*TEST) TEXT('Used to test' Node.js toolkit')`;
+      const connection = new Connection({
+        transport: 'ssh',
+        transportOptions: {
+          host: process.env.TKHOST,
+          username: process.env.TKUSER,
+          password: process.env.TKPASS,
+        },
+      });
+      const checkLib = new CommandCall({ command: `CHKOBJ OBJ(QSYS/${lib}) OBJTYPE(*LIB)`, type: 'cl' });
+      const createLib = new CommandCall({ command: `CRTLIB LIB(${lib}) TYPE(*TEST) TEXT('Used to test Node.js toolkit')`, type: 'cl' });
+      const checkDataArea = new CommandCall({ command: `CHKOBJ OBJ(${lib}/${dataArea}) OBJTYPE(*DTAARA)`, type: 'cl' });
+      const createDataArea = new CommandCall({ command: `CRTDTAARA DTAARA(${lib}/${dataArea}) TYPE(*CHAR) TEXT('TEST DATA AREA FOR NODE TOOLKIT') VALUE('Hello From Test Data Area!')`, type: 'cl' });
 
-      const createDataArea = `CRTDTAARA DTAARA(${lib}/${dataArea}) TYPE(*CHAR) `
-                            + 'TEXT(\'TEST DATA AREA FOR NODE TOOLKIT\') '
-                            + 'VALUE(\'Hello From Test Data Area!\')';
-
-      const findLib = 'SELECT SCHEMA_NAME FROM qsys2.sysschemas WHERE SCHEMA_NAME = \'NODETKTEST\'';
-
-      const findDataArea = `SELECT OBJNAME FROM TABLE (QSYS2.OBJECT_STATISTICS('${lib}', '*DTAARA')) AS X`;
-
-      const libResult = await pool.runSql(findLib);
-
-      const dataAreaResult = await pool.runSql(findDataArea);
-
-      if (!libResult.length) {
-        await pool.prepareExecute(qcmdexec, [createLib]).catch((error) => {
-          // eslint-disable-next-line no-console
-          console.log('Unable to Create Lib!');
-          throw error;
+      connection.add(checkLib);
+      connection.run((checkLibError, checkLibOutput) => { // check if LIB exists
+        if (checkLibError) { throw checkLibError; }
+        parseString(checkLibOutput, (parseCheckLibError, checkLibResult) => {
+          if (parseCheckLibError) { throw parseCheckLibError; }
+          if (checkLibResult.myscript.cmd[0].success) { // LIB already exists
+            connection.add(checkDataArea);
+            connection.run((checkDataAreaError, checkDataAreaOutput) => { // check if DTAQ exists
+              if (checkDataAreaError) { throw checkDataAreaError; }
+              parseString(checkDataAreaOutput, (parseCheckDataAreaError, checkDataAreaResult) => {
+                if (parseCheckDataAreaError) { throw parseCheckDataAreaError; }
+                if (!checkDataAreaResult.myscript.cmd[0].success) {
+                  connection.add(createDataArea);
+                  connection.run((createDataAreaError, createDataAreaOutput) => {
+                    if (createDataAreaError) { throw createDataAreaError; }
+                    // eslint-disable-next-line max-len
+                    parseString(createDataAreaOutput, (parseCreateDataAreaError, createDataAreaResult) => {
+                      if (parseCreateDataAreaError) { throw parseCreateDataAreaError; }
+                      if (!createDataAreaResult.myscript.cmd[0].success) {
+                        throw new Error('Unable to create DTAARA');
+                      }
+                      done();
+                    });
+                  });
+                }
+                done();
+              });
+            });
+          } else { // LIB does not exist
+            connection.add(createLib);
+            connection.add(createDataArea);
+            connection.run((createBothError, createBothOutput) => { // add LIB and DTAQ
+              if (createBothError) { throw createBothError; }
+              parseString(createBothOutput, (parseCreateBothError, createBothResult) => {
+                if (parseCreateBothError) { throw parseCreateBothError; }
+                if (!createBothResult.myscript.cmd[0].success) { throw new Error('Unable to create LIB'); }
+                if (!createBothResult.myscript.cmd[1].success) { throw new Error('Unable to create DTAARA'); }
+                done();
+              });
+            });
+          }
         });
-        // eslint-disable-next-line no-console
-        console.log('CREATED LIB!');
-      }
-      if (!dataAreaResult.length) {
-        await pool.prepareExecute(qcmdexec, [createDataArea]).catch((error) => {
-          // eslint-disable-next-line no-console
-          console.log('Unable to Create DA!');
-          throw error;
-        });
-        // eslint-disable-next-line no-console
-        console.log('CREATED DA!');
-      }
+      });
     });
     transports.forEach((transport) => {
       it(`returns contents of a data area using ${transport.name} transport`, (done) => {
