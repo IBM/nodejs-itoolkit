@@ -52,8 +52,6 @@
   - [Toolkit.sendToDataQueue(name, library, data, callback)](#ToolkitsendToDataQueuename-library-data-callback)
   - [Toolkit.receiveFromDataQueue(name, library, size, callback)](#ToolkitreceiveFromDataQueuename-library-size-callback)
   - [Toolkit.clearDataQueue(name, library, callback)](#ToolkitclearDataQueuename-library-callback)
-- [Utility functions](#Utility-functions)
-    - [xmlToJson(xml)](#xmlToJsonxml)
 - [Deprecated Classes and Functions](#Deprecated-Classes-and-Functions)
   - [iConn](#iConn)
   - [iCmd](#iCmd)
@@ -91,6 +89,7 @@
   - [iSql.toXML()](#iSqltoXML)
   - [iUserSpace](#iUserSpace)
   - [iWork](#iWork)
+  - [xmlToJson(xml)](#xmlToJsonxml)
 
 # Introduction
 
@@ -2385,89 +2384,6 @@ toolkit.clearDataQueue('mydq', 'mylib', (error, output) => {
 });
 ```
 
-# Utility functions
-
-These are helper functions used across the package.
-
-### xmlToJson(xml)
-
-**Description:**
-
-The response data of XMLSERVICE is always a XML document, so it is necessary to convert it to a JavaScript object to easily access the data in Node.js.
-
-This functions converts the XMLSERVICE output into A JavaScript object.
-
-**Syntax:**
-
-xmlToJson(xml)
-
-**Parameters:**
-
-- **xml** `<string>` xml output from XMLSERVICE to convert to JSON.
-
-**Returns:**
-
-`<object>` representation of the XMLSERVICE output.
-
-**Example:**
-
-```js
-const { Connection, CommandCall, xmlToJson } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' }
-});
-
-connection.add(new CommandCall({ type: 'cl', command: 'RTVJOBA USRLIBL(?) SYSLIBL(?)'}));
-
-connection.run((error, xmlOutput) => {
-  if (error) {
-    throw error;
-  }
-  console.log(xmlOutput); // Print the raw XML output
-  const result = xmlToJson(xmlOutput);
-  console.log(result); // Print the formatted JSON output
-});
-```
-
-Expected Result:
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<myscript>
-   <cmd exec="rexx" error="fast">
-      <success>+++ success RTVJOBA USRLIBL(?) SYSLIBL(?)</success>
-      <row>
-         <data desc="USRLIBL">QGPL  QTEMP</data>
-      </row>
-      <row>
-         <data desc="SYSLIBL">QSYS  QSYS2  QHLPSYS  QUSRSYS</data>
-      </row>
-   </cmd>
-</myscript>
-```
-
-```json
-[
-    {
-        "type": "cmd",
-        "success": true,
-        "cmd": "RTVJOBA USRLIBL(?) SYSLIBL(?)",
-        "data": [
-            {
-                "name": "USRLIBL",
-                "value": "QGPL  QTEMP"
-            },
-            {
-                "name": "SYSLIBL",
-                "value": "QSYS  QSYS2  QHLPSYS  QUSRSYS"
-            }
-        ]
-    }
-]
-```
-
 # Deprecated Classes and Functions
 
 As of version 1.0.0 the following is deprecated:
@@ -3185,3 +3101,81 @@ From the Toolkit class you may access:
 - [sendToDataQueue](#ToolkitsendToDataQueuename-library-data-callback)
 - [receiveFromDataQueue](#ToolkitreceiveFromDataQueuename-library-size-callback)
 - [clearDataQueue](#ToolkitclearDataQueuename-library-callback)
+
+## xmlToJson(xml)
+
+**Description:**
+
+Converts XMLSERVICE output into an array of objects.
+
+Each object in the array represents the program, command, or sql call that was made.
+
+**Syntax:**
+
+xmlToJson(xml)
+
+**Parameters:**
+
+- **xml** `<string>` the XMLSERVICE output to convert.
+
+**Returns:**
+
+`<array>` each element of the array is an object.
+
+**Example:**
+
+```js
+const { Connection, CommandCall, xmlToJson } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' }
+});
+
+connection.add(new CommandCall({ type: 'cl', command: 'RTVJOBA USRLIBL(?) SYSLIBL(?)'}));
+
+connection.run((error, xmlOutput) => {
+  if (error) {
+    throw error;
+  }
+  const result = xmlToJson(xmlOutput);
+  console.log(result);
+});
+```
+
+Expected Result:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<myscript>
+   <cmd exec="rexx" error="fast">
+      <success>+++ success RTVJOBA USRLIBL(?) SYSLIBL(?)</success>
+      <row>
+         <data desc="USRLIBL">QGPL  QTEMP</data>
+      </row>
+      <row>
+         <data desc="SYSLIBL">QSYS  QSYS2  QHLPSYS  QUSRSYS</data>
+      </row>
+   </cmd>
+</myscript>
+```
+
+```json
+[
+    {
+        "type": "cmd",
+        "success": true,
+        "cmd": "RTVJOBA USRLIBL(?) SYSLIBL(?)",
+        "data": [
+            {
+                "name": "USRLIBL",
+                "value": "QGPL  QTEMP"
+            },
+            {
+                "name": "SYSLIBL",
+                "value": "QSYS  QSYS2  QHLPSYS  QUSRSYS"
+            }
+        ]
+    }
+]
+```
