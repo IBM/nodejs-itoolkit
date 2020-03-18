@@ -44,62 +44,7 @@ describe('Toolkit Functional Tests', () => {
     printConfig();
   });
 
-  describe('DataQueue Functional Tests', () => {
-    const dqName = 'TESTQ';
-    const dqName2 = 'TESTQ2';
 
-    before('check if data queue exists for tests', (done) => {
-      checkObjectExists(config, dqName, '*DTAQ', (error) => {
-        if (error) { throw error; }
-
-        checkObjectExists(config, dqName2, '*DTAQ', (error) => {
-          if (error) { throw error; }
-          done();
-        });
-      });
-    });
-    describe('sendToDataQueue', () => {
-      it('sends data to specified DQ', (done) => {
-        const connection = new Connection(config);
-
-        const toolkit = new Toolkit(connection);
-
-        toolkit.sendToDataQueue(dqName, lib, 'Hello from DQ!', (error, output) => {
-          expect(error).to.equal(null);
-          expect(output).to.equal(true);
-          done();
-        });
-      });
-    });
-
-    describe('receiveFromDataQueue', () => {
-      it('receives data from specfied DQ', (done) => {
-        const connection = new Connection(config);
-
-        const toolkit = new Toolkit(connection);
-
-        toolkit.receiveFromDataQueue(dqName, lib, 100, (error, output) => {
-          expect(error).to.equal(null);
-          expect(output).to.be.a('string').and.to.equal('Hello from DQ!');
-          done();
-        });
-      });
-    });
-
-    describe('clearDataQueue', () => {
-      it('clears the specifed DQ', (done) => {
-        const connection = new Connection(config);
-
-        const toolkit = new Toolkit(connection);
-
-        toolkit.clearDataQueue(dqName2, lib, (error, output) => {
-          expect(error).to.equal(null);
-          expect(output).to.equal(true);
-          done();
-        });
-      });
-    });
-  });
   describe('getTCPIPAttr', () => {
     it('retrieves TCP/IP Attributes', (done) => {
       const connection = new Connection(config);
