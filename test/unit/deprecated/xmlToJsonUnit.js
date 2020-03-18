@@ -18,7 +18,7 @@
 /* eslint-env mocha */
 
 const { expect } = require('chai');
-const { xmlToJson } = require('../../lib/itoolkit');
+const { xmlToJson } = require('../../../lib/itoolkit');
 
 describe('xmlToJson Tests', () => {
   it('converts CL command XML output to js object', () => {
