@@ -42,13 +42,6 @@
   - [Toolkit.deleteUserSpace(name, library, callback)](#ToolkitdeleteUserSpacename-library-callback)
   - [Toolkit.getTCPIPAttr(callback)](#ToolkitgetTCPIPAttrcallback)
   - [Toolkit.getNetInterfaceData(ip, callback)](#ToolkitgetNetInterfaceDataip-callback)
-  - [Toolkit.retrUsrAuth(user, type, name, library, callback)](#ToolkitretrUsrAuthuser-type-name-library-callback)
-  - [Toolkit.retrCmdInfo(command, [library,] callback)](#ToolkitretrCmdInfocommand-library-callback)
-  - [Toolkit.retrPgmInfo(program, library, callback)](#ToolkitretrPgmInfoprogram-library-callback)
-  - [Toolkit.retrSrvPgmInfo(program, library, callback)](#ToolkitretrSrvPgmInfoprogram-library-callback)
-  - [Toolkit.retrUserInfo(user, callback)](#ToolkitretrUserInfouser-callback)
-  - [Toolkit.retrUserAuthToObj(path, callback)](#ToolkitretrUserAuthToObjpath-callback)
-  - [Toolkit.addToLibraryList(library, callback)](#ToolkitaddToLibraryListlibrary-callback)
   - [Toolkit.sendToDataQueue(name, library, data, callback)](#ToolkitsendToDataQueuename-library-data-callback)
   - [Toolkit.receiveFromDataQueue(name, library, size, callback)](#ToolkitreceiveFromDataQueuename-library-size-callback)
   - [Toolkit.clearDataQueue(name, library, callback)](#ToolkitclearDataQueuename-library-callback)
@@ -58,6 +51,13 @@
   - [iDataQueue](#iDataQueue)
   - [iNetwork](#iNetwork)
   - [iObj](#iObj)
+    - [iObj.retrUsrAuth(user, type, name, library, callback)](#iObjretrUsrAuthuser-type-name-library-callback)
+    - [iObj.retrCmdInfo(command, [library,] callback)](#iObjretrCmdInfocommand-library-callback)
+    - [iObj.retrPgmInfo(program, library, callback)](#iObjretrPgmInfoprogram-library-callback)
+    - [iObj.retrSrvPgmInfo(program, library, callback)](#iObjretrSrvPgmInfoprogram-library-callback)
+    - [iObj.retrUserInfo(user, callback)](#iObjretrUserInfouser-callback)
+    - [iObj.retrUserAuthToObj(path, callback)](#iObjretrUserAuthToObjpath-callback)
+    - [iObj.addToLibraryList(library, callback)](#iObjaddToLibraryListlibrary-callback)
   - [iPgm](#iPgm)
   - [iProd](#iProd)
   - [iQsh](#iQsh)
@@ -1684,568 +1684,6 @@ toolkit.getNetInterfaceData('127.0.0.1', (error, output) => {
 });
 ```
 
-## Toolkit.retrUsrAuth(user, type, name, library, callback)
-
-**Description:**
-
-Retrieves a specific user's authority for an object to the caller
-
-**Syntax:**
-
-retrUsrAuth(user, type, name, library, callback)
-
-**Parameters:**
-- **user** `<string>` the name of the user whose object authority is returned
-
-  Special values:
-
-  - `*CURRENT` the authority of the user currently running to the specified object is returned.
-
-  - `*PUBLIC` the public authority for the object is returned.
-
-- type `<string>` the type of object for which authority information is returned. For example, if the target object is a program, then *PGM should be set to the type parameter.
-
-- **name** `<string>` the object name.
-
-- **library** `<string>` the library name.
-
-  Special values:
-
-  - `*CURLIB` the current library is used to locate the object. If there is no current library, QGPL (general purpose library) is used.
-
-  - `*LIBL` the library list is used to locate the object.
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**output**
-
-| Key                                    |
-| -----                                  |
-| Object_authority_/_Data_authority      |
-| Authorization_list_management          |
-| Object_operational                     |
-| Object_management                      |
-| Object_existence                       |
-| Data_read                              |
-| Data_add                               |
-| Data_update                            |
-| Data_delete                            |
-| Authorization_list                     |
-| Authority_source                       |
-| Some_adopted_authority                 |
-| Adopted_object_authority               |
-| Adopted_authorization_list_management  |
-| Adopted_object_operational             |
-| Adopted_object_management              |
-| Adopted_object_existence               |
-| Adopted_data_read                      |
-| Adopted_data_add                       |
-| Adopted_data_update                    |
-| Adopted_data_delete                    |
-| Adopted_data_execute                   |
-| Reserved                               |
-| Adopted_object_alter                   |
-| Adopted_object_reference               |
-| Data_execute                           |
-| Object_alter                           |
-| Object_reference                       |
-| ASP_device_name_of_library             |
-| ASP_device_name_of_object              |
-| Offset_to_group_information_table      |
-| Number_of_group_table_entries_returned |
-
-
-**IBM i API:**
-
-[QSYRUSRA](https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_74/apis/qsyrusra.htm)
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.retrUsrAuth('*PUBLIC', '*PGM', 'XMLCGI', 'QXMLSERV', (error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log(output);
-});
-```
-
-## Toolkit.retrCmdInfo(command, [library,] callback)
-
-**Description:**
-
-Retrieves information from a command definition object.
-
-**Syntax:**
-
-retrCmdInfo(cmd, [library,] callback)
-
-**Parameters:**
-
-- **command** `<string>` the command name.
-
-- **library** `<string>` the library name. If it is undefined, `*LIBL` will be used.
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**output**
-
-| Key                                                                  |
-| -----                                                                |
-| Command_name                                                         |
-| Command_library_name                                                 |
-| Command_processing_program_or_proxy_target_command                   |
-| Command_processing_program's_or_proxy_target_command's_library name  |
-| Source_file_name                                                     |
-| Source_file_library_name                                             |
-| Source_file_member_name                                              |
-| Validity_check_program_name                                          |
-| Validity_check_program_library_name                                  |
-| Mode_information                                                     |
-| Where_allowed_to_run                                                 |
-| Allow_limited_user                                                   |
-| Maximum_positional_parameters                                        |
-| Prompt_message_file_name                                             |
-| Prompt_message_file_library_name                                     |
-| Message_file_name                                                    |
-| Message_file_library_name                                            |
-| Help_panel_group_name                                                |
-| Help_panel_group_library_name                                        |
-| Help_identifier                                                      |
-| Search_index_name                                                    |
-| Search_index_library_name                                            |
-| Current_library                                                      |
-| Product_library                                                      |
-| Prompt_override_program_name                                         |
-| Prompt_override_program_library name                                 |
-| Restricted_to_target_release                                         |
-| Text_description                                                     |
-| Command_processing_program_call_state                                |
-| Validity_check_program_call_state                                    |
-| Prompt_override_program_call_state                                   |
-| Offset_to_help_bookshelf_information                                 |
-| Length_of_help_bookshelf_information                                 |
-| Coded_character_set_ID_(CCSID)                                       |
-| Enabled_for_GUI_indicator                                            |
-| Threadsafe_indicator                                                 |
-| Multithreaded_job_action                                             |
-| Proxy_command_indicator                                              |
-| Prompt_message_file_text_indicator                                   |
-
-**IBM i API:**
-
-[QCDRCMDI](https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_74/apis/qcdrcmdi.htm)
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.retrCmdInfo('CRTLIB', '*LIBL', (error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log(output);
-});
-```
-
-
-## Toolkit.retrPgmInfo(program, library, callback)
-
-**Description:**
-
-Retrieves information from a program object.
-
-**Syntax:**
-
-retrPgmInfo(pgm, lib, callback)
-
-**Parameters:**
-- **program** `<string>` The program name.
-
-- **library** `<string>` The library name. If it is undefined, *LIBL will be used.
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**output**
-
-| Key                                          |
-| -----                                        |
-| Program_name                                 |
-| Program_library_name                         |
-| Program_owner                                |
-| Program_attribute                            |
-| Creation_date_and_time                       |
-| Source_file_name                             |
-| Source_file_library_name                     |
-| Source_file_member_name                      |
-| Source_file_updated_date_and_time            |
-| Observable_information                       |
-| User_profile_option                          |
-| Use_adopted_authority                        |
-| Log_commands                                 |
-| Allow_RTVCLSRC                               |
-| Fix_decimal_data                             |
-| Text description                             |
-| Type_of_program                              |
-| Teraspace_storage-enabled_program            |
-| Reserved                                     |
-| Minimum_number_of_parameters                 |
-| Maximum_number_of_parameters                 |
-| Program_size                                 |
-| Associated_space_size                        |
-| Static_storage_size                          |
-| Automatic_storage_size                       |
-| Number_of_MI_instructions                    |
-| Number_of_MI_ODT_entries                     |
-| Program_state                                |
-| Compiler_identification                      |
-| Earliest_release_program_can_run             |
-| Sort_sequence_table_name                     |
-| Sort_sequence_table_library name             |
-| Language_identifier                          |
-| Program_domain                               |
-| Conversion_required                          |
-| Conversion_details                           |
-| Optimization                                 |
-| Paging_pool                                  |
-| Update_program_automatic_storage_area_(PASA) |
-| Clear_program_automatic_storage_area_(PASA)  |
-| Paging_amount                                |
-| Program_entry_procedure_module               |
-| Program_entry_procedure_module_library       |
-| Activation_group_attribute                   |
-| Observable_information_compressed            |
-| Run-time_information_compressed              |
-| Release_program_created_on                   |
-| Shared_activation_group                      |
-| Allow_update                                 |
-| Program_CCSID                                |
-| Number_of_modules                            |
-| Number_of_service_programs                   |
-| Number_of_copyrights                         |
-| Number_of_unresolved_references              |
-| Release_program_created_for                  |
-| Allow_static_storage_reinitialization        |
-| All_creation_data                            |
-| Allow_bound_*SRVPGM_library_name_update      |
-| Profiling_data                               |
-| Teraspace_storage_enabled_modules            |
-| Storage_model                                |
-| Uses_argument_optimization_(ARGOPT)          |
-
-**IBM i API:**
-
-[QCLRPGMI](https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_74/apis/qclrpgmi.htm)
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.retrPgmInfo('XMLCGI', 'QXMLSERV', (error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log(output);
-});
-```
-
-
-## Toolkit.retrSrvPgmInfo(program, library, callback)
-
-**Description:**
-
-Retrieves information from a service program object.
-
-**Syntax:**
-
-retrSrvPgmInfo(program, library, callback)
-
-**Parameters:**
-
-- **program** `<string>` the service program name.
-
-- **library** `<string>` the library name. If it is undefined, *LIBL will be used.
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**output**
-
-| Key                                      |
-| -----                                    |
-| Service_program_name                     |
-| Service_program_library_name             |
-| Service_program_owner                    |
-| Service_program_attribute                |
-| Creation_date_and_time                   |
-| Export_source_file_name                  |
-| Export_source_file_library_name          |
-| Export_source_file_member_name           |
-| Activation_group_attribute               |
-| Current_export_signature                 |
-| User_profile                             |
-| Observable_information_compressed        |
-| Run-time_information_compressed          |
-| Service_program_CCSID                    |
-| Number_of_modules                        |
-| Number_of_service_programs               |
-| Number_of_copyrights                     |
-| Text_description                         |
-| Shared_activation_group                  |
-| Allow_update                             | 
-| Number_of_unresolved_references          |
-| Use_adopted_authority                    |
-| Allow_bound_*SRVPGM_library_name_update  |
-| Profiling_data                           |
-| Teraspace_storage_enabled_modules        |
-| Storage_model                            |
-| Uses_argument_optimization_(ARGOPT)      |
-| Reserved_'00'X                           |
-| Service_program_state                    |
-| Service program_domain                   |
-| Associated_space_size                    |
-| Static_storage_size                      |
-| Service_program_size                     |
-| Release_service_program_created_on       |
-| Earliest_release_service_program_can_run |
-| Release_service_program_created_for      |
-| Allow_static_storage_reinitialization    |
-| Conversion_required                      |
-| All_creation_data                        |
-| Conversion_details                       |
-| Reserved                                 |
-| Paging_pool                              |
-| Paging_amount                            |
-
-
-**IBM i API:**
-
-[QBNRSPGM](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/qbnrspgm.htm)
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.retrSrvPgmInfo('QZSRVSSL', 'QHTTPSVR', (error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log(output);
-});
-```
-
-
-## Toolkit.retrUserInfo(user, callback)
-
-**Description:**
-
-Retrieves information about a user profile.
-
-**Syntax:**
-
-retrUserInfo(user, callback)
-
-**Parameters:**
-- **user** `<string>` the user profile.
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**output**
-
-| Key                            |
-| -----                          |
-| User_profile_name              |
-| Previous_sign-on_date_and_time |
-| Reserved                       |
-| Sign-on_attempts_not_valid     |
-| Status                         |
-| Password_change_date           |
-| No_password_indicator          |
-| Reserved                       |
-| Password_expiration_interval   |
-| Date_password_expires          |
-| Days_until_password_expires    |
-| Set_password_to_expire         |
-| Display_sign-on_information    |
-| Local_password_management      |
-| Block_password_change          |
-
-**IBM i API:**
-
-[QSYRUSRI](https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_74/apis/qsyrusri.htm)
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.retrUserInfo('QSYS', (error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log(output);
-});
-```
-
-
-## Toolkit.retrUserAuthToObj(path, callback)
-
-**Description:**
-
-Retrieves information about the users who are authorized to an object.
-
-**Syntax:**
-
-retrUserAuthToObj(path. callback)
-
-**Parameters:**
-
-- **path** `<string>` the absolute path of the object.
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is `<object>` output when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**output**
-
-| Key                           |
-| -----                         |
-| Profile_name                  |
-| User_or_group indicator       |
-| Data_authority                |
-| Authorization_list_management |
-| Object_management             |
-| Object_existence              |
-| Object_alter                  |
-| Object_reference              |
-| Reserved                      |
-| Object_operational            |
-| Data_read                     |
-| Data_add                      |
-| Data_update                   |
-| Data_delete                   |
-| Data_execute                  |
-
-**IBM i API:**
-
-[QSYRTVUA](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/qsyrtvua.htm)
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.retrUserAuthToObj('/home', (error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log(output);
-});
-```
-
-
-
-
-## Toolkit.addToLibraryList(library, callback)
-
-**Description:**
-
-Retrieves information about the users who are authorized to an object.
-
-**Syntax:**
-
-addToLibraryList(library)
-
-**Parameters:**
-
-- **library** `striing` the library name to be added to the library list.
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is `<boolean> true` when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**IBM i API:**
-
-[QLICHGLL](https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_74/rbam6/chglibl.htm)
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.addToLibraryList('QHTTPSVR', (error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log(output);
-});
-
-
-```
-
 ## Toolkit.sendToDataQueue(name, library, data, callback)
 
 **Description:**
@@ -2420,16 +1858,563 @@ From the Toolkit class you may access:
 
 ## iObj
 
-The `iObj` class is deprecated. Use the [Toolkit](#Class-Toolkit) class instead.
+### iObj.retrUsrAuth(user, type, name, library, callback)
 
-From the Toolkit class you may access:
-- [addToLibraryList](#ToolkitaddToLibraryListlibrary-callback)
-- [retrUsrAuth](#ToolkitretrUserAuthToObjpath-callback)
-- [retrCmdInfo](#ToolkitretrCmdInfocommand-library-callback)
-- [retrPgmInfo](#ToolkitretrPgmInfoprogram-library-callback)
-- [retrSrvPgmInfo](#ToolkitretrSrvPgmInfoprogram-library-callback)
-- [retrUserInfo](#ToolkitretrUserInfouser-callback)
-- [retrUserAuthToObj](#ToolkitretrUserAuthToObjpath-callback)
+**Description:**
+
+Retrieves a specific user's authority for an object to the caller
+
+**Syntax:**
+
+retrUsrAuth(user, type, name, library, callback)
+
+**Parameters:**
+- **user** `<string>` the name of the user whose object authority is returned
+
+  Special values:
+
+  - `*CURRENT` the authority of the user currently running to the specified object is returned.
+
+  - `*PUBLIC` the public authority for the object is returned.
+
+- type `<string>` the type of object for which authority information is returned. For example, if the target object is a program, then *PGM should be set to the type parameter.
+
+- **name** `<string>` the object name.
+
+- **library** `<string>` the library name.
+
+  Special values:
+
+  - `*CURLIB` the current library is used to locate the object. If there is no current library, QGPL (general purpose library) is used.
+
+  - `*LIBL` the library list is used to locate the object.
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**output**
+
+| Key                                    |
+| -----                                  |
+| Object_authority_/_Data_authority      |
+| Authorization_list_management          |
+| Object_operational                     |
+| Object_management                      |
+| Object_existence                       |
+| Data_read                              |
+| Data_add                               |
+| Data_update                            |
+| Data_delete                            |
+| Authorization_list                     |
+| Authority_source                       |
+| Some_adopted_authority                 |
+| Adopted_object_authority               |
+| Adopted_authorization_list_management  |
+| Adopted_object_operational             |
+| Adopted_object_management              |
+| Adopted_object_existence               |
+| Adopted_data_read                      |
+| Adopted_data_add                       |
+| Adopted_data_update                    |
+| Adopted_data_delete                    |
+| Adopted_data_execute                   |
+| Reserved                               |
+| Adopted_object_alter                   |
+| Adopted_object_reference               |
+| Data_execute                           |
+| Object_alter                           |
+| Object_reference                       |
+| ASP_device_name_of_library             |
+| ASP_device_name_of_object              |
+| Offset_to_group_information_table      |
+| Number_of_group_table_entries_returned |
+
+
+**IBM i API:**
+
+[QSYRUSRA](https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_74/apis/qsyrusra.htm)
+
+**Example:**
+
+```js
+const { Connection, iObj } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const obj = new iObj(connection);
+
+obj.retrUsrAuth('*PUBLIC', '*PGM', 'XMLCGI', 'QXMLSERV', (error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log(output);
+});
+```
+
+### iObj.retrCmdInfo(command, [library,] callback)
+
+**Description:**
+
+Retrieves information from a command definition object.
+
+**Syntax:**
+
+retrCmdInfo(cmd, [library,] callback)
+
+**Parameters:**
+
+- **command** `<string>` the command name.
+
+- **library** `<string>` the library name. If it is undefined, `*LIBL` will be used.
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**output**
+
+| Key                                                                  |
+| -----                                                                |
+| Command_name                                                         |
+| Command_library_name                                                 |
+| Command_processing_program_or_proxy_target_command                   |
+| Command_processing_program's_or_proxy_target_command's_library name  |
+| Source_file_name                                                     |
+| Source_file_library_name                                             |
+| Source_file_member_name                                              |
+| Validity_check_program_name                                          |
+| Validity_check_program_library_name                                  |
+| Mode_information                                                     |
+| Where_allowed_to_run                                                 |
+| Allow_limited_user                                                   |
+| Maximum_positional_parameters                                        |
+| Prompt_message_file_name                                             |
+| Prompt_message_file_library_name                                     |
+| Message_file_name                                                    |
+| Message_file_library_name                                            |
+| Help_panel_group_name                                                |
+| Help_panel_group_library_name                                        |
+| Help_identifier                                                      |
+| Search_index_name                                                    |
+| Search_index_library_name                                            |
+| Current_library                                                      |
+| Product_library                                                      |
+| Prompt_override_program_name                                         |
+| Prompt_override_program_library name                                 |
+| Restricted_to_target_release                                         |
+| Text_description                                                     |
+| Command_processing_program_call_state                                |
+| Validity_check_program_call_state                                    |
+| Prompt_override_program_call_state                                   |
+| Offset_to_help_bookshelf_information                                 |
+| Length_of_help_bookshelf_information                                 |
+| Coded_character_set_ID_(CCSID)                                       |
+| Enabled_for_GUI_indicator                                            |
+| Threadsafe_indicator                                                 |
+| Multithreaded_job_action                                             |
+| Proxy_command_indicator                                              |
+| Prompt_message_file_text_indicator                                   |
+
+**IBM i API:**
+
+[QCDRCMDI](https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_74/apis/qcdrcmdi.htm)
+
+**Example:**
+
+```js
+const { Connection, iObj } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const obj = new iObj(connection);
+
+obj.retrCmdInfo('CRTLIB', '*LIBL', (error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log(output);
+});
+```
+
+
+### iObj.retrPgmInfo(program, library, callback)
+
+**Description:**
+
+Retrieves information from a program object.
+
+**Syntax:**
+
+retrPgmInfo(pgm, lib, callback)
+
+**Parameters:**
+- **program** `<string>` The program name.
+
+- **library** `<string>` The library name. If it is undefined, *LIBL will be used.
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**output**
+
+| Key                                          |
+| -----                                        |
+| Program_name                                 |
+| Program_library_name                         |
+| Program_owner                                |
+| Program_attribute                            |
+| Creation_date_and_time                       |
+| Source_file_name                             |
+| Source_file_library_name                     |
+| Source_file_member_name                      |
+| Source_file_updated_date_and_time            |
+| Observable_information                       |
+| User_profile_option                          |
+| Use_adopted_authority                        |
+| Log_commands                                 |
+| Allow_RTVCLSRC                               |
+| Fix_decimal_data                             |
+| Text description                             |
+| Type_of_program                              |
+| Teraspace_storage-enabled_program            |
+| Reserved                                     |
+| Minimum_number_of_parameters                 |
+| Maximum_number_of_parameters                 |
+| Program_size                                 |
+| Associated_space_size                        |
+| Static_storage_size                          |
+| Automatic_storage_size                       |
+| Number_of_MI_instructions                    |
+| Number_of_MI_ODT_entries                     |
+| Program_state                                |
+| Compiler_identification                      |
+| Earliest_release_program_can_run             |
+| Sort_sequence_table_name                     |
+| Sort_sequence_table_library name             |
+| Language_identifier                          |
+| Program_domain                               |
+| Conversion_required                          |
+| Conversion_details                           |
+| Optimization                                 |
+| Paging_pool                                  |
+| Update_program_automatic_storage_area_(PASA) |
+| Clear_program_automatic_storage_area_(PASA)  |
+| Paging_amount                                |
+| Program_entry_procedure_module               |
+| Program_entry_procedure_module_library       |
+| Activation_group_attribute                   |
+| Observable_information_compressed            |
+| Run-time_information_compressed              |
+| Release_program_created_on                   |
+| Shared_activation_group                      |
+| Allow_update                                 |
+| Program_CCSID                                |
+| Number_of_modules                            |
+| Number_of_service_programs                   |
+| Number_of_copyrights                         |
+| Number_of_unresolved_references              |
+| Release_program_created_for                  |
+| Allow_static_storage_reinitialization        |
+| All_creation_data                            |
+| Allow_bound_*SRVPGM_library_name_update      |
+| Profiling_data                               |
+| Teraspace_storage_enabled_modules            |
+| Storage_model                                |
+| Uses_argument_optimization_(ARGOPT)          |
+
+**IBM i API:**
+
+[QCLRPGMI](https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_74/apis/qclrpgmi.htm)
+
+**Example:**
+
+```js
+const { Connection, iObj } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const obj = new iObj(connection);
+
+obj.retrPgmInfo('XMLCGI', 'QXMLSERV', (error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log(output);
+});
+```
+
+
+### iObj.retrSrvPgmInfo(program, library, callback)
+
+**Description:**
+
+Retrieves information from a service program object.
+
+**Syntax:**
+
+retrSrvPgmInfo(program, library, callback)
+
+**Parameters:**
+
+- **program** `<string>` the service program name.
+
+- **library** `<string>` the library name. If it is undefined, *LIBL will be used.
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**output**
+
+| Key                                      |
+| -----                                    |
+| Service_program_name                     |
+| Service_program_library_name             |
+| Service_program_owner                    |
+| Service_program_attribute                |
+| Creation_date_and_time                   |
+| Export_source_file_name                  |
+| Export_source_file_library_name          |
+| Export_source_file_member_name           |
+| Activation_group_attribute               |
+| Current_export_signature                 |
+| User_profile                             |
+| Observable_information_compressed        |
+| Run-time_information_compressed          |
+| Service_program_CCSID                    |
+| Number_of_modules                        |
+| Number_of_service_programs               |
+| Number_of_copyrights                     |
+| Text_description                         |
+| Shared_activation_group                  |
+| Allow_update                             | 
+| Number_of_unresolved_references          |
+| Use_adopted_authority                    |
+| Allow_bound_*SRVPGM_library_name_update  |
+| Profiling_data                           |
+| Teraspace_storage_enabled_modules        |
+| Storage_model                            |
+| Uses_argument_optimization_(ARGOPT)      |
+| Reserved_'00'X                           |
+| Service_program_state                    |
+| Service program_domain                   |
+| Associated_space_size                    |
+| Static_storage_size                      |
+| Service_program_size                     |
+| Release_service_program_created_on       |
+| Earliest_release_service_program_can_run |
+| Release_service_program_created_for      |
+| Allow_static_storage_reinitialization    |
+| Conversion_required                      |
+| All_creation_data                        |
+| Conversion_details                       |
+| Reserved                                 |
+| Paging_pool                              |
+| Paging_amount                            |
+
+
+**IBM i API:**
+
+[QBNRSPGM](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/qbnrspgm.htm)
+
+**Example:**
+
+```js
+const { Connection, iObj } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const obj = new iObj(connection);
+
+obj.retrSrvPgmInfo('QZSRVSSL', 'QHTTPSVR', (error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log(output);
+});
+```
+
+
+### iObj.retrUserInfo(user, callback)
+
+**Description:**
+
+Retrieves information about a user profile.
+
+**Syntax:**
+
+retrUserInfo(user, callback)
+
+**Parameters:**
+- **user** `<string>` the user profile.
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**output**
+
+| Key                            |
+| -----                          |
+| User_profile_name              |
+| Previous_sign-on_date_and_time |
+| Reserved                       |
+| Sign-on_attempts_not_valid     |
+| Status                         |
+| Password_change_date           |
+| No_password_indicator          |
+| Reserved                       |
+| Password_expiration_interval   |
+| Date_password_expires          |
+| Days_until_password_expires    |
+| Set_password_to_expire         |
+| Display_sign-on_information    |
+| Local_password_management      |
+| Block_password_change          |
+
+**IBM i API:**
+
+[QSYRUSRI](https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_74/apis/qsyrusri.htm)
+
+**Example:**
+
+```js
+const { Connection, iObj } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const obj = new iObj(connection);
+
+obj.retrUserInfo('QSYS', (error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log(output);
+});
+```
+
+
+### iObj.retrUserAuthToObj(path, callback)
+
+**Description:**
+
+Retrieves information about the users who are authorized to an object.
+
+**Syntax:**
+
+retrUserAuthToObj(path. callback)
+
+**Parameters:**
+
+- **path** `<string>` the absolute path of the object.
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is `<object>` output when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**output**
+
+| Key                           |
+| -----                         |
+| Profile_name                  |
+| User_or_group indicator       |
+| Data_authority                |
+| Authorization_list_management |
+| Object_management             |
+| Object_existence              |
+| Object_alter                  |
+| Object_reference              |
+| Reserved                      |
+| Object_operational            |
+| Data_read                     |
+| Data_add                      |
+| Data_update                   |
+| Data_delete                   |
+| Data_execute                  |
+
+**IBM i API:**
+
+[QSYRTVUA](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/qsyrtvua.htm)
+
+**Example:**
+
+```js
+const { Connection, iObj } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const obj = new iObj(connection);
+
+obj.retrUserAuthToObj('/home', (error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log(output);
+});
+```
+
+
+### iObj.addToLibraryList(library, callback)
+
+**Description:**
+
+Retrieves information about the users who are authorized to an object.
+
+**Syntax:**
+
+addToLibraryList(library)
+
+**Parameters:**
+
+- **library** `striing` the library name to be added to the library list.
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is `<boolean> true` when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**IBM i API:**
+
+[QLICHGLL](https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_74/rbam6/chglibl.htm)
+
+**Example:**
+
+```js
+const { Connection, iObj } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const obj = new iObj(connection);
+
+obj.addToLibraryList('QHTTPSVR', (error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log(output);
+});
+```
 
 ## iPgm
 
