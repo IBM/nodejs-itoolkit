@@ -36,10 +36,6 @@
   - [Toolkit.getPTFInfo(number, callback)](#ToolkitgetPTFInfonumber-callback)
   - [Toolkit.getProductInfo(name, option, callback)](#ToolkitgetProductInfoname-option-callback)
   - [Toolkit.getInstalledProducts(callback)](#ToolkitgetInstalledProductscallback)
-  - [Toolkit.createUserSpace(name, library, attribute, size, authority, description, callback)](#ToolkitcreateUserSpacename-library-attribute-size-authority-description-callback)
-  - [Toolkit.setUserSpaceData(name, library, size, data, callback)](#ToolkitsetUserSpaceDataname-library-size-data-callback)
-  - [Toolkit.getUserSpaceData(name, library, size, callback)](#ToolkitgetUserSpaceDataname-library-size-callback)
-  - [Toolkit.deleteUserSpace(name, library, callback)](#ToolkitdeleteUserSpacename-library-callback)
   - [Toolkit.getTCPIPAttr(callback)](#ToolkitgetTCPIPAttrcallback)
   - [Toolkit.getNetInterfaceData(ip, callback)](#ToolkitgetNetInterfaceDataip-callback)
   - [Toolkit.retrUsrAuth(user, type, name, library, callback)](#ToolkitretrUsrAuthuser-type-name-library-callback)
@@ -88,6 +84,10 @@
   - [iSql.execute([params,[options]])](#iSqlexecuteparamsoptions)
   - [iSql.toXML()](#iSqltoXML)
   - [iUserSpace](#iUserSpace)
+    - [iUserSpace.createUserSpace(name, library, attribute, size, authority, description, callback)](#iUserSpacecreateUserSpacename-library-attribute-size-authority-description-callback)
+    - [iUserSpace.setUserSpaceData(name, library, size, data, callback)](#iUserSpacesetUserSpaceDataname-library-size-data-callback)
+    - [iUserSpace.getUserSpaceData(name, library, size, callback)](#iUserSpacegetUserSpaceDataname-library-size-callback)
+    - [iUserSpace.deleteUserSpace(name, library, callback)](#iUserSpacedeleteUserSpacename-library-callback)
   - [iWork](#iWork)
   - [xmlToJson(xml)](#xmlToJsonxml)
 
@@ -1321,201 +1321,7 @@ toolkit.getInstalledProducts((error, output) => {
 });
 ```
 
-## Toolkit.createUserSpace(name, library, attribute, size, authority, description, callback)
 
-**Description:**
-
-Create a new user space.
-
-**Syntax:**
-
-createUserSpace(name, library, attribute, size, authority, description, callback)
-
-**Parameters:**
-
-- **name** `<string>` the user space name. (10 characters max).
-
-- **library** `<string>` tame of the library where the user space is located (10 characters max). If it is blank then `*CURLIB` is used.
-
-- **attribute** `<string>` the extended attribute of the user space (11 characters max). If it is blank then `LOG` is used.
-
-- **size** `<number>` the initial size of the user space being created. This value must be from 1 byte to 16,776,704 bytes. Defaults to `50`.
-
-- **authority** `<string>` the authority you give users who do not have specific private or group authority to the user space. Defaults to `*USE`.
-
-   The valid values for this parameter are:
-
-   - `*ALL` - users can perform all authorized operations on the object.
-   - `*CHANGE` - users can read the object description and has read, add, update, and delete authority to the object.
-   - `*EXCLUDE` - users cannot access the object in any way.
-   - `*LIBCRTAUT` - public authority for the user space is taken from the CRTAUT value for the target library when the object is created.
-   - `*USE` - users can read the object and its description but cannot change them.
-
-- **description** `<string>` This text briefly describes the user space. (50 characters max).
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is `<boolean> true` when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**IBM i API:**
-
-[QUSCRTUS](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/quscrtus.htm)
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.createUserSpace('myuserspace', 'mylib', 'LOG', 50, 'EXCLUDE', 'Example User Space', (error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log(output);
-});
-```
-
-## Toolkit.setUserSpaceData(name, library, size, data, callback)
-
-**Description:**
-
-Set the content of the user space.
-
-**Syntax:**
-
-setUserSpaceData(name, library, size, data, callback)
-
-**Parameters:**
-- **name** `<string>` the user space name. (10 characters max).
-
-- **library** `<string>` name of the library where the user space is located (10 characters max). If it is blank then `*CURLIB` is used.
-
-- **size** `<number>` the length of the new data in the input data parameter. The length must be greater than 0.
-
-- **data** `<string>` the new data to be placed into the user space. The field must be at least as long as the length of data parameter.
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is `<boolean> true` when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**IBM i API:**
-
-[QUSCHGUS](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/quschgus.htm)
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.setUserSpaceData('myuserspace', 'mylib', 20, 'Hello!', (error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log(output);
-});
-```
-
-## Toolkit.getUserSpaceData(name, library, size, callback)
-
-**Description:**
-
-Get the content of the user space.
-
-**Syntax:**
-
-getUserSpaceData(name, library, size, callback)
-
-**Parameters:**
-
-- **name** `<string>` the user space name. (10 characters max).
-
-- **library** `<string>` name of the library where the user space is located (10 characters max). If it is blank then `*CURLIB` is used.
-
-- **size**:`<number>` the length of the data to retrieve. The length must be greater than 0.
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is `<string>` output from the user space when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**IBM i API:**
-
-[QUSRTVUS](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_72/apis/qusrtvus.htm)
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.getUserSpaceData('myuserspace', 'mylib', 20, (error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log(output);
-});
-```
-
-## Toolkit.deleteUserSpace(name, library, callback)
-
-**Description:**
-
-Delete the user space.
-
-**Syntax:**
-
-deleteUserSpace(name, library, callback)
-
-**Parameters:**
-- **name** `<string>` the user space name. (10 characters max).
-
-- **library** `<string>` name of the library where the user space is located (10 characters max). If it is blank then `*CURLIB` is used.
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is `<boolean> true` when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**IBM i API:**
-
-[QUSDLTUS](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/qusdltus.htm)
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.deleteUserSpace('myuserspace', 'mylib', (error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log(output);
-});
-```
 
 ## Toolkit.getTCPIPAttr(callback)
 
@@ -3086,12 +2892,201 @@ console.log(sql.toXML());
 
 ## iUserSpace
 
-The `iUserSpace` class is deprecated. Use the [Toolkit](#Class-Toolkit) class instead.
+### iUserSpace.createUserSpace(name, library, attribute, size, authority, description, callback)
 
-From the Toolkit class you may access:
-- [sendToDataQueue](#ToolkitsendToDataQueuename-library-data-callback)
-- [receiveFromDataQueue](#ToolkitreceiveFromDataQueuename-library-size-callback)
-- [clearDataQueue](#ToolkitclearDataQueuename-library-callback)
+**Description:**
+
+Create a new user space.
+
+**Syntax:**
+
+createUserSpace(name, library, attribute, size, authority, description, callback)
+
+**Parameters:**
+
+- **name** `<string>` the user space name. (10 characters max).
+
+- **library** `<string>` tame of the library where the user space is located (10 characters max). If it is blank then `*CURLIB` is used.
+
+- **attribute** `<string>` the extended attribute of the user space (11 characters max). If it is blank then `LOG` is used.
+
+- **size** `<number>` the initial size of the user space being created. This value must be from 1 byte to 16,776,704 bytes. Defaults to `50`.
+
+- **authority** `<string>` the authority you give users who do not have specific private or group authority to the user space. Defaults to `*USE`.
+
+   The valid values for this parameter are:
+
+   - `*ALL` - users can perform all authorized operations on the object.
+   - `*CHANGE` - users can read the object description and has read, add, update, and delete authority to the object.
+   - `*EXCLUDE` - users cannot access the object in any way.
+   - `*LIBCRTAUT` - public authority for the user space is taken from the CRTAUT value for the target library when the object is created.
+   - `*USE` - users can read the object and its description but cannot change them.
+
+- **description** `<string>` This text briefly describes the user space. (50 characters max).
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is `<boolean> true` when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**IBM i API:**
+
+[QUSCRTUS](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/quscrtus.htm)
+
+**Example:**
+
+```js
+const { Connection, iUserSpace } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const userSpace = new iUserSpace(connection);
+
+userSpace.createUserSpace('myuserspace', 'mylib', 'LOG', 50, 'EXCLUDE', 'Example User Space', (error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log(output);
+});
+```
+
+### iUserSpace.setUserSpaceData(name, library, size, data, callback)
+
+**Description:**
+
+Set the content of the user space.
+
+**Syntax:**
+
+setUserSpaceData(name, library, size, data, callback)
+
+**Parameters:**
+- **name** `<string>` the user space name. (10 characters max).
+
+- **library** `<string>` name of the library where the user space is located (10 characters max). If it is blank then `*CURLIB` is used.
+
+- **size** `<number>` the length of the new data in the input data parameter. The length must be greater than 0.
+
+- **data** `<string>` the new data to be placed into the user space. The field must be at least as long as the length of data parameter.
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is `<boolean> true` when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**IBM i API:**
+
+[QUSCHGUS](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/quschgus.htm)
+
+**Example:**
+
+```js
+const { Connection, iUserSpace } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const userSpace = new iUserSpace(connection);
+
+userSpace.setUserSpaceData('myuserspace', 'mylib', 20, 'Hello!', (error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log(output);
+});
+```
+
+### iUserSpace.getUserSpaceData(name, library, size, callback)
+
+**Description:**
+
+Get the content of the user space.
+
+**Syntax:**
+
+getUserSpaceData(name, library, size, callback)
+
+**Parameters:**
+
+- **name** `<string>` the user space name. (10 characters max).
+
+- **library** `<string>` name of the library where the user space is located (10 characters max). If it is blank then `*CURLIB` is used.
+
+- **size**:`<number>` the length of the data to retrieve. The length must be greater than 0.
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is `<string>` output from the user space when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**IBM i API:**
+
+[QUSRTVUS](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_72/apis/qusrtvus.htm)
+
+**Example:**
+
+```js
+const { Connection, iUserSpace } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const userSpace = new iUserSpace(connection);
+
+userSPace.getUserSpaceData('myuserspace', 'mylib', 20, (error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log(output);
+});
+```
+
+### iUserSpace.deleteUserSpace(name, library, callback)
+
+**Description:**
+
+Delete the user space.
+
+**Syntax:**
+
+deleteUserSpace(name, library, callback)
+
+**Parameters:**
+- **name** `<string>` the user space name. (10 characters max).
+
+- **library** `<string>` name of the library where the user space is located (10 characters max). If it is blank then `*CURLIB` is used.
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is `<boolean> true` when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**IBM i API:**
+
+[QUSDLTUS](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/qusdltus.htm)
+
+**Example:**
+
+```js
+const { Connection, iUserSpace } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const userSpace = new iUserSpace(connection);
+
+userSpace.deleteUserSpace('myuserspace', 'mylib', (error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log(output);
+});
+```
 
 ## iWork
 
