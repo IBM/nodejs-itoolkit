@@ -27,12 +27,6 @@
   - [ProgramCall.toXML()](#ProgramCalltoXML)
 - [Class Toolkit](#Class-Toolkit)
   - [Constructor: Toolkit(connection)](#Constructor-Toolkitconnection)
-  - [Toolkit.getSysValue(value, callback)](#ToolkitgetSysValuevalue-callback)
-  - [Toolkit.getSysStatus(callback)](#ToolkitgetSysStatuscallback)
-  - [Toolkit.getSysStatusExt(callback)](#ToolkitgetSysStatusExtcallback)
-  - [Toolkit.getJobStatus(id, callback)](#ToolkitgetJobStatusid-callback)
-  - [Toolkit.getJobInfo(name, user, number, callback)](#ToolkitgetJobInfoname-user-number-callback)
-  - [Toolkit.getDataArea(library, area, length, callback)](#ToolkitgetDataArealibrary-area-length-callback)
   - [Toolkit.getPTFInfo(number, callback)](#ToolkitgetPTFInfonumber-callback)
   - [Toolkit.getProductInfo(name, option, callback)](#ToolkitgetProductInfoname-option-callback)
   - [Toolkit.getInstalledProducts(callback)](#ToolkitgetInstalledProductscallback)
@@ -89,6 +83,12 @@
   - [iSql.toXML()](#iSqltoXML)
   - [iUserSpace](#iUserSpace)
   - [iWork](#iWork)
+    - [iWork.getSysValue(value, callback)](#iWorkgetSysValuevalue-callback)
+    - [iWork.getSysStatus(callback)](#iWorkgetSysStatuscallback)
+    - [iWork.getSysStatusExt(callback)](#iWorkgetSysStatusExtcallback)
+    - [iWork.getJobStatus(id, callback)](#iWorkgetJobStatusid-callback)
+    - [iWork.getJobInfo(name, user, number, callback)](#iWorkgetJobInfoname-user-number-callback)
+    - [iWork.getDataArea(library, area, length, callback)](#iWorkgetDataArealibrary-area-length-callback)
   - [xmlToJson(xml)](#xmlToJsonxml)
 
 # Introduction
@@ -750,374 +750,7 @@ const connection = new Connection({
 const toolkit = new Toolkit(connection);
 ```
 
-## Toolkit.getSysValue(value, callback)
 
-**Description:**
-
-Get specified system value.
-
-**Syntax:**
-
-getSysValue (value, callback)
-
-**Parameters:**
-
-- **value** `<string>` The system value name to be queried.
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is `<string>` system value when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**IBM i API:**
-
-[QWCRSVAL](https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_74/apis/qwcrsval.htm)
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.getSysValue('QCCSID', (error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log(`QCCSID = ${output}`);
-});
-```
-
-## Toolkit.getSysStatus(callback)
-
-**Description:**
-
-Get basic system status.
-
-**Syntax:**
-
-getSysStatus(callback)
-
-**Parameters:**
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**output**
-
-| Keys                                                  |
-| -----                                                 |
-| Current_date_and_time                                 |
-| System_name                                           |
-| Users_currently_signed_on                             |
-| Users_temporarily_signed_off_(disconnected)           |
-| Users_suspended_by_system_request                     | 
-| Users_suspended_by_group_jobs                         |
-| Users_signed_off_with_printer_output_waiting_to_print |
-| Batch_jobs_waiting_for_messages                       |
-| Batch_jobs_running                                    | 
-| Batch_jobs_held_while_running                         |
-| Batch_jobs_ending                                     |
-| Batch_jobs_waiting_to_run_or_already_scheduled        |
-| Batch_jobs_held_on_a_job_queue                        |
-| Batch_jobs_on_a_held_job_queue                        |
-| Batch_jobs_on_an_unassigned_job_queue                 |
-| Batch_jobs_ended_with_printer_output_waiting_to_print |
-
-**IBM i API:**
-
-[QWCRSSTS](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/qwcrssts.htm)
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.getSysStatus((error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log((output));
-});
-```
-
-## Toolkit.getSysStatusExt(callback)
-
-**Description:**
-
-Get detailed system status.
-
-**Syntax:**
-
-getSysStatusExt(callback)
-
-**Parameters:**
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**output**
-
-| Key                               |
-| -----                             |
-| Current_date_and_time             |
-| System_name                       |
-| Elapsed_time                      |
-| Restricted_state_flag             |
-| %_processing_unit_used            |
-| Jobs_in_system                    |
-| %_permanent_addresses             |
-| %_temporary_addresses             |
-| System_ASP                        |
-| %_system_ASP_used                 |
-| Total_auxiliary_storage           |
-| Current_unprotected_storage_used  |
-| Maximum_unprotected_storage_used  |
-| %_DB_capability                   |
-| Main_storage_size                 |
-| Number_of_partitions              |
-| Partition_identifier              |
-| Current_processing_capacity       |
-| Processor_sharing_attribute       |
-| Number_of_processors              |
-| Active_jobs_in_system             |
-| Active_threads_in_system          |
-| Maximum_jobs_in_system            |
-| %_temporary_256MB_segments_used   |
-| %_temporary_4GB_segments_used     |
-| %_permanent_256MB_segments_used   |
-| %_permanent_4GB_segments_used     |
-| %_current_interactive_performance |
-| %_uncapped_CPU_capacity_used      |
-| %_shared_processor_pool_used      |
-| Main_storage_size_(long)          |
-
-**IBM i API:**
-
-[QWCRSSTS](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/qwcrssts.htm)
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.getSysStatusExt((error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log(output);
-});
-```
-
-## Toolkit.getJobStatus(id, callback)
-
-**Description:**
-
-Get the status of the specified job.
-
-**Syntax:**
-
-getJobStatus(id, callback)
-
-**Parameters:**
-
-- **id** `<string>` a specific job number(6 characters max)
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**output**
-
-| Key                      |
-| -----                    |
-| Job_status               |
-| Fully_qualified_job_name |
-
-
-**IBM i API:**
-
-[QWCRJBST](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/qwcrjbst.htm)
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.getJobStatus('jobid', (error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log(output);
-});
-```
-
-## Toolkit.getJobInfo(name, user, number, callback)
-
-**Description:**
-
-Get specified job’s status.
-
-**Syntax:**
-
-getJobInfo (name, user, number, callback)
-
-**Parameters:**
-- **name** `<string>` a specific job name (10 characters max)
-
-- **user** `<string>` a specific user profile name (10 characters max)
-
-- **number** `<string>` a specific job number (6 characters max)
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**output**
-
-| Key                                                                          |
-| -----                                                                        |
-| Job_name                                                                     |
-| User_name        Data Queues                                                      |
-| Job_number       Data Queues                                                      |
-| Job_status       Data Queues                                                      |
-| Job_type                                                                     |
-| Job_subtype                                                                  |
-| Subsystem_description_name                                                   |
-| Run_priority_(job)                                                           |
-| System_pool_identifier                                                       |
-| Processing_unit_time_used,_if_less_than_2,147,483,647_milliseconds           |
-| Number_of_auxiliary I/O requests,_if_less_than_2,147,483,647                 |
-| Number_of_interactive_transactions                                           |
-| Response_time_total                                                          |
-| Function_type                                                                |
-| Function_name                                                                |
-| Active_job_status                                                            |
-| Number_of_database_lock_waits                                                |
-| Number_of_internal_machine_lock_waits                                        |
-| Number_of_nondatabase_lock_waits                                             |
-| Time_spent_on_database_lock_waits                                            |
-| Time_spent_on_internal_machine_lock_waits                                    |
-| Time_spent_on_nondatabase_lock_waits                                         |
-| Current_system_pool_identifier                                               |
-| Thread_count                                                                 |
-| Processing_unit_time_used_-_total_for_the_job                                |
-| Number_of_auxiliary_I/O_requests                                             |
-| Processing_unit_time_used_for_database_-_total_for_the_job                   |
-| Page_faults                                                                  |
-| Active_job_status_for_jobs_ending                                            |
-| Memory_pool_name                                                             |
-| Message_reply                                                                |
-| Message_key,_when_active_job_waiting_for_a_message                           |
-| Message_queue_name,_when_active_job_waiting_for_a_message                    |
-| Message_queue_library name,_when_active_job_waiting_for_a_message            |
-| Message_queue_library_ASP_device name,_when active_job_waiting_for_a_message |
-
-**IBM i API:**
-
-[QUSRJOBI](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_72/apis/qusrjobi.htm)
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.getJobInfo('jobname', 'user', 'jobnumber', (error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log(output);
-});
-```
-
-## Toolkit.getDataArea(library, area, length, callback)
-
-**Description:**
-
-Retrieve the contents of a data area.
-
-**Syntax:**
-
-getDataArea (library, area, length, callback)
-
-**Parameters:**
-
-- **library** `<string>` name of the library where the data area is located (10 characters max).
-
-- **area** `<string>` the data area name (10 characters max)
-
-- **length** `<number>` the length of the data area substring to be retrieved.
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**output**
-
-| Key                         |
-| -----                       |
-| Type_of_value_returned      |
-| Library_name                |
-| Length_of_value_returned    |
-| Number_of_decimal_positions |
-| Value                       |
-
-**IBM i API:**
-
-[QWCRDTAA](https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_74/apis/qwcrdtaa.htm)
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.getDataArea('mylibrary', 'mydataarea', 100, (error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log(output);
-});
-```
 
 
 ## Toolkit.getPTFInfo(number, callback)
@@ -3095,12 +2728,374 @@ From the Toolkit class you may access:
 
 ## iWork
 
-The `iWork` class is deprecated. Use the [Toolkit](#Class-Toolkit) class instead.
+### iWork.getSysValue(value, callback)
 
-From the Toolkit class you may access:
-- [sendToDataQueue](#ToolkitsendToDataQueuename-library-data-callback)
-- [receiveFromDataQueue](#ToolkitreceiveFromDataQueuename-library-size-callback)
-- [clearDataQueue](#ToolkitclearDataQueuename-library-callback)
+**Description:**
+
+Get specified system value.
+
+**Syntax:**
+
+getSysValue (value, callback)
+
+**Parameters:**
+
+- **value** `<string>` The system value name to be queried.
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is `<string>` system value when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**IBM i API:**
+
+[QWCRSVAL](https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_74/apis/qwcrsval.htm)
+
+**Example:**
+
+```js
+const { Connection, iWork } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const work = new iWork(connection);
+
+work.getSysValue('QCCSID', (error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log(`QCCSID = ${output}`);
+});
+```
+
+### iWork.getSysStatus(callback)
+
+**Description:**
+
+Get basic system status.
+
+**Syntax:**
+
+getSysStatus(callback)
+
+**Parameters:**
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**output**
+
+| Keys                                                  |
+| -----                                                 |
+| Current_date_and_time                                 |
+| System_name                                           |
+| Users_currently_signed_on                             |
+| Users_temporarily_signed_off_(disconnected)           |
+| Users_suspended_by_system_request                     | 
+| Users_suspended_by_group_jobs                         |
+| Users_signed_off_with_printer_output_waiting_to_print |
+| Batch_jobs_waiting_for_messages                       |
+| Batch_jobs_running                                    | 
+| Batch_jobs_held_while_running                         |
+| Batch_jobs_ending                                     |
+| Batch_jobs_waiting_to_run_or_already_scheduled        |
+| Batch_jobs_held_on_a_job_queue                        |
+| Batch_jobs_on_a_held_job_queue                        |
+| Batch_jobs_on_an_unassigned_job_queue                 |
+| Batch_jobs_ended_with_printer_output_waiting_to_print |
+
+**IBM i API:**
+
+[QWCRSSTS](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/qwcrssts.htm)
+
+**Example:**
+
+```js
+const { Connection, iWork } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const work = new iWork(connection);
+
+work.getSysStatus((error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log((output));
+});
+```
+
+### iWork.getSysStatusExt(callback)
+
+**Description:**
+
+Get detailed system status.
+
+**Syntax:**
+
+getSysStatusExt(callback)
+
+**Parameters:**
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**output**
+
+| Key                               |
+| -----                             |
+| Current_date_and_time             |
+| System_name                       |
+| Elapsed_time                      |
+| Restricted_state_flag             |
+| %_processing_unit_used            |
+| Jobs_in_system                    |
+| %_permanent_addresses             |
+| %_temporary_addresses             |
+| System_ASP                        |
+| %_system_ASP_used                 |
+| Total_auxiliary_storage           |
+| Current_unprotected_storage_used  |
+| Maximum_unprotected_storage_used  |
+| %_DB_capability                   |
+| Main_storage_size                 |
+| Number_of_partitions              |
+| Partition_identifier              |
+| Current_processing_capacity       |
+| Processor_sharing_attribute       |
+| Number_of_processors              |
+| Active_jobs_in_system             |
+| Active_threads_in_system          |
+| Maximum_jobs_in_system            |
+| %_temporary_256MB_segments_used   |
+| %_temporary_4GB_segments_used     |
+| %_permanent_256MB_segments_used   |
+| %_permanent_4GB_segments_used     |
+| %_current_interactive_performance |
+| %_uncapped_CPU_capacity_used      |
+| %_shared_processor_pool_used      |
+| Main_storage_size_(long)          |
+
+**IBM i API:**
+
+[QWCRSSTS](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/qwcrssts.htm)
+
+**Example:**
+
+```js
+const { Connection, iWork } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const work = new iWork(connection);
+
+work.getSysStatusExt((error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log(output);
+});
+```
+
+### iWork.getJobStatus(id, callback)
+
+**Description:**
+
+Get the status of the specified job.
+
+**Syntax:**
+
+getJobStatus(id, callback)
+
+**Parameters:**
+
+- **id** `<string>` a specific job number(6 characters max)
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**output**
+
+| Key                      |
+| -----                    |
+| Job_status               |
+| Fully_qualified_job_name |
+
+
+**IBM i API:**
+
+[QWCRJBST](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/qwcrjbst.htm)
+
+**Example:**
+
+```js
+const { Connection, iWork } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const work = new iWork(connection);
+
+work.getJobStatus('jobid', (error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log(output);
+});
+```
+
+### iWork.getJobInfo(name, user, number, callback)
+
+**Description:**
+
+Get specified job’s status.
+
+**Syntax:**
+
+getJobInfo (name, user, number, callback)
+
+**Parameters:**
+- **name** `<string>` a specific job name (10 characters max)
+
+- **user** `<string>` a specific user profile name (10 characters max)
+
+- **number** `<string>` a specific job number (6 characters max)
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**output**
+
+| Key                                                                          |
+| -----                                                                        |
+| Job_name                                                                     |
+| User_name        Data Queues                                                      |
+| Job_number       Data Queues                                                      |
+| Job_status       Data Queues                                                      |
+| Job_type                                                                     |
+| Job_subtype                                                                  |
+| Subsystem_description_name                                                   |
+| Run_priority_(job)                                                           |
+| System_pool_identifier                                                       |
+| Processing_unit_time_used,_if_less_than_2,147,483,647_milliseconds           |
+| Number_of_auxiliary I/O requests,_if_less_than_2,147,483,647                 |
+| Number_of_interactive_transactions                                           |
+| Response_time_total                                                          |
+| Function_type                                                                |
+| Function_name                                                                |
+| Active_job_status                                                            |
+| Number_of_database_lock_waits                                                |
+| Number_of_internal_machine_lock_waits                                        |
+| Number_of_nondatabase_lock_waits                                             |
+| Time_spent_on_database_lock_waits                                            |
+| Time_spent_on_internal_machine_lock_waits                                    |
+| Time_spent_on_nondatabase_lock_waits                                         |
+| Current_system_pool_identifier                                               |
+| Thread_count                                                                 |
+| Processing_unit_time_used_-_total_for_the_job                                |
+| Number_of_auxiliary_I/O_requests                                             |
+| Processing_unit_time_used_for_database_-_total_for_the_job                   |
+| Page_faults                                                                  |
+| Active_job_status_for_jobs_ending                                            |
+| Memory_pool_name                                                             |
+| Message_reply                                                                |
+| Message_key,_when_active_job_waiting_for_a_message                           |
+| Message_queue_name,_when_active_job_waiting_for_a_message                    |
+| Message_queue_library name,_when_active_job_waiting_for_a_message            |
+| Message_queue_library_ASP_device name,_when active_job_waiting_for_a_message |
+
+**IBM i API:**
+
+[QUSRJOBI](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_72/apis/qusrjobi.htm)
+
+**Example:**
+
+```js
+const { Connection, iWork } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const work = new iWork(connection);
+
+work.getJobInfo('jobname', 'user', 'jobnumber', (error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log(output);
+});
+```
+
+### iWork.getDataArea(library, area, length, callback)
+
+**Description:**
+
+Retrieve the contents of a data area.
+
+**Syntax:**
+
+getDataArea (library, area, length, callback)
+
+**Parameters:**
+
+- **library** `<string>` name of the library where the data area is located (10 characters max).
+
+- **area** `<string>` the data area name (10 characters max)
+
+- **length** `<number>` the length of the data area substring to be retrieved.
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**output**
+
+| Key                         |
+| -----                       |
+| Type_of_value_returned      |
+| Library_name                |
+| Length_of_value_returned    |
+| Number_of_decimal_positions |
+| Value                       |
+
+**IBM i API:**
+
+[QWCRDTAA](https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_74/apis/qwcrdtaa.htm)
+
+**Example:**
+
+```js
+const { Connection, iWork } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const work = new iWork(connection);
+
+work.getDataArea('mylibrary', 'mydataarea', 100, (error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log(output);
+});
+```
 
 ## xmlToJson(xml)
 
