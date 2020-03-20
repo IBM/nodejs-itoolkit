@@ -21,6 +21,7 @@
 const { expect } = require('chai');
 const { Toolkit, Connection } = require('../../lib/itoolkit');
 const { config } = require('./config');
+const { checkObjectExists } = require('./checkObjectExists');
 
 const lib = 'NODETKTEST';
 
@@ -28,46 +29,12 @@ describe('Toolkit Functional Tests', () => {
   describe('DataQueue Functional Tests', () => {
     const dqName = 'TESTQ';
 
-    before('setup library for tests and create DQ', async () => {
-      // eslint-disable-next-line global-require
-      const { DBPool } = require('idb-pconnector');
-
-      const pool = new DBPool({ url: '*LOCAL' }, { incrementSize: 2 });
-
-      const qcmdexec = 'CALL QSYS2.QCMDEXC(?)';
-
-      const createLib = `CRTLIB LIB(${lib}) TYPE(*TEST) TEXT('Used to test Node.js toolkit')`;
-
-      const createDQ = `CRTDTAQ DTAQ(${lib}/${dqName}) MAXLEN(100) AUT(*EXCLUDE) TEXT('TEST DQ FOR NODE TOOLKIT TESTS')`;
-
-      const findLib = 'SELECT SCHEMA_NAME FROM qsys2.sysschemas WHERE SCHEMA_NAME = \'NODETKTEST\'';
-
-      const findDQ = 'SELECT OBJLONGNAME FROM TABLE (QSYS2.OBJECT_STATISTICS(\'NODETKTEST\', \'*DTAQ\')) AS X';
-
-      const libResult = await pool.runSql(findLib);
-
-      const dqResult = await pool.runSql(findDQ);
-
-      if (!libResult.length) {
-        await pool.prepareExecute(qcmdexec, [createLib]).catch((error) => {
-          // eslint-disable-next-line no-console
-          console.log('Unable to Create Lib!');
-          throw error;
-        });
-        // eslint-disable-next-line no-console
-        console.log('CREATED LIB!');
-      }
-      if (!dqResult.length) {
-        await pool.prepareExecute(qcmdexec, [createDQ]).catch((error) => {
-          // eslint-disable-next-line no-console
-          console.log('Unable to Create DQ!');
-          throw error;
-        });
-        // eslint-disable-next-line no-console
-        console.log('CREATED DQ!');
-      }
+    before('check if data queue exists for tests', (done) => {
+      checkObjectExists(config, '*DTAQ', (error) => {
+        if (error) { throw error; }
+        done();
+      });
     });
-
     describe('sendToDataQueue', () => {
       it(`sends data to specified DQ using ${config.transport} transport`, (done) => {
         const connection = new Connection(config);
@@ -861,46 +828,11 @@ describe('Toolkit Functional Tests', () => {
   });
 
   describe('getDataArea', () => {
-    before('init lib, data area, and add data', async () => {
-      // eslint-disable-next-line global-require
-      const { DBPool } = require('idb-pconnector');
-      const pool = new DBPool({ url: '*LOCAL' }, { incrementSize: 2 });
-
-      const qcmdexec = 'CALL QSYS2.QCMDEXC(?)';
-      const dataArea = 'TESTDA';
-
-      const createLib = `CRTLIB LIB(${lib}) TYPE(*TEST) TEXT('Used to test' Node.js toolkit')`;
-
-      const createDataArea = `CRTDTAARA DTAARA(${lib}/${dataArea}) TYPE(*CHAR) `
-                            + 'TEXT(\'TEST DATA AREA FOR NODE TOOLKIT\') '
-                            + 'VALUE(\'Hello From Test Data Area!\')';
-
-      const findLib = 'SELECT SCHEMA_NAME FROM qsys2.sysschemas WHERE SCHEMA_NAME = \'NODETKTEST\'';
-
-      const findDataArea = `SELECT OBJNAME FROM TABLE (QSYS2.OBJECT_STATISTICS('${lib}', '*DTAARA')) AS X`;
-
-      const libResult = await pool.runSql(findLib);
-
-      const dataAreaResult = await pool.runSql(findDataArea);
-
-      if (!libResult.length) {
-        await pool.prepareExecute(qcmdexec, [createLib]).catch((error) => {
-          // eslint-disable-next-line no-console
-          console.log('Unable to Create Lib!');
-          throw error;
-        });
-        // eslint-disable-next-line no-console
-        console.log('CREATED LIB!');
-      }
-      if (!dataAreaResult.length) {
-        await pool.prepareExecute(qcmdexec, [createDataArea]).catch((error) => {
-          // eslint-disable-next-line no-console
-          console.log('Unable to Create DA!');
-          throw error;
-        });
-        // eslint-disable-next-line no-console
-        console.log('CREATED DA!');
-      }
+    before('check if data area exists for tests', (done) => {
+      checkObjectExists(config, '*DTAARA', (error) => {
+        if (error) { throw error; }
+        done();
+      });
     });
     it(`returns contents of a data area using ${config.transport} transport`, (done) => {
       const connection = new Connection(config);

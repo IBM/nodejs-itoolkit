@@ -21,6 +21,8 @@
 const { expect } = require('chai');
 const { iConn, iWork } = require('../../../lib/itoolkit');
 const { config } = require('../config');
+const { checkObjectExists } = require('../checkObjectExists');
+
 
 if (config.transport !== 'idb' && config.transport !== 'rest') {
   throw new Error('Only idb and rest transports are available for deprecated tests');
@@ -198,47 +200,11 @@ describe('iWork Functional Tests', () => {
   });
 
   describe('getDataArea', () => {
-    before('init lib, data area, and add data', async () => {
-      // eslint-disable-next-line global-require
-      const { DBPool } = require('idb-pconnector');
-      const pool = new DBPool({ url: '*LOCAL' }, { incrementSize: 2 });
-
-      const qcmdexec = 'CALL QSYS2.QCMDEXC(?)';
-      const lib = 'NODETKTEST';
-      const dataArea = 'TESTDA';
-
-      const createLib = `CRTLIB LIB(${lib}) TYPE(*TEST) TEXT('Used to test' Node.js toolkit')`;
-
-      const createDataArea = `CRTDTAARA DTAARA(${lib}/${dataArea}) TYPE(*CHAR) `
-                          + 'TEXT(\'TEST DATA AREA FOR NODE TOOLKIT\') '
-                          + 'VALUE(\'Hello From Test Data Area!\')';
-
-      const findLib = 'SELECT SCHEMA_NAME FROM qsys2.sysschemas WHERE SCHEMA_NAME = \'NODETKTEST\'';
-
-      const findDataArea = `SELECT OBJNAME FROM TABLE (QSYS2.OBJECT_STATISTICS('${lib}', '*DTAARA')) AS X`;
-
-      const libResult = await pool.runSql(findLib);
-
-      const dataAreaResult = await pool.runSql(findDataArea);
-
-      if (!libResult.length) {
-        await pool.prepareExecute(qcmdexec, [createLib]).catch((error) => {
-          // eslint-disable-next-line no-console
-          console.log('Unable to Create Lib!');
-          throw error;
-        });
-        // eslint-disable-next-line no-console
-        console.log('CREATED LIB!');
-      }
-      if (!dataAreaResult.length) {
-        await pool.prepareExecute(qcmdexec, [createDataArea]).catch((error) => {
-          // eslint-disable-next-line no-console
-          console.log('Unable to Create DA!');
-          throw error;
-        });
-        // eslint-disable-next-line no-console
-        console.log('CREATED DA!');
-      }
+    before('init lib, data area, and add data', (done) => {
+      checkObjectExists(config, '*DTAARA', (error) => {
+        if (error) { throw error; }
+        done();
+      });
     });
     it(`returns contents of a data area using ${config.transport} transport`, (done) => {
       const connection = new iConn(database, username, password, restOptions);
