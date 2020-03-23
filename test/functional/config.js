@@ -19,11 +19,6 @@ const config = {
     verbose: !!process.env.TKVERBOSE,
     dsn: process.env.TKDSN,
   },
-  restOptions: {
-    host: process.env.TKHOST || 'localhost',
-    port: process.env.TKPORT || 80,
-    path: process.env.TKPATH || '/cgi-bin/xmlcgi.pgm',
-  },
 };
 
 module.exports.config = config;
