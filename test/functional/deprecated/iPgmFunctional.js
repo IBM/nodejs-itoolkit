@@ -23,6 +23,9 @@ const { parseString } = require('xml2js');
 const { iPgm, iConn } = require('../../../lib/itoolkit');
 const { config } = require('../config');
 
+// deprecated tests are in place to test compatability using deprecated classes and functions
+// these tests use deprecated iConn Class to create a connnection
+// iConn only supported idb and rest transports
 if (config.transport !== 'idb' && config.transport !== 'rest') {
   throw new Error('Only idb and rest transports are available for deprecated tests');
 }
@@ -31,7 +34,11 @@ const { database, username, password } = config.transportOptions;
 
 let restOptions = null;
 if (config.transport === 'rest') {
-  restOptions = config.restOptions;
+  restOptions = {
+    hodt: config.host,
+    port: config.port || 80,
+    path: config.path,
+  };
 }
 
 describe('iPgm Functional Tests', () => {
