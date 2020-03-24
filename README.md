@@ -61,12 +61,11 @@ Initial configuration is required for the endpoint.
 
 A quick example is to add the following to `/www/apachedft/conf/httpd.conf`
 
-```
+```apache
 ScriptAlias /cgi-bin/ /QSYS.LIB/XMLSERVICE.LIB/
 <Directory /QSYS.LIB/XMLSERVICE.LIB/>
   AllowOverride None
-  order allow,deny
-  allow from all
+  Require all granted
   SetHandler cgi-script
   Options +ExecCGI
 </Directory>
