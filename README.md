@@ -18,8 +18,6 @@
       - [Example](#example)
     - [CommandCall](#commandcall)
       - [Example](#example-1)
-    - [SqlCall](#sqlcall)
-      - [Example](#example-2)
   - [Utility Toolkit Functions](#utility-toolkit-functions)
 - [Documentation](#documentation)
 - [Testing](#testing)
@@ -266,43 +264,7 @@ conn.run((error, xmlOutput) => {
 });
 ```
 
-### SqlCall
-SqlCall is used to make an SQL query.
 
-#### Example
-
-```javascript
-const {
-  Connection, SqlCall,
-} = require('itoolkit');
-
-const { parseString } = require('xml2js');
-
-const conn = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' }
-});
-
-const sql = new SqlCall();
-sql.prepare('call qsys2.tcpip_info()');
-sql.execute();
-sql.fetch();
-sql.free();
-
-conn.add(sql);
-
-conn.run((error, xmlOutput) => {
-  if (error) {
-    throw error;
-  }
-  parseString(xmlOutput, (parseError, result) => {
-    if (parseError) {
-      throw parseError;
-    }
-    console.log(JSON.stringify(result));
-  });
-});
-```
 ## Utility Toolkit Functions
 
 Aside from the main classes this toolkit also provides helper functions to access:
