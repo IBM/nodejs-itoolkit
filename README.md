@@ -127,23 +127,7 @@ const connection = new Connection({
 ##### ODBC
 The [ODBC](https://github.com/wankdanker/node-odbc/tree/v2.0) transport establishes a database connection and calls XMLSERVICE stored procedure.
 
-Before using the ODBC transport ensure all dependencies are installed.
-
-Ensure the IBM i Access ODBC driver is installed where you will be running Node.js.
-
-`TODO document installation`
-
-On the client side ensure `unixODBC` and `unixODBC-devel` are both installed.
-
-On IBM i this can be done with:
-
-`yum install unixODBC unixODBC-devel`
-
-Refer to [node-odbc](https://github.com/wankdanker/node-odbc/tree/v2.0#installation) for how this is done your OS.
-
-Also on the client side ensure the `IBM i Access ODBC Driver` is installed.
-
-`TODO document installation`
+Refer to the [odbc setup guide](https://github.com/IBM/ibmi-oss-examples/blob/master/odbc/odbc.md#table-of-contents) for setup instructions.
 
 To use the `ODBC` transport create an instance of Connection with:
 
@@ -154,21 +138,8 @@ const connection = new Connection({
 });
 ```
 
-Alternatively you can specify a [DSN](https://support.microsoft.com/en-us/help/966849/what-is-a-dsn-data-source-name) to use.
+Alternatively you can specify a [DSN](https://github.com/IBM/ibmi-oss-examples/blob/master/odbc/odbc.md#dsns) to use.
 
-Create an `.odbc.ini` file within your home directory and add additional configuration options.
-
-Refer to the [knowledge center](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_73/rzaik/connectkeywords.htm) for a list of valid options.
-
-A simple .odbc.ini file:
-
-```
-[*LOCAL]
-Driver=IBM i Access ODBC Driver
-UserID=myuser
-Password=mypass
-System=localhost
-```
 To use the `ODBC` transport with a DSN create an instance of Connection with:
 
 ```javascript
