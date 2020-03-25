@@ -22,20 +22,20 @@ const { expect } = require('chai');
 const { ProgramCall } = require('../../lib/itoolkit');
 
 const outBuf = [
-  [0, '10i0'],
-  [0, '10i0'],
-  ['', '36h'],
-  ['', '10A'],
-  ['', '1A'],
-  ['', '1A'],
-  [0, '10i0'],
-  [0, '10i0'],
+  { type: '10i0', value: 0 },
+  { type: '10i0', value: 0 },
+  { type: '36h', value: '' },
+  { type: '10A', value: '' },
+  { type: '1A', value: '' },
+  { type: '1A', value: '' },
+  { type: '10i0', value: 0 },
+  { type: '10i0', value: 0 },
 ];
 const errno = [
-  [0, '10i0'],
-  [0, '10i0', { setlen: 'rec2' }],
-  ['', '7A'],
-  ['', '1A'],
+  { type: '10i0', value: 0 },
+  { type: '10i0', value: 0, setlen: 'rec2' },
+  { type: '7A', value: '' },
+  { type: '1A', value: '' },
 ];
 
 describe('ProgramCall Class Unit Tests', () => {
@@ -70,7 +70,7 @@ describe('ProgramCall Class Unit Tests', () => {
           error: 'fast',
         });
 
-      pgm.addParam(outBuf, { io: 'out' });
+      pgm.addParam({ type: 'ds', io: 'out', fields: outBuf });
 
       let expectedXML = '<pgm name=\'QTOCNETSTS\' lib=\'QSYS\' func=\'QtoRtvTCPA\' error=\'fast\'>'
       + '<parm io=\'out\'><ds><data type=\'10i0\'>0</data><data type=\'10i0\'>'
@@ -80,7 +80,7 @@ describe('ProgramCall Class Unit Tests', () => {
 
       expect(pgm.toXML()).to.equal(expectedXML);
 
-      pgm.addParam(66, '10i0');
+      pgm.addParam({ value: 66, type: '10i0' });
 
       expectedXML = '<pgm name=\'QTOCNETSTS\' lib=\'QSYS\' func=\'QtoRtvTCPA\' error=\'fast\'>'
       + '<parm io=\'out\'><ds><data type=\'10i0\'>0</data><data type=\'10i0\'>'
@@ -91,7 +91,7 @@ describe('ProgramCall Class Unit Tests', () => {
 
       expect(pgm.toXML()).to.equal(expectedXML);
 
-      pgm.addParam(1, '10i0');
+      pgm.addParam({ value: 1, type: '10i0' });
 
       expectedXML = '<pgm name=\'QTOCNETSTS\' lib=\'QSYS\' func=\'QtoRtvTCPA\' error=\'fast\'>'
       + '<parm io=\'out\'><ds><data type=\'10i0\'>0</data><data type=\'10i0\'>'
@@ -103,7 +103,7 @@ describe('ProgramCall Class Unit Tests', () => {
 
       expect(pgm.toXML()).to.equal(expectedXML);
 
-      pgm.addParam('QCCSID', '10A');
+      pgm.addParam({ value: 'QCCSID', type: '10A' });
 
       expectedXML = '<pgm name=\'QTOCNETSTS\' lib=\'QSYS\' func=\'QtoRtvTCPA\' error=\'fast\'>'
       + '<parm io=\'out\'><ds><data type=\'10i0\'>0</data><data type=\'10i0\'>'
@@ -116,7 +116,9 @@ describe('ProgramCall Class Unit Tests', () => {
 
       expect(pgm.toXML()).to.equal(expectedXML);
 
-      pgm.addParam(errno, { io: 'both', len: 'rec2' });
+      pgm.addParam({
+        type: 'ds', io: 'both', len: 'rec2', fields: errno,
+      });
 
       expectedXML = '<pgm name=\'QTOCNETSTS\' lib=\'QSYS\' func=\'QtoRtvTCPA\' error=\'fast\'>'
       + '<parm io=\'out\'><ds><data type=\'10i0\'>0</data><data type=\'10i0\'>'
@@ -136,8 +138,8 @@ describe('ProgramCall Class Unit Tests', () => {
     it('regular <parm> contains by=\'val\'', () => {
       const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
-      pgm.addParam('', '1A', { by: 'val' });
-      pgm.addReturn('', '2A', { name: 'output' });
+      pgm.addParam({ value: '', type: '1A', by: 'val' });
+      pgm.addReturn('', '2A', 'output');
 
       const lookAtXML = pgm.toXML();
       expect(lookAtXML).to.match(/<parm .*by='val'.*>/);
@@ -147,11 +149,13 @@ describe('ProgramCall Class Unit Tests', () => {
       const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
       const params = [
-        [0, '3s0'],
-        [0, '7s0', { name: 'ds_fld2' }],
+        { type: '3s0', value: 0 },
+        { type: '7s0', value: 0, name: 'ds_fld2' },
       ];
 
-      pgm.addParam(params, { name: 'inds', by: 'val' });
+      pgm.addParam({
+        name: 'inds', type: 'ds', by: 'val', fields: params,
+      });
       pgm.addReturn('', '2A', { name: 'output' });
 
       const lookAtXML = pgm.toXML();
@@ -161,7 +165,9 @@ describe('ProgramCall Class Unit Tests', () => {
     it('regular <parm> contains by=\'val\', with io=\'both\'', () => {
       const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
-      pgm.addParam('', '1A', { by: 'val', io: 'both' });
+      pgm.addParam({
+        value: '', type: '1A', by: 'val', io: 'both',
+      });
       pgm.addReturn('', '2A', { name: 'output' });
 
       const lookAtXML = pgm.toXML();
@@ -173,11 +179,13 @@ describe('ProgramCall Class Unit Tests', () => {
       const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
       const params = [
-        [0, '3s0'],
-        [0, '7s0', { name: 'ds_fld2' }],
+        { type: '3s0', value: 0 },
+        { type: '7s0', value: 0, name: 'ds_fld2' },
       ];
 
-      pgm.addParam(params, { name: 'inds', by: 'val', io: 'both' });
+      pgm.addParam({
+        name: 'inds', type: 'ds', by: 'val', io: 'both', fields: params,
+      });
       pgm.addReturn('', '2A', { name: 'output' });
 
       const lookAtXML = pgm.toXML();
