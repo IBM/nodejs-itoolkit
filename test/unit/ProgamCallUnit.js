@@ -22,8 +22,6 @@
 const { expect } = require('chai');
 const { ProgramCall } = require('../../lib/itoolkit');
 
-// now in this format
-// [name, type, value, options]
 const outBuf = [
   { type: '10i0', value: 0 },
   { type: '10i0', value: 0 },
@@ -73,7 +71,7 @@ describe('ProgramCall Class Unit Tests', () => {
           error: 'fast',
         });
 
-      pgm.addParam({ fields: outBuf, io: 'out', type: 'ds' });
+      pgm.addParam({ type: 'ds', io: 'out', fields: outBuf });
 
       let expectedXML = '<pgm name=\'QTOCNETSTS\' lib=\'QSYS\' func=\'QtoRtvTCPA\' error=\'fast\'>'
       + '<parm io=\'out\'><ds><data type=\'10i0\'>0</data><data type=\'10i0\'>'
@@ -120,7 +118,7 @@ describe('ProgramCall Class Unit Tests', () => {
       expect(pgm.toXML()).to.equal(expectedXML);
 
       pgm.addParam({
-        fields: errno, type: 'ds', io: 'both', len: 'rec2',
+        type: 'ds', io: 'both', len: 'rec2', fields: errno,
       });
 
       expectedXML = '<pgm name=\'QTOCNETSTS\' lib=\'QSYS\' func=\'QtoRtvTCPA\' error=\'fast\'>'
@@ -157,7 +155,7 @@ describe('ProgramCall Class Unit Tests', () => {
       ];
 
       pgm.addParam({
-        fields: params, type: 'ds', name: 'inds', by: 'val',
+        name: 'inds', type: 'ds', by: 'val', fields: params,
       });
       pgm.addReturn('', '2A', { name: 'output' });
 
@@ -187,7 +185,7 @@ describe('ProgramCall Class Unit Tests', () => {
       ];
 
       pgm.addParam({
-        fields: params, type: 'ds', name: 'inds', by: 'val', io: 'both',
+        name: 'inds', type: 'ds', by: 'val', io: 'both', fields: params,
       });
       pgm.addReturn('', '2A', { name: 'output' });
 
