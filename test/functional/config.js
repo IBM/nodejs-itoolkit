@@ -15,6 +15,7 @@ const config = {
     port: process.env.TKPORT,
     path: process.env.TKPATH || '/cgi-bin/xmlcgi.pgm',
     privateKey,
+    // passphrase is used by the ssh transport to decrypt the private key
     passphrase: process.env.TKPHRASE,
     verbose: !!process.env.TKVERBOSE,
     dsn: process.env.TKDSN,
