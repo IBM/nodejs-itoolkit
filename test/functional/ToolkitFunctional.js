@@ -32,11 +32,16 @@ describe('Toolkit Functional Tests', () => {
 
   describe('DataQueue Functional Tests', () => {
     const dqName = 'TESTQ';
+    const dqName2 = 'TESTQ2';
 
     before('check if data queue exists for tests', (done) => {
-      checkObjectExists(config, '*DTAQ', (error) => {
+      checkObjectExists(config, dqName, '*DTAQ', (error) => {
         if (error) { throw error; }
-        done();
+
+        checkObjectExists(config, dqName2, '*DTAQ', (error) => {
+          if (error) { throw error; }
+          done();
+        });
       });
     });
     describe('sendToDataQueue', () => {
@@ -73,7 +78,7 @@ describe('Toolkit Functional Tests', () => {
 
         const toolkit = new Toolkit(connection);
 
-        toolkit.clearDataQueue(dqName, lib, (error, output) => {
+        toolkit.clearDataQueue(dqName2, lib, (error, output) => {
           expect(error).to.equal(null);
           expect(output).to.equal(true);
           done();
@@ -833,7 +838,7 @@ describe('Toolkit Functional Tests', () => {
 
   describe('getDataArea', () => {
     before('check if data area exists for tests', (done) => {
-      checkObjectExists(config, '*DTAARA', (error) => {
+      checkObjectExists(config, 'TESTDA', '*DTAARA', (error) => {
         if (error) { throw error; }
         done();
       });
