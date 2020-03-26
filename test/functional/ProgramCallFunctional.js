@@ -52,29 +52,43 @@ describe('ProgramCall Functional Tests', () => {
 
         const program = new ProgramCall('QWCRSVAL', { lib: 'QSYS' });
 
-        const outBuf = [
-          [0, '10i0'],
-          [0, '10i0'],
-          ['', '36h'],
-          ['', '10A'],
-          ['', '1A'],
-          ['', '1A'],
-          [0, '10i0'],
-          [0, '10i0'],
-        ];
+        const outBuf = {
+          type: 'ds',
+          io: 'out',
+          fields: [
+            { type: '10i0', value: 0 },
+            { type: '10i0', value: 0 },
+            { type: '36h', value: '' },
+            { type: '10A', value: '' },
+            { type: '1A', value: '' },
+            { type: '1A', value: '' },
+            { type: '10i0', value: 0 },
+            { type: '10i0', value: 0 },
+          ],
+        };
 
-        const errno = [
-          [0, '10i0'],
-          [0, '10i0', { setlen: 'rec2' }],
-          ['', '7A'],
-          ['', '1A'],
-        ];
+        const errno = {
+          type: 'ds',
+          io: 'both',
+          len: 'rec2',
+          fields: [
+            {
+              name: 'bytes_provided',
+              type: '10i0',
+              value: 0,
+              setlen: 'rec2',
+            },
+            { name: 'bytes_available', type: '10i0', value: 0 },
+            { name: 'msgid', type: '7A', value: '' },
+            { type: '1A', value: '' },
+          ],
+        };
 
-        program.addParam(outBuf, { io: 'out' });
-        program.addParam(66, '10i0');
-        program.addParam(1, '10i0');
-        program.addParam('QCCSID', '10A');
-        program.addParam(errno, { io: 'both', len: 'rec2' });
+        program.addParam(outBuf);
+        program.addParam({ type: '10i0', value: 66 });
+        program.addParam({ type: '10i0', value: 1 });
+        program.addParam({ type: '10A', value: 'QCCSID' });
+        program.addParam(errno);
         connection.add(program);
         connection.run((error, xmlOut) => {
           expect(error).to.equal(null);
@@ -96,31 +110,44 @@ describe('ProgramCall Functional Tests', () => {
 
         const program = new ProgramCall('QWCRSVAL', { lib: 'QSYS' });
 
-        const outBuf = [
-          [0, '10i0'],
-          [0, '10i0'],
-          ['', '36h'],
-          ['', '10A'],
-          ['', '1A'],
-          ['', '1A'],
-          [0, '10i0'],
-          [0, '10i0'],
-        ];
+        const outBuf = {
+          type: 'ds',
+          io: 'out',
+          fields: [
+            { type: '10i0', value: 0 },
+            { type: '10i0', value: 0 },
+            { type: '36h', value: '' },
+            { type: '10A', value: '' },
+            { type: '1A', value: '' },
+            { type: '1A', value: '' },
+            { type: '10i0', value: 0 },
+            { type: '10i0', value: 0 },
+          ],
+        };
 
-        const errno = [
-          [0, '10i0'],
-          [0, '10i0', { setlen: 'rec2' }],
-          ['', '7A'],
-          ['', '1A'],
-        ];
+        const errno = {
+          name: 'errno',
+          type: 'ds',
+          io: 'both',
+          len: 'rec2',
+          fields: [
+            {
+              name: 'bytes_provided',
+              type: '10i0',
+              value: 0,
+              setlen: 'rec2',
+            },
+            { name: 'bytes_available', type: '10i0', value: 0 },
+            { name: 'msgid', type: '7A', value: '' },
+            { type: '1A', value: '' },
+          ],
+        };
 
-        program.addParam(outBuf, { io: 'out' });
-        program.addParam(66, '10i0');
-        program.addParam(1, '10i0');
-        program.addParam('QCCSID', '10A');
-        const paramValue = 'errno';
-
-        program.addParam(errno, { io: 'both', len: 'rec2', name: paramValue });
+        program.addParam(outBuf);
+        program.addParam({ type: '10i0', value: 66 });
+        program.addParam({ type: '10i0', value: 1 });
+        program.addParam({ type: '10A', value: 'QCCSID' });
+        program.addParam(errno);
         connection.add(program);
         connection.run((error, xmlOut) => {
           expect(error).to.equal(null);
@@ -143,7 +170,7 @@ describe('ProgramCall Functional Tests', () => {
 
         const program = new ProgramCall('ZZSRV6', { lib: 'XMLSERVICE', func: 'ZZVARY4' });
 
-        program.addParam('Gill', '10A', { varying: '4' });
+        program.addParam({ type: '10A', varying: '4', value: 'Gill' });
         const testValue = 'NEW_NAME';
         program.addReturn('0', '20A', { varying: '4', name: testValue });
         connection.add(program);
