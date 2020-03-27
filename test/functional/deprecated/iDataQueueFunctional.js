@@ -20,66 +20,42 @@
 
 const { expect } = require('chai');
 const { iConn, iDataQueue } = require('../../../lib/itoolkit');
+const { config, printConfig } = require('../config');
+const { checkObjectExists } = require('../checkObjectExists');
 
-// Set Env variables or set values here.
-const opt = {
-  database: process.env.TKDB || '*LOCAL',
-  username: process.env.TKUSER || '',
-  password: process.env.TKPASS || '',
-  host: process.env.TKHOST || 'localhost',
-  port: process.env.TKPORT || 80,
-  path: process.env.TKPATH || '/cgi-bin/xmlcgi.pgm',
-};
+// deprecated tests are in place to test compatability using deprecated classes and functions
+// these tests use deprecated iConn Class to create a connnection.
+// iConn only supported idb and rest transports
+if (config.transport !== 'idb' && config.transport !== 'rest') {
+  throw new Error('Only idb and rest transports are available for deprecated tests');
+}
+
+const { database, username, password } = config.transportOptions;
+
+let restOptions = null;
+
+if (config.transport === 'rest') {
+  restOptions = {
+    hodt: config.host,
+    port: config.port || 80,
+    path: config.path,
+  };
+}
 
 const lib = 'NODETKTEST'; const dqName = 'TESTQ';
 
-const { returnTransportsDeprecated } = require('../../../lib/utils');
-
-const transports = returnTransportsDeprecated(opt);
-
 describe('iDataQueue Functional Tests', () => {
-  before('setup library for tests and create DQ', async () => {
-    // eslint-disable-next-line global-require
-    const { DBPool } = require('idb-pconnector');
-
-    const pool = new DBPool({ url: '*LOCAL' }, { incrementSize: 2 });
-
-    const qcmdexec = 'CALL QSYS2.QCMDEXC(?)';
-
-    const createLib = `CRTLIB LIB(${lib}) TYPE(*TEST) TEXT('Used to test Node.js toolkit')`;
-
-    const createDQ = `CRTDTAQ DTAQ(${lib}/${dqName}) MAXLEN(100) AUT(*EXCLUDE) TEXT('TEST DQ FOR NODE TOOLKIT TESTS')`;
-
-    const findLib = 'SELECT SCHEMA_NAME FROM qsys2.sysschemas WHERE SCHEMA_NAME = \'NODETKTEST\'';
-
-    const findDQ = 'SELECT OBJLONGNAME FROM TABLE (QSYS2.OBJECT_STATISTICS(\'NODETKTEST\', \'*DTAQ\')) AS X';
-
-    const libResult = await pool.runSql(findLib);
-
-    const dqResult = await pool.runSql(findDQ);
-
-    if (!libResult.length) {
-      await pool.prepareExecute(qcmdexec, [createLib]).catch((error) => {
-        // eslint-disable-next-line no-console
-        console.log('Unable to Create Lib!');
-        throw error;
-      });
-      // eslint-disable-next-line no-console
-      console.log('CREATED LIB!');
-    }
-    if (!dqResult.length) {
-      await pool.prepareExecute(qcmdexec, [createDQ]).catch((error) => {
-        // eslint-disable-next-line no-console
-        console.log('Unable to Create DQ!');
-        throw error;
-      });
-      // eslint-disable-next-line no-console
-      console.log('CREATED DQ!');
-    }
+  before('check if data queue exists for tests', (done) => {
+    printConfig();
+    checkObjectExists(config, '*DTAQ', (error) => {
+      if (error) { throw error; }
+      done();
+    });
   });
+
   describe('constructor', () => {
     it('creates and returns an instance of iDataQueue', () => {
-      const connection = new iConn(opt.database, opt.user, opt.password);
+      const connection = new iConn(database, config.user, password);
 
       const dq = new iDataQueue(connection);
       expect(dq).to.be.instanceOf(iDataQueue);
@@ -87,46 +63,40 @@ describe('iDataQueue Functional Tests', () => {
   });
 
   describe('sendToDataQueue', () => {
-    transports.forEach((transport) => {
-      it(`sends data to specified DQ using ${transport.name} transport`, (done) => {
-        const connection = transport.me;
+    it('sends data to specified DQ', (done) => {
+      const connection = new iConn(database, username, password, restOptions);
 
-        const dq = new iDataQueue(connection);
+      const dq = new iDataQueue(connection);
 
-        dq.sendToDataQueue(dqName, lib, 'Hello from DQ!', (output) => {
-          expect(output).to.equal(true);
-          done();
-        });
+      dq.sendToDataQueue(dqName, lib, 'Hello from DQ!', (output) => {
+        expect(output).to.equal(true);
+        done();
       });
     });
   });
 
   describe('receiveFromDataQueue', () => {
-    transports.forEach((transport) => {
-      it(`receives data from specfied DQ using ${transport.name} transport`, (done) => {
-        const connection = transport.me;
+    it('receives data from specfied DQ', (done) => {
+      const connection = new iConn(database, username, password, restOptions);
 
-        const dq = new iDataQueue(connection);
+      const dq = new iDataQueue(connection);
 
-        dq.receiveFromDataQueue(dqName, lib, 100, (output) => {
-          expect(output).to.be.a('string').and.to.equal('Hello from DQ!');
-          done();
-        });
+      dq.receiveFromDataQueue(dqName, lib, 100, (output) => {
+        expect(output).to.be.a('string').and.to.equal('Hello from DQ!');
+        done();
       });
     });
   });
 
   describe('clearDataQueue', () => {
-    transports.forEach((transport) => {
-      it(`clears the specifed DQ using ${transport.name} transport`, (done) => {
-        const connection = transport.me;
+    it('clears the specifed DQ', (done) => {
+      const connection = new iConn(database, username, password, restOptions);
 
-        const dq = new iDataQueue(connection);
+      const dq = new iDataQueue(connection);
 
-        dq.clearDataQueue(dqName, lib, (output) => {
-          expect(output).to.equal(true);
-          done();
-        });
+      dq.clearDataQueue(dqName, lib, (output) => {
+        expect(output).to.equal(true);
+        done();
       });
     });
   });
