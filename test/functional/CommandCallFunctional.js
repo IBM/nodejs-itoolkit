@@ -20,12 +20,16 @@
 const { expect } = require('chai');
 const { parseString } = require('xml2js');
 const { CommandCall, Connection } = require('../../lib/itoolkit');
-const { config } = require('./config');
+const { config, printConfig } = require('./config');
 
 
 describe('CommandCall Functional Tests', () => {
+  before(() => {
+    printConfig();
+  });
+
   describe('CL command tests', () => {
-    it(`calls CL command using ${config.transport} transport`, (done) => {
+    it('calls CL command', (done) => {
       const connection = new Connection(config);
       connection.add(new CommandCall({ command: 'RTVJOBA USRLIBL(?) SYSLIBL(?)', type: 'cl' }));
       connection.run((error, xmlOut) => {
@@ -40,7 +44,7 @@ describe('CommandCall Functional Tests', () => {
   });
 
   describe('SH command tests', () => {
-    it(`calls PASE shell command using ${config.transport} transport`, (done) => {
+    it('calls PASE shell command', (done) => {
       const connection = new Connection(config);
       connection.add(new CommandCall({ command: 'system -i wrksyssts', type: 'sh' }));
       connection.run((error, xmlOut) => {
@@ -57,7 +61,7 @@ describe('CommandCall Functional Tests', () => {
   });
 
   describe('QSH command tests', () => {
-    it(`calls QSH command using ${config.transport} transport`, (done) => {
+    it('calls QSH command', (done) => {
       const connection = new Connection(config);
       connection.add(new CommandCall({ command: 'system wrksyssts', type: 'qsh' }));
       connection.run((error, xmlOut) => {

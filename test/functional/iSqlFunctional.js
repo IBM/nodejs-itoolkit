@@ -21,11 +21,15 @@
 const { expect } = require('chai');
 const { parseString } = require('xml2js');
 const { iSql, Connection } = require('../../lib/itoolkit');
-const { config } = require('./config');
+const { config, printConfig } = require('./config');
 
 describe('iSql Functional Tests', () => {
+  before(() => {
+    printConfig();
+  });
+
   describe('prepare & execute', () => {
-    it(`prepares & executes stored procedure then fetch results using ${config.transport} transport`, (done) => {
+    it('prepares & executes stored procedure then fetch results', (done) => {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -59,7 +63,7 @@ describe('iSql Functional Tests', () => {
   });
 
   describe('addQuery & fetch', () => {
-    it(`runs a query and fetches results using ${config.transport} transport`, (done) => {
+    it('runs a query and fetches results', (done) => {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -85,7 +89,7 @@ describe('iSql Functional Tests', () => {
   });
 
   describe('added test to ensure issue #11 was resolved', () => {
-    it(`should parse SQL result set empty data tags correctly using ${config.transport} transport`, (done) => {
+    it('should parse SQL result set empty data tags correctly', (done) => {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -112,7 +116,7 @@ describe('iSql Functional Tests', () => {
   });
 
   describe('tables', () => {
-    it(`returns meta data for specified table using ${config.transport} transport`, (done) => {
+    it('returns meta data for specified table', (done) => {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -137,7 +141,7 @@ describe('iSql Functional Tests', () => {
   });
 
   describe('tablePriv', () => {
-    it(`returns privilege data for a table using ${config.transport} transport`, (done) => {
+    it('returns privilege data for a table', (done) => {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -164,7 +168,7 @@ describe('iSql Functional Tests', () => {
   });
 
   describe('columns', () => {
-    it(`returns meta data for a column using ${config.transport} transport`, (done) => {
+    it('returns meta data for a column', (done) => {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -202,7 +206,7 @@ describe('iSql Functional Tests', () => {
   });
 
   describe('columnPriv', () => {
-    it(`returns privilege data for a column using ${config.transport} transport`, (done) => {
+    it('returns privilege data for a column', (done) => {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -231,7 +235,7 @@ describe('iSql Functional Tests', () => {
   });
 
   describe('procedures', () => {
-    it(`returns meta data on for a procedure using ${config.transport} transport`, (done) => {
+    it('returns meta data on for a procedure', (done) => {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -259,7 +263,7 @@ describe('iSql Functional Tests', () => {
   });
 
   describe('pColumns', () => {
-    it(`returns meta data for procedure column using ${config.transport} transport`, (done) => {
+    it('returns meta data for procedure column', (done) => {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -298,7 +302,7 @@ describe('iSql Functional Tests', () => {
   });
 
   describe('primaryKeys', () => {
-    it(`returns meta data for a primary key using ${config.transport} transport`, (done) => {
+    it('returns meta data for a primary key', (done) => {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -324,7 +328,7 @@ describe('iSql Functional Tests', () => {
   });
 
   describe('foreignKeys', () => {
-    it(`returns meta data for a foreign key using ${config.transport} transport`, (done) => {
+    it('returns meta data for a foreign key', (done) => {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -359,7 +363,7 @@ describe('iSql Functional Tests', () => {
   });
 
   describe('statistics', () => {
-    it(`returns stats info for table using ${config.transport} transport`, (done) => {
+    it('returns stats info for table', (done) => {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -394,7 +398,7 @@ describe('iSql Functional Tests', () => {
   describe.skip('special', () => {
     // TODO: find passing case
     // Below test fails with error code 9- argument value not valid
-    it.skip(`returns meta data for special columns using ${config.transport} transport`, (done) => {
+    it.skip('returns meta data for special columns', (done) => {
       // [catalog, schema, table, row | transaction |session, no | nullable]
       const connection = new Connection(config);
 
@@ -417,7 +421,7 @@ describe('iSql Functional Tests', () => {
 
   describe.skip('rowCount', () => {
     // Skip for now need to create a table for this test  to insert to.
-    it.skip(`returns the number of rows affected by statement using ${config.transport} transport`, (done) => {
+    it.skip('returns the number of rows affected by statement', (done) => {
       const connection = new Connection(config);
 
       const sql = new iSql();

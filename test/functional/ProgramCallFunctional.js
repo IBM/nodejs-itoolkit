@@ -16,17 +16,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /* eslint-env mocha */
-/* eslint-disable new-cap */
 
 const { expect } = require('chai');
 const { parseString } = require('xml2js');
 const { ProgramCall, Connection } = require('../../lib/itoolkit');
-const { config } = require('./config');
+const { config, printConfig } = require('./config');
 
 
 describe('ProgramCall Functional Tests', () => {
+  before(() => {
+    printConfig();
+  });
+
   describe('Test ProgramCall()', () => {
-    it(`calls QWCRSVAL program checks if it ran successfully using ${config.transport} transport`, (done) => {
+    it('calls QWCRSVAL program checks if it ran successfully', (done) => {
       const connection = new Connection(config);
 
       const program = new ProgramCall('QWCRSVAL', { lib: 'QSYS' });
@@ -82,7 +85,7 @@ describe('ProgramCall Functional Tests', () => {
 
 
   describe('Test ProgramCall()', () => {
-    it(`calls QWCRSVAL program and returns arbitrarily named parameter using ${config.transport} transport`, (done) => {
+    it('calls QWCRSVAL program and returns arbitrarily named parameter', (done) => {
       const connection = new Connection(config);
 
       const program = new ProgramCall('QWCRSVAL', { lib: 'QSYS' });
@@ -140,7 +143,7 @@ describe('ProgramCall Functional Tests', () => {
   describe.skip('Test ProgramCall()', () => {
     // ZZSRV6 program requires XMLSERVICE built with tests
     // Skip for now, we need to add before hook to check ZZSRV6 is available
-    it.skip(`Should be successful with addReturn arbitrary attribute specified using using ${config.transport} transport`, (done) => {
+    it.skip('Should be successful with addReturn arbitrary attribute specified', (done) => {
       const connection = new Connection(config);
 
       const program = new ProgramCall('ZZSRV6', { lib: 'XMLSERVICE', func: 'ZZVARY4' });

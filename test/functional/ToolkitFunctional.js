@@ -20,12 +20,16 @@
 
 const { expect } = require('chai');
 const { Toolkit, Connection } = require('../../lib/itoolkit');
-const { config } = require('./config');
+const { config, printConfig } = require('./config');
 const { checkObjectExists } = require('./checkObjectExists');
 
 const lib = 'NODETKTEST';
 
 describe('Toolkit Functional Tests', () => {
+  before(() => {
+    printConfig();
+  });
+
   describe('DataQueue Functional Tests', () => {
     const dqName = 'TESTQ';
 
@@ -36,7 +40,7 @@ describe('Toolkit Functional Tests', () => {
       });
     });
     describe('sendToDataQueue', () => {
-      it(`sends data to specified DQ using ${config.transport} transport`, (done) => {
+      it('sends data to specified DQ', (done) => {
         const connection = new Connection(config);
 
         const toolkit = new Toolkit(connection);
@@ -50,7 +54,7 @@ describe('Toolkit Functional Tests', () => {
     });
 
     describe('receiveFromDataQueue', () => {
-      it(`receives data from specfied DQ using ${config.transport} transport`, (done) => {
+      it('receives data from specfied DQ', (done) => {
         const connection = new Connection(config);
 
         const toolkit = new Toolkit(connection);
@@ -64,7 +68,7 @@ describe('Toolkit Functional Tests', () => {
     });
 
     describe('clearDataQueue', () => {
-      it(`clears the specifed DQ using ${config.transport} transport`, (done) => {
+      it('clears the specifed DQ', (done) => {
         const connection = new Connection(config);
 
         const toolkit = new Toolkit(connection);
@@ -78,7 +82,7 @@ describe('Toolkit Functional Tests', () => {
     });
   });
   describe('getTCPIPAttr', () => {
-    it(`retrieves TCP/IP Attributes using ${config.transport} transport`, (done) => {
+    it('retrieves TCP/IP Attributes', (done) => {
       const connection = new Connection(config);
 
       const toolkit = new Toolkit(connection);
@@ -122,7 +126,7 @@ describe('Toolkit Functional Tests', () => {
   });
 
   describe('getNetInterfaceData', () => {
-    it(`retrieves IPv4 network interface info using ${config.transport} transport`, (done) => {
+    it('retrieves IPv4 network interface info', (done) => {
       const connection = new Connection(config);
 
       const toolkit = new Toolkit(connection);
@@ -230,7 +234,7 @@ describe('Toolkit Functional Tests', () => {
   });
 
   describe('rtrCmdInfo', () => {
-    it(`returns command info using ${config.transport} transport`, (done) => {
+    it('returns command info', (done) => {
       const connection = new Connection(config);
 
       const toolkit = new Toolkit(connection);
@@ -283,7 +287,7 @@ describe('Toolkit Functional Tests', () => {
   });
 
   describe('retrPgmInfo', () => {
-    it(`returns program info using ${config.transport} transport`, (done) => {
+    it('returns program info', (done) => {
       const connection = new Connection(config);
 
       const toolkit = new Toolkit(connection);
@@ -361,7 +365,7 @@ describe('Toolkit Functional Tests', () => {
   });
 
   describe('retrSrvPgmInfo', () => {
-    it(`returns service program info using ${config.transport} transport`, (done) => {
+    it('returns service program info', (done) => {
       const connection = new Connection(config);
 
       const toolkit = new Toolkit(connection);
@@ -419,7 +423,7 @@ describe('Toolkit Functional Tests', () => {
   });
 
   describe('retrUserInfo', () => {
-    it(`returns specified user profile info using ${config.transport} transport`, (done) => {
+    it('returns specified user profile info', (done) => {
       const connection = new Connection(config);
 
       const toolkit = new Toolkit(connection);
@@ -477,7 +481,7 @@ describe('Toolkit Functional Tests', () => {
   });
 
   describe('addToLibraryList', () => {
-    it(`appends lib to user's lib list using ${config.transport} transport`, (done) => {
+    it('appends lib to user\'s lib list', (done) => {
       const connection = new Connection(config);
 
       const toolkit = new Toolkit(connection);
@@ -491,7 +495,7 @@ describe('Toolkit Functional Tests', () => {
   });
 
   describe('getPTFInfo', () => {
-    it(`returns info for specified ptf using ${config.transport} transport`, (done) => {
+    it('returns info for specified ptf', (done) => {
       const connection = new Connection(config);
 
       const toolkit = new Toolkit(connection);
@@ -535,7 +539,7 @@ describe('Toolkit Functional Tests', () => {
   });
 
   describe('getProductInfo', () => {
-    it(`returns info for specified product using ${config.transport} transport`, (done) => {
+    it('returns info for specified product', (done) => {
       const connection = new Connection(config);
 
       const toolkit = new Toolkit(connection);
@@ -569,7 +573,7 @@ describe('Toolkit Functional Tests', () => {
   // The requested URL's length exceeds the capacity limit for this server
   describe('getInstalledProducts', () => {
     // eslint-disable-next-line func-names
-    it(`returns info for installed products using ${config.transport} transport`, (done) => {
+    it('returns info for installed products', (done) => {
       const connection = new Connection(config);
 
       const toolkit = new Toolkit(connection);
@@ -599,7 +603,7 @@ describe('Toolkit Functional Tests', () => {
   });
   describe('UserSpace Functional Tests', () => {
     describe('createUserSpace', () => {
-      it(`creates a user space using ${config.transport} transport`, (done) => {
+      it('creates a user space', (done) => {
         const connection = new Connection(config);
 
         const toolkit = new Toolkit(connection);
@@ -618,7 +622,7 @@ describe('Toolkit Functional Tests', () => {
     });
 
     describe('setUserSpaceData', () => {
-      it(`sets data within the user space using ${config.transport} transport`, (done) => {
+      it('sets data within the user space', (done) => {
         const connection = new Connection(config);
 
         const toolkit = new Toolkit(connection);
@@ -637,7 +641,7 @@ describe('Toolkit Functional Tests', () => {
     });
 
     describe('getUserSpaceData', () => {
-      it(`returns specified length of data using ${config.transport} transport`,
+      it('returns specified length of data',
         (done) => {
           const connection = new Connection(config);
 
@@ -654,7 +658,7 @@ describe('Toolkit Functional Tests', () => {
     });
 
     describe('deleteUserSpace', () => {
-      it(`removes a user space using ${config.transport} transport`, (done) => {
+      it('removes a user space', (done) => {
         const connection = new Connection(config);
 
         const toolkit = new Toolkit(connection);
@@ -671,7 +675,7 @@ describe('Toolkit Functional Tests', () => {
   });
 
   describe('getSysValue', () => {
-    it(`returns the value of system variable using ${config.transport} transport`, (done) => {
+    it('returns the value of system variable', (done) => {
       const connection = new Connection(config);
 
       const toolkit = new Toolkit(connection);
@@ -686,7 +690,7 @@ describe('Toolkit Functional Tests', () => {
 
   describe('getSysStatus', () => {
     it('returns basic system status information about the signed-on users '
-             + `and batch jobs using ${config.transport} transport`,
+             + 'and batch jobs',
     (done) => {
       const connection = new Connection(config);
       const toolkit = new Toolkit(connection);
@@ -716,7 +720,7 @@ describe('Toolkit Functional Tests', () => {
   });
 
   describe('getSysStatusExt', () => {
-    it(`returns more detailed system status info using ${config.transport} transport`,
+    it('returns more detailed system status info',
       (done) => {
         const connection = new Connection(config);
 
@@ -762,7 +766,7 @@ describe('Toolkit Functional Tests', () => {
   });
 
   describe('getJobStatus', () => {
-    it(`returns status of specified job using ${config.transport} transport`,
+    it('returns status of specified job',
       (done) => {
         const connection = new Connection(config);
 
@@ -779,7 +783,7 @@ describe('Toolkit Functional Tests', () => {
   });
 
   describe('getJobInfo', () => {
-    it(`returns info on specfed job using ${config.transport} transport`, (done) => {
+    it('returns info on specfed job', (done) => {
       const connection = new Connection(config);
 
       const toolkit = new Toolkit(connection);
@@ -834,7 +838,7 @@ describe('Toolkit Functional Tests', () => {
         done();
       });
     });
-    it(`returns contents of a data area using ${config.transport} transport`, (done) => {
+    it('returns contents of a data area', (done) => {
       const connection = new Connection(config);
 
       const toolkit = new Toolkit(connection);
