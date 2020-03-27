@@ -7,6 +7,7 @@ if (process.env.TKPK) {
 
 const config = {
   transport: process.env.TKTRANSPORT || 'ssh',
+  verbose: !!process.env.TKVERBOSE,
   transportOptions: {
     database: process.env.TKDB || '*LOCAL',
     username: process.env.TKUSER || '',
@@ -17,9 +18,17 @@ const config = {
     privateKey,
     // passphrase is used by the ssh transport to decrypt the private key
     passphrase: process.env.TKPHRASE,
-    verbose: !!process.env.TKVERBOSE,
     dsn: process.env.TKDSN,
   },
 };
 
+function printConfig() {
+/* eslint-disable no-console */
+  console.log('-----------------------');
+  console.log('transport:', config.transport);
+  console.log(`verbose: ${config.verbose ? 'on' : 'off'}`);
+  console.log('-----------------------');
+}
+
 module.exports.config = config;
+module.exports.printConfig = printConfig;
