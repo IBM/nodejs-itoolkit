@@ -5,7 +5,7 @@ const dataQueue = 'TESTQ';
 const dataArea = 'TESTDA';
 
 function checkObjectExistsSSH(config, object = {}, callback) {
-  // eslint-disable-next-line global-require
+  /* eslint-disable global-require */
   const { Client } = require('ssh2');
 
   const client = new Client();
@@ -19,6 +19,7 @@ function checkObjectExistsSSH(config, object = {}, callback) {
 
   client.on('ready', () => {
     client.exec(checkLibCommand, (checkLibError, checkLibStream) => {
+      /* eslint-disable no-console */
       console.log(`executing ${checkLibCommand}`);
       if (checkLibError) {
         callback(checkLibError, false);
@@ -65,7 +66,6 @@ function checkObjectExistsSSH(config, object = {}, callback) {
 }
 
 function checkObjectExistsODBC(config, object = {}, callback) {
-  // eslint-disable-next-line global-require
   const odbc = require('odbc');
 
   const connectionString = config.dsn || `DRIVER=IBM i Access ODBC Driver;SYSTEM=${config.host};UID=${config.username};PWD=${config.password};`;
@@ -108,16 +108,13 @@ function checkObjectExistsODBC(config, object = {}, callback) {
 }
 
 function checkObjectExistsIDB(config, object = {}, callback) {
-  // eslint-disable-next-line global-require
   const { dbconn, dbstmt } = require('idb-connector');
 
-  // eslint-disable-next-line new-cap
+  /* eslint-disable new-cap */
   const connection = new dbconn();
   connection.conn('*LOCAL');
-  // eslint-disable-next-line new-cap
   const statement = new dbstmt(connection);
 
-  console.log(config);
   statement.exec(findLib, (libResult, error) => {
     if (error) {
       callback(error, null);
@@ -126,7 +123,6 @@ function checkObjectExistsIDB(config, object = {}, callback) {
     if (config.verbose) {
       console.log('find lib result set: ', libResult);
     }
-    console.log('im in it');
     if (!libResult.length) {
       const libError = new Error(`${lib} lib was not found! Create it by running: ${createLib}`);
       callback(libError, null);
@@ -166,6 +162,8 @@ function checkObjectExists(config, type, callback) {
   }
 
   object.findObject = `SELECT OBJNAME FROM TABLE (QSYS2.OBJECT_STATISTICS('${lib}', '${type}')) AS X WHERE OBJNAME = '${object.name}'`;
+  // eslint-disable-next-line no-param-reassign
+  config.transportOptions.verbose = config.verbose;
 
   if (config.transport === 'idb') {
     checkObjectExistsIDB(config.transportOptions, object, callback);
