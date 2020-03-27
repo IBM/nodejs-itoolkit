@@ -25,6 +25,20 @@ const { checkObjectExists } = require('./checkObjectExists');
 
 const lib = 'NODETKTEST';
 
+function generateRandomName() {
+  let name;
+
+  do {
+    // generate a random 10 digit base-36 number string
+    // (base 36 is 0-9A-Z)
+    name = Math.floor(Math.random() * (36 ** 10)).toString(36);
+  }
+  // first character can't be a digit
+  while (name[0] >= '0' && name[0] <= '9');
+
+  return name.toUpperCase();
+}
+
 describe('Toolkit Functional Tests', () => {
   before(() => {
     printConfig();
@@ -607,6 +621,8 @@ describe('Toolkit Functional Tests', () => {
     });
   });
   describe('UserSpace Functional Tests', () => {
+    let userSpaceName;
+
     describe('createUserSpace', () => {
       it('creates a user space', (done) => {
         const connection = new Connection(config);
@@ -615,12 +631,13 @@ describe('Toolkit Functional Tests', () => {
 
         const description = 'Node toolkit test user space';
 
-        const userSpaceName = `USP${(config.transport).toUpperCase()}`;
+        const name = generateRandomName();
 
-        toolkit.createUserSpace(userSpaceName, lib, 'LOG', 50, '*EXCLUDE',
+        toolkit.createUserSpace(name, lib, 'LOG', 50, '*EXCLUDE',
           description, (error, output) => {
             expect(error).to.equal(null);
             expect(output).to.be.a('boolean').and.to.equal(true);
+            userSpaceName = name;
             done();
           });
       });
@@ -628,13 +645,15 @@ describe('Toolkit Functional Tests', () => {
 
     describe('setUserSpaceData', () => {
       it('sets data within the user space', (done) => {
+        if (!userSpaceName) {
+          this.skip();
+        }
+
         const connection = new Connection(config);
 
         const toolkit = new Toolkit(connection);
 
         const msg = 'Hello from userspace!';
-
-        const userSpaceName = `USP${(config.transport).toUpperCase()}`;
 
         toolkit.setUserSpaceData(userSpaceName, lib, msg.length, msg,
           (error, output) => {
@@ -646,29 +665,31 @@ describe('Toolkit Functional Tests', () => {
     });
 
     describe('getUserSpaceData', () => {
-      it('returns specified length of data',
-        (done) => {
-          const connection = new Connection(config);
+      it('returns specified length of data', (done) => {
+        if (!userSpaceName) {
+          this.skip();
+        }
 
-          const toolkit = new Toolkit(connection);
-
-          const userSpaceName = `USP${(config.transport).toUpperCase()}`;
-
-          toolkit.getUserSpaceData(userSpaceName, lib, 21, (error, output) => {
-            expect(error).to.equal(null);
-            expect(output).to.be.a('string').and.to.equal('Hello from userspace!');
-            done();
-          });
-        });
-    });
-
-    describe('deleteUserSpace', () => {
-      it('removes a user space', (done) => {
         const connection = new Connection(config);
 
         const toolkit = new Toolkit(connection);
 
-        const userSpaceName = `USP${(config.transport).toUpperCase()}`;
+        toolkit.getUserSpaceData(userSpaceName, lib, 21, (error, output) => {
+          expect(error).to.equal(null);
+          expect(output).to.be.a('string').and.to.equal('Hello from userspace!');
+          done();
+        });
+      });
+    });
+
+    describe('deleteUserSpace', () => {
+      it('removes a user space', (done) => {
+        if (!userSpaceName) {
+          this.skip();
+        }
+        const connection = new Connection(config);
+
+        const toolkit = new Toolkit(connection);
 
         toolkit.deleteUserSpace(userSpaceName, lib, (error, output) => {
           expect(error).to.equal(null);
