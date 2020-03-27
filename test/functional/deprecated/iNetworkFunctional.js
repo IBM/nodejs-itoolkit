@@ -20,7 +20,7 @@
 
 const { expect } = require('chai');
 const { iConn, iNetwork } = require('../../../lib/itoolkit');
-const { config } = require('../config');
+const { config, printConfig } = require('../config');
 
 // deprecated tests are in place to test compatability using deprecated classes and functions
 // these tests use deprecated iConn Class to create a connnection
@@ -42,6 +42,10 @@ if (config.transport === 'rest') {
 }
 
 describe('iNetwork Functional Tests', () => {
+  before(() => {
+    printConfig();
+  });
+
   describe('constructor', () => {
     it('creates and returns an instance of iNetwork', () => {
       const connection = new iConn(database, config.user, password);
@@ -53,7 +57,7 @@ describe('iNetwork Functional Tests', () => {
   });
 
   describe('getTCPIPAttr', () => {
-    it(`retrieves TCP/IP Attributes using ${config.transport} transport`, (done) => {
+    it('retrieves TCP/IP Attributes', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
       const net = new iNetwork(connection);
@@ -96,7 +100,7 @@ describe('iNetwork Functional Tests', () => {
   });
 
   describe('getNetInterfaceData', () => {
-    it(`retrieves IPv4 network interface info using ${config.transport} transport`, (done) => {
+    it('retrieves IPv4 network interface info', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
       const net = new iNetwork(connection);

@@ -20,7 +20,7 @@
 
 const { expect } = require('chai');
 const { iConn, iUserSpace } = require('../../../lib/itoolkit');
-const { config } = require('../config');
+const { config, printConfig } = require('../config');
 
 // deprecated tests are in place to test compatability using deprecated classes and functions
 // these tests use deprecated iConn Class to create a connnection
@@ -44,6 +44,10 @@ if (config.transport === 'rest') {
 const lib = 'NODETKTEST';
 
 describe('iUserSpace Functional Tests', () => {
+  before(() => {
+    printConfig();
+  });
+
   describe('constructor', () => {
     it('returns an instance of iUserSpace', () => {
       const connection = new iConn(database, config.user, password);
@@ -55,7 +59,7 @@ describe('iUserSpace Functional Tests', () => {
   });
 
   describe('createUserSpace', () => {
-    it(`creates a user space using ${config.transport} transport`, (done) => {
+    it('creates a user space', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
       const userSpace = new iUserSpace(connection);
@@ -73,7 +77,7 @@ describe('iUserSpace Functional Tests', () => {
   });
 
   describe('setUserSpaceData', () => {
-    it(`sets data within the user space using ${config.transport} transport`, (done) => {
+    it('sets data within the user space', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
       const userSpace = new iUserSpace(connection);
@@ -91,7 +95,7 @@ describe('iUserSpace Functional Tests', () => {
   });
 
   describe('getUserSpaceData', () => {
-    it(`returns specified length of data using ${config.transport} transport`, (done) => {
+    it('returns specified length of data', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
       const userSpace = new iUserSpace(connection);
@@ -106,7 +110,7 @@ describe('iUserSpace Functional Tests', () => {
   });
 
   describe('deleteUserSpace', () => {
-    it(`removes a user space using ${config.transport} transport`, (done) => {
+    it('removes a user space', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
       const userSpace = new iUserSpace(connection);

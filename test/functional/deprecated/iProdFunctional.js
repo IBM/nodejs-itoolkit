@@ -20,7 +20,7 @@
 
 const { expect } = require('chai');
 const { iConn, iProd } = require('../../../lib/itoolkit');
-const { config } = require('../config');
+const { config, printConfig } = require('../config');
 
 // deprecated tests are in place to test compatability using deprecated classes and functions
 // these tests use deprecated iConn Class to create a connnection
@@ -42,6 +42,10 @@ if (config.transport === 'rest') {
 }
 
 describe('iProd Functional Tests', () => {
+  before(() => {
+    printConfig();
+  });
+
   describe('constructor', () => {
     it('creates and returns an instance of iProd', () => {
       const connection = new iConn(database, config.user, password);
@@ -53,7 +57,7 @@ describe('iProd Functional Tests', () => {
   });
 
   describe('getPTFInfo', () => {
-    it(`returns info for specified ptf using ${config.transport} transport`, (done) => {
+    it('returns info for specified ptf', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
       const prod = new iProd(connection);
@@ -96,7 +100,7 @@ describe('iProd Functional Tests', () => {
   });
 
   describe('getProductInfo', () => {
-    it(`returns info for specified product using ${config.transport} transport`, (done) => {
+    it('returns info for specified product', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
       const prod = new iProd(connection);
@@ -129,7 +133,7 @@ describe('iProd Functional Tests', () => {
   // The requested URL's length exceeds the capacity limit for this server
   describe('getInstalledProducts', () => {
     // eslint-disable-next-line func-names
-    it(`returns info for installed products using ${config.transport} transport`, (done) => {
+    it('returns info for installed products', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
       const prod = new iProd(connection);

@@ -20,7 +20,7 @@
 
 const { expect } = require('chai');
 const { iConn, iObj } = require('../../../lib/itoolkit');
-const { config } = require('../config');
+const { config, printConfig } = require('../config');
 
 // deprecated tests are in place to test compatability using deprecated classes and functions
 // these tests use deprecated iConn Class to create a connnection
@@ -42,6 +42,10 @@ if (config.transport === 'rest') {
 }
 
 describe('iObj Functional Tests', () => {
+  before(() => {
+    printConfig();
+  });
+
   describe('constructor', () => {
     it('creates and returns an instance of iObj', () => {
       const connection = new iConn(database, config.user, password);
@@ -101,7 +105,7 @@ describe('iObj Functional Tests', () => {
   });
 
   describe('rtrCmdInfo', () => {
-    it(`returns command info using ${config.transport} transport`, (done) => {
+    it('returns command info', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
       const obj = new iObj(connection);
@@ -153,7 +157,7 @@ describe('iObj Functional Tests', () => {
   });
 
   describe('retrPgmInfo', () => {
-    it(`returns program info using ${config.transport} transport`, (done) => {
+    it('returns program info', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
       const obj = new iObj(connection);
@@ -230,7 +234,7 @@ describe('iObj Functional Tests', () => {
   });
 
   describe('retrSrvPgmInfo', () => {
-    it(`returns service program info using ${config.transport} transport`, (done) => {
+    it('returns service program info', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
       const obj = new iObj(connection);
@@ -287,7 +291,7 @@ describe('iObj Functional Tests', () => {
   });
 
   describe('retrUserInfo', () => {
-    it(`returns specified user profile info using ${config.transport} transport`, (done) => {
+    it('returns specified user profile info', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
       const obj = new iObj(connection);
@@ -343,7 +347,7 @@ describe('iObj Functional Tests', () => {
   });
 
   describe('addToLibraryList', () => {
-    it(`appends lib to user's lib list using ${config.transport} transport`, (done) => {
+    it('appends lib to user\'s lib list', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
       const obj = new iObj(connection);

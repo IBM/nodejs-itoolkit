@@ -20,7 +20,7 @@
 
 const { expect } = require('chai');
 const { iConn, iWork } = require('../../../lib/itoolkit');
-const { config } = require('../config');
+const { config, printConfig } = require('../config');
 const { checkObjectExists } = require('../checkObjectExists');
 
 // deprecated tests are in place to test compatability using deprecated classes and functions
@@ -43,6 +43,10 @@ if (config.transport === 'rest') {
 }
 
 describe('iWork Functional Tests', () => {
+  before(() => {
+    printConfig();
+  });
+
   describe('constructor', () => {
     it('creates and returns an instance of iWork', () => {
       const connection = new iConn(database, config.user, password);
@@ -54,7 +58,7 @@ describe('iWork Functional Tests', () => {
   });
 
   describe('getSysValue', () => {
-    it(`returns the value of system variable using ${config.transport} transport`, (done) => {
+    it('returns the value of system variable', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
       const work = new iWork(connection);
@@ -68,7 +72,7 @@ describe('iWork Functional Tests', () => {
 
   describe('getSysStatus', () => {
     it('returns basic system status information about the signed-on users '
-           + `and batch jobs using ${config.transport} transport`,
+           + 'and batch jobs',
     (done) => {
       const connection = new iConn(database, username, password, restOptions);
       const work = new iWork(connection);
@@ -97,7 +101,7 @@ describe('iWork Functional Tests', () => {
   });
 
   describe('getSysStatusExt', () => {
-    it(`returns more detailed system status info using ${config.transport} transport`,
+    it('returns more detailed system status info',
       (done) => {
         const connection = new iConn(database, username, password, restOptions);
 
@@ -142,7 +146,7 @@ describe('iWork Functional Tests', () => {
   });
 
   describe('getJobStatus', () => {
-    it(`returns status of specified job using ${config.transport} transport`,
+    it('returns status of specified job',
       (done) => {
         const connection = new iConn(database, username, password, restOptions);
 
@@ -158,7 +162,7 @@ describe('iWork Functional Tests', () => {
   });
 
   describe('getJobInfo', () => {
-    it(`returns info on specfed job using ${config.transport} transport`, (done) => {
+    it('returns info on specfed job', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
       const work = new iWork(connection);
@@ -212,7 +216,7 @@ describe('iWork Functional Tests', () => {
         done();
       });
     });
-    it(`returns contents of a data area using ${config.transport} transport`, (done) => {
+    it('returns contents of a data area', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
       const work = new iWork(connection);

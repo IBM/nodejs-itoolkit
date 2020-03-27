@@ -25,7 +25,7 @@ const {
   iCmd, iSh, iQsh, iConn,
 } = require('../../../lib/itoolkit');
 
-const { config } = require('../config');
+const { config, printConfig } = require('../config');
 
 // deprecated tests are in place to test compatability using deprecated classes and functions
 // these tests use deprecated iConn Class to create a connnection
@@ -45,8 +45,12 @@ if (config.transport === 'rest') {
 }
 
 describe('iSh, iCmd, iQsh, Functional Tests', () => {
+  before(() => {
+    printConfig();
+  });
+
   describe('iCmd()', () => {
-    it(`calls CL command using ${config.transport} transport`, (done) => {
+    it('calls CL command', (done) => {
       const connection = new iConn(database, username, password, restOptions);
       connection.add(iCmd('RTVJOBA USRLIBL(?) SYSLIBL(?)'));
       connection.run((xmlOut) => {
@@ -60,7 +64,7 @@ describe('iSh, iCmd, iQsh, Functional Tests', () => {
   });
 
   describe('iSh()', () => {
-    it(`calls PASE shell command using ${config.transport} transport`, (done) => {
+    it('calls PASE shell command', (done) => {
       const connection = new iConn(database, username, password, restOptions);
       connection.add(iSh('system -i wrksyssts'));
       connection.run((xmlOut) => {
@@ -76,7 +80,7 @@ describe('iSh, iCmd, iQsh, Functional Tests', () => {
   });
 
   describe('iQsh()', () => {
-    it(`calls QSH command using ${config.transport} transport`, (done) => {
+    it('calls QSH command', (done) => {
       const connection = new iConn(database, username, password, restOptions);
       connection.add(iQsh('system wrksyssts'));
       connection.run((xmlOut) => {

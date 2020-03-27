@@ -20,7 +20,7 @@
 
 const { expect } = require('chai');
 const { iConn, iDataQueue } = require('../../../lib/itoolkit');
-const { config } = require('../config');
+const { config, printConfig } = require('../config');
 const { checkObjectExists } = require('../checkObjectExists');
 
 // deprecated tests are in place to test compatability using deprecated classes and functions
@@ -46,11 +46,13 @@ const lib = 'NODETKTEST'; const dqName = 'TESTQ';
 
 describe('iDataQueue Functional Tests', () => {
   before('check if data queue exists for tests', (done) => {
+    printConfig();
     checkObjectExists(config, '*DTAQ', (error) => {
       if (error) { throw error; }
       done();
     });
   });
+
   describe('constructor', () => {
     it('creates and returns an instance of iDataQueue', () => {
       const connection = new iConn(database, config.user, password);
@@ -61,7 +63,7 @@ describe('iDataQueue Functional Tests', () => {
   });
 
   describe('sendToDataQueue', () => {
-    it(`sends data to specified DQ using ${config.transport} transport`, (done) => {
+    it('sends data to specified DQ', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
       const dq = new iDataQueue(connection);
@@ -74,7 +76,7 @@ describe('iDataQueue Functional Tests', () => {
   });
 
   describe('receiveFromDataQueue', () => {
-    it(`receives data from specfied DQ using ${config.transport} transport`, (done) => {
+    it('receives data from specfied DQ', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
       const dq = new iDataQueue(connection);
@@ -87,7 +89,7 @@ describe('iDataQueue Functional Tests', () => {
   });
 
   describe('clearDataQueue', () => {
-    it(`clears the specifed DQ using ${config.transport} transport`, (done) => {
+    it('clears the specifed DQ', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
       const dq = new iDataQueue(connection);

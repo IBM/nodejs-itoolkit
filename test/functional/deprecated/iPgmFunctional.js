@@ -21,7 +21,7 @@
 const { expect } = require('chai');
 const { parseString } = require('xml2js');
 const { iPgm, iConn } = require('../../../lib/itoolkit');
-const { config } = require('../config');
+const { config, printConfig } = require('../config');
 
 // deprecated tests are in place to test compatability using deprecated classes and functions
 // these tests use deprecated iConn Class to create a connnection
@@ -42,8 +42,12 @@ if (config.transport === 'rest') {
 }
 
 describe('iPgm Functional Tests', () => {
+  before(() => {
+    printConfig();
+  });
+
   describe('Test iPgm()', () => {
-    it(`calls QWCRSVAL program checks if it ran successfully using ${config.transport} transport`, (done) => {
+    it('calls QWCRSVAL program checks if it ran successfully', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
       const program = new iPgm('QWCRSVAL', { lib: 'QSYS' });
@@ -76,7 +80,7 @@ describe('iPgm Functional Tests', () => {
 
 
   describe('Test iPgm()', () => {
-    it(`calls QWCRSVAL program and returns arbitrarily named parameter using ${config.transport} transport`, (done) => {
+    it('calls QWCRSVAL program and returns arbitrarily named parameter', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
       const program = new iPgm('QWCRSVAL', { lib: 'QSYS' });
@@ -112,7 +116,7 @@ describe('iPgm Functional Tests', () => {
   describe.skip('Test iPgm()', () => {
     // ZZSRV6 program requires XMLSERVICE built with tests
     // Skip for now, we need to add before hook to check if ZZSRV6 is available
-    it.skip(`Should be successful with addReturn arbitrary attribute specified using using ${config.transport} transport`, (done) => {
+    it.skip('Should be successful with addReturn arbitrary attribute specified using', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
       const program = new iPgm('ZZSRV6', { lib: 'XMLSERVICE', func: 'ZZVARY4' });
