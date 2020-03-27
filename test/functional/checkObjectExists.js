@@ -150,18 +150,18 @@ function checkObjectExistsIDB(config, object = {}, callback) {
   });
 }
 
-function checkObjectExists(config, type, callback) {
+function checkObjectExists(config, name, type, callback) {
   const object = { type };
 
   if (type === '*DTAARA') {
-    object.name = dataArea;
-    object.createObject = `CRTDTAARA DTAARA(${lib}/${dataArea}) TYPE(*CHAR) TEXT('TEST DATA AREA FOR NODE TOOLKIT') VALUE('Hello From Test Data Area!')`;
+    object.name = name;
+    object.createObject = `CRTDTAARA DTAARA(${lib}/${name}) TYPE(*CHAR) TEXT('TEST DATA AREA FOR NODE TOOLKIT') VALUE('Hello From Test Data Area!')`;
   } else if (type === '*DTAQ') {
-    object.name = dataQueue;
-    object.createObject = `CRTDTAQ DTAQ(${lib}/${dataQueue}) MAXLEN(100) AUT(*EXCLUDE) TEXT('TEST DQ FOR NODE TOOLKIT TESTS')`;
+    object.name = name;
+    object.createObject = `CRTDTAQ DTAQ(${lib}/${name}) MAXLEN(100) AUT(*EXCLUDE) TEXT('TEST DQ FOR NODE TOOLKIT TESTS')`;
   }
 
-  object.findObject = `SELECT OBJNAME FROM TABLE (QSYS2.OBJECT_STATISTICS('${lib}', '${type}')) AS X WHERE OBJNAME = '${object.name}'`;
+  object.findObject = `SELECT OBJNAME FROM TABLE (QSYS2.OBJECT_STATISTICS('${lib}', '${type}')) AS X WHERE OBJNAME = '${name}'`;
   // eslint-disable-next-line no-param-reassign
   config.transportOptions.verbose = config.verbose;
 

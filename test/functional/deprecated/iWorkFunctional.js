@@ -211,7 +211,7 @@ describe('iWork Functional Tests', () => {
 
   describe('getDataArea', () => {
     before('init lib, data area, and add data', (done) => {
-      checkObjectExists(config, '*DTAARA', (error) => {
+      checkObjectExists(config, 'TESTDA', '*DTAARA', (error) => {
         if (error) { throw error; }
         done();
       });

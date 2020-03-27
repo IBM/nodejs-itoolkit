@@ -26,4 +26,10 @@ jobs:
     - run: npm test
       env:
         CI: true
+    - run: npm run test-integration
+      env:
+        TKTRANSPORT: 'ssh'
+        TKHOST: ${{ secrets.IBMI_HOSTNAME }}
+        TKUSER: ${{ secrets.IBMI_USERNAME }}
+        TKPASS: ${{ secrets.IBMI_PASSWORD }}
 
