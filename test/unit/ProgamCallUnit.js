@@ -211,5 +211,25 @@ describe('ProgramCall Class Unit Tests', () => {
 
       expect(pgm.toXML()).to.equal(expectedXML);
     });
+
+    it('appends return with ds to pgm xml', () => {
+      const pgm = new ProgramCall('TEST');
+
+      const ds = {
+        name: 'test_ds',
+        type: 'ds',
+        io: 'out',
+        fields: [
+          { type: '10i0', value: 0 },
+          { type: '10A', value: '' },
+        ],
+      };
+      pgm.addReturn(ds);
+
+      const expectedXML = "<pgm name='TEST' error='fast'><return><ds name='test_ds'>"
+      + "<data type='10i0'>0</data><data type='10A'></data></ds></return></pgm>";
+
+      expect(pgm.toXML()).to.equal(expectedXML);
+    });
   });
 });
