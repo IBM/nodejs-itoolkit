@@ -22,7 +22,7 @@
 - [Class ProgramCall](#Class-ProgramCall)
   - [Example](#Example-1)
   - [Constructor: ProgramCall(program[, options])](#Constructor-ProgramCallprogram-options)
-  - [ProgramCall.addParam(value, [options])](#ProgramCalladdParamvalue-options)
+  - [ProgramCall.addParam(parameter)](#ProgramCalladdParamparameter)
   - [ProgramCall.addReturn(value, type[, options])](#ProgramCalladdReturnvalue-type-options)
   - [ProgramCall.toXML()](#ProgramCalltoXML)
 - [Class Toolkit](#Class-Toolkit)
@@ -537,30 +537,47 @@ const connection = new Connection({
   transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
 });
 
-const output = [
-  ['0', '10i0'],
-  ['0', '10i0'],
-  ['', '10A'],
-  ['', '1A'],
-  ['', '1A'],
-  ['0', '10i0'],
-  ['0', '10i0'],
-];
+const receiver = {
+  name: 'receiver',
+  type: 'ds',
+  io: 'out',
+  len: 'rec1',
+  fields: [
+    { name: 'number_sys_values_returned', type: '10i0', value: '0' },
+    { name: 'offset_to_sys value info_table', type: '10i0', value: '0' },
+    { name: 'sys_value', type:'10A', value: '' },
+    { name: 'type_of_data', type:'1A' , value: '' },
+    { name: 'info_status', type:'1A' , value: '' },
+    { name: 'len_of_data', value: '0', type: '10i0' },
+    { name: 'data', value: '0', type: '10i0' },
+  ],
+};
 
-const errno = [
-  ['0', '10i0'],
-  ['0', '10i0', { setlen: 'rec2' }],
-  ['', '7A'],
-  ['', '1A'],
-];
+const errno = {
+  name: 'error_code',
+  type: 'ds',
+  io: 'both',
+  len: 'rec2',
+  fields: [
+    {
+      name: 'bytes_provided',
+      type: '10i0',
+      value: 0,
+      setlen: 'rec2',
+    },
+    { name: 'bytes_available', type: '10i0', value: 0 },
+    { name: 'msgid', type: '7A', value: '' },
+    { type: '1A', value: '' },
+  ],
+};
 
 const program = new ProgramCall('QWCRSVAL', { lib: 'QSYS' });
 
-program.addParam(output, { io: 'out', len: 'rec1' });
-program.addParam('0', '10i0', { setlen: 'rec1' });
-program.addParam('1', '10i0');
-program.addParam('QCCSID', '10A');
-program.addParam(errno, { io: 'both', len: 'rec2' });
+program.addParam(receiver);
+program.addParam({ name: 'length_of_receiver', type: '10i0', setlen: 'rec1', value: '0' });
+program.addParam({ name: 'number_sys_values', type: '10i0', value: '1' });
+program.addParam({ name: 'sys_value', type: '10A', value: 'QCCSID' });
+program.addParam(errno);
 
 connection.add(program);
 
@@ -572,7 +589,7 @@ connection.run((error, xmlOutput) => {
     if (parseError) {
       throw parseError;
     }
-    console.log(JSON.stringify(result));
+    console.log('QCCSID:', result.myscript.pgm[0].parm[0].ds[0].data[6]._);
   });
 });
 ```
@@ -603,33 +620,36 @@ Creates a new ProgramCall object,
 `<object>` a ProgramCall object.
 
 
-## ProgramCall.addParam(value, [options])
+## ProgramCall.addParam(parameter)
 
 **Description:**
 
 Add a new parameter element to the ProgramCall.
 
-**Syntax 1:**
+**Syntax:**
 
-addParam(data, type[,options])
-
-**Syntax 2:**
-
-addParam(data, [,options])
+addParam(parameter)
 
 **Parameters:**
 
-- **value** `<string> | <array>` The parameter element value.
+- **parameter** `<object>` the parameter.
 
-  If the parameter is a data structure, then use syntax 2 where data is an 2D `<array>`.
-
-  Each element of the array can have: `[data, type, options]`.
-
-  Otherwise use syntax 1 where data is the value of the parameter as a `<string>`.
-  
-- **type** `<string>` The parameter data type.
-
-- **[options]** `<object>` additional configuration for the parameter.<br>Refer to the [param, ds, and data tag](http://youngiprofessionals.com/wiki/index.php/XMLSERVICE/XMLSERVICEQuick) for available options.
+| Key | Type | Description |
+| --  |  --  |  --   |
+| name | string | This is the name of the parameter |
+| io  | string | parm option to define parameter input output type<br>Valid values are `in`, `out`, or `both` |
+| by  | string | parm option to specify to pass the parameter by reference or value<br>Valid values are `ref` or `val`|
+| type | string | [xmlservice data type](http://yips.idevcloud.com/wiki/index.php/XMLService/DataTypes) or `ds` for a data structure |
+| value | string | This is the value of the data node |
+| fields | array | This is an array of data objects `{ name: type: value: , etc }` used to define ds elements |
+| dim | string | ds option for array dimension value |
+| dou | string | ds option for label match array dou terminate parm label |
+| len | string | ds option for label match calculate length of ds parm label |
+| varying | string | data option for character varying data<br>Valid vlues are `on`, `off`, `2`, `4` |
+| enddo | string | data option for label match array dou terminate parm|
+| setlen | string | data option for label match calculate length of ds parm label |
+| hex | string | data option for hex input character |
+| trim | string | data option to trim character<br> Valid values are `on` or `off`|
 
 **Example:**
 

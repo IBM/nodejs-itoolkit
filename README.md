@@ -153,45 +153,60 @@ The ProgramCall class is used to call IBM i programs and service programs.
 
 #### Example
 ```javascript
-const {
-  Connection, ProgramCall,
-} = require('itoolkit');
-
+const { Connection, ProgramCall } = require('itoolkit');
 const { parseString } = require('xml2js');
 
-const conn = new Connection({
+
+const connection = new Connection({
   transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' }
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
 });
 
+const receiver = {
+  name: 'receiver',
+  type: 'ds',
+  io: 'out',
+  len: 'rec1',
+  fields: [
+    { name: 'number_sys_values_returned', type: '10i0', value: '0' },
+    { name: 'offset_to_sys value info_table', type: '10i0', value: '0' },
+    { name: 'sys_value', type:'10A', value: '' },
+    { name: 'type_of_data', type:'1A' , value: '' },
+    { name: 'info_status', type:'1A' , value: '' },
+    { name: 'len_of_data', value: '0', type: '10i0' },
+    { name: 'data', value: '0', type: '10i0' },
+  ],
+};
+
+const errno = {
+  name: 'error_code',
+  type: 'ds',
+  io: 'both',
+  len: 'rec2',
+  fields: [
+    {
+      name: 'bytes_provided',
+      type: '10i0',
+      value: 0,
+      setlen: 'rec2',
+    },
+    { name: 'bytes_available', type: '10i0', value: 0 },
+    { name: 'msgid', type: '7A', value: '' },
+    { type: '1A', value: '' },
+  ],
+};
+
 const program = new ProgramCall('QWCRSVAL', { lib: 'QSYS' });
-const outBuf = [
-  [0, '10i0'],
-  [0, '10i0'],
-  ['', '36h'],
-  ['', '10A'],
-  ['', '1A'],
-  ['', '1A'],
-  [0, '10i0'],
-  [0, '10i0'],
-];
-const errno = [
-  [0, '10i0'],
-  [0, '10i0', { setlen: 'rec2' }],
-  ['', '7A'],
-  ['', '1A'],
-];
 
-program.addParam(outBuf, { io: 'out' });
-program.addParam(66, '10i0');
-program.addParam(1, '10i0');
-program.addParam('QCCSID', '10A');
-program.addParam(errno, { io: 'both', len: 'rec2' });
+program.addParam(receiver);
+program.addParam({ name: 'length_of_receiver', type: '10i0', setlen: 'rec1', value: '0' });
+program.addParam({ name: 'number_sys_values', type: '10i0', value: '1' });
+program.addParam({ name: 'sys_value', type: '10A', value: 'QCCSID' });
+program.addParam(errno);
 
-conn.add(program);
+connection.add(program);
 
-
-conn.run((error, xmlOutput) => {
+connection.run((error, xmlOutput) => {
   if (error) {
     throw error;
   }
@@ -199,7 +214,7 @@ conn.run((error, xmlOutput) => {
     if (parseError) {
       throw parseError;
     }
-    console.log(JSON.stringify(result));
+    console.log('QCCSID:', result.myscript.pgm[0].parm[0].ds[0].data[6]._);
   });
 });
 ```
