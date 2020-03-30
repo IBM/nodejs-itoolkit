@@ -25,20 +25,6 @@ const { checkObjectExists } = require('./checkObjectExists');
 
 const lib = 'NODETKTEST';
 
-function generateRandomName() {
-  let name;
-
-  do {
-    // generate a random 10 digit base-36 number string
-    // (base 36 is 0-9A-Z)
-    name = Math.floor(Math.random() * (36 ** 10)).toString(36);
-  }
-  // first character can't be a digit
-  while (name[0] >= '0' && name[0] <= '9');
-
-  return name.toUpperCase();
-}
-
 describe('Toolkit Functional Tests', () => {
   before(() => {
     printConfig();
@@ -509,86 +495,6 @@ describe('Toolkit Functional Tests', () => {
         expect(error).to.equal(null);
         expect(output).to.be.a('boolean').and.to.equal(true);
         done();
-      });
-    });
-  });
-
-  describe('UserSpace Functional Tests', () => {
-    let userSpaceName;
-
-    describe('createUserSpace', () => {
-      it('creates a user space', (done) => {
-        const connection = new Connection(config);
-
-        const toolkit = new Toolkit(connection);
-
-        const description = 'Node toolkit test user space';
-
-        const name = generateRandomName();
-
-        toolkit.createUserSpace(name, lib, 'LOG', 50, '*EXCLUDE',
-          description, (error, output) => {
-            expect(error).to.equal(null);
-            expect(output).to.be.a('boolean').and.to.equal(true);
-            userSpaceName = name;
-            done();
-          });
-      });
-    });
-
-    describe('setUserSpaceData', () => {
-      it('sets data within the user space', (done) => {
-        if (!userSpaceName) {
-          this.skip();
-        }
-
-        const connection = new Connection(config);
-
-        const toolkit = new Toolkit(connection);
-
-        const msg = 'Hello from userspace!';
-
-        toolkit.setUserSpaceData(userSpaceName, lib, msg.length, msg,
-          (error, output) => {
-            expect(error).to.equal(null);
-            expect(output).to.be.a('boolean').and.to.equal(true);
-            done();
-          });
-      });
-    });
-
-    describe('getUserSpaceData', () => {
-      it('returns specified length of data', (done) => {
-        if (!userSpaceName) {
-          this.skip();
-        }
-
-        const connection = new Connection(config);
-
-        const toolkit = new Toolkit(connection);
-
-        toolkit.getUserSpaceData(userSpaceName, lib, 21, (error, output) => {
-          expect(error).to.equal(null);
-          expect(output).to.be.a('string').and.to.equal('Hello from userspace!');
-          done();
-        });
-      });
-    });
-
-    describe('deleteUserSpace', () => {
-      it('removes a user space', (done) => {
-        if (!userSpaceName) {
-          this.skip();
-        }
-        const connection = new Connection(config);
-
-        const toolkit = new Toolkit(connection);
-
-        toolkit.deleteUserSpace(userSpaceName, lib, (error, output) => {
-          expect(error).to.equal(null);
-          expect(output).to.be.a('boolean').and.to.equal(true);
-          done();
-        });
       });
     });
   });
