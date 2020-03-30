@@ -198,7 +198,6 @@ Will now be generated with:
 `const command = new CommandCall({type: 'sh', command: 'ls /home' })`
 
 ### iSql
-
 The `iSql` class is deprecated and will be removed in the next major version.
 
 The `odbc`, `idb-connector`, and `idb-pconnector` npm packages are much better SQL interfaces for IBM i and should be used instead.
@@ -206,7 +205,6 @@ The `odbc`, `idb-connector`, and `idb-pconnector` npm packages are much better S
 `iSql.connect` and `iSql.setOptions` are no longer available.
 
 ### xmlToJson
-
 The `xmlToJson` function is deprecated and will be removed in the next major version.
 
 Use `xml2js` npm package.
@@ -227,5 +225,4 @@ The `iProd` class is deprecated and will be removed in the next major version.
 The `iUserSpace` class is deprecated and will be removed in the next major version.
 
 ### iWork
-
 The `iWork` class is deprecated and will be removed in the next major version.
