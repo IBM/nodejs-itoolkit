@@ -33,9 +33,6 @@
   - [Toolkit.getJobStatus(id, callback)](#ToolkitgetJobStatusid-callback)
   - [Toolkit.getJobInfo(name, user, number, callback)](#ToolkitgetJobInfoname-user-number-callback)
   - [Toolkit.getDataArea(library, area, length, callback)](#ToolkitgetDataArealibrary-area-length-callback)
-  - [Toolkit.getPTFInfo(number, callback)](#ToolkitgetPTFInfonumber-callback)
-  - [Toolkit.getProductInfo(name, option, callback)](#ToolkitgetProductInfoname-option-callback)
-  - [Toolkit.getInstalledProducts(callback)](#ToolkitgetInstalledProductscallback)
   - [Toolkit.createUserSpace(name, library, attribute, size, authority, description, callback)](#ToolkitcreateUserSpacename-library-attribute-size-authority-description-callback)
   - [Toolkit.setUserSpaceData(name, library, size, data, callback)](#ToolkitsetUserSpaceDataname-library-size-data-callback)
   - [Toolkit.getUserSpaceData(name, library, size, callback)](#ToolkitgetUserSpaceDataname-library-size-callback)
@@ -60,6 +57,9 @@
   - [iObj](#iObj)
   - [iPgm](#iPgm)
   - [iProd](#iProd)
+    - [iProd.getPTFInfo(number, callback)](#iProdgetPTFInfonumber-callback)
+    - [iProd.getProductInfo(name, option, callback)](#iProdgetProductInfoname-option-callback)
+    - [iProd.getInstalledProducts(callback)](#iProdgetInstalledProductscallback)
   - [iQsh](#iQsh)
   - [iSh](#iSh)
   - [iSql](#iSql)
@@ -1120,206 +1120,7 @@ toolkit.getDataArea('mylibrary', 'mydataarea', 100, (error, output) => {
 ```
 
 
-## Toolkit.getPTFInfo(number, callback)
 
-**Description:**
-
-Get the load status of specified PTF.
-
-**Syntax:**
-
-getPTFInfo(number, callback)
-
-**Parameters:**
-- **number** `<string>` The PTF number to be queried.
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**output**
-
-| Key                            |
-| -----                          |
-| Product_ID                     |
-| PTF_ID                         |
-| Release_level                  |
-| Product_option                 |
-| Load_ID                        |
-| Loaded_status                  |
-| Cover_letter_status            |
-| On-order_status                |
-| Save_file_status               |
-| File_name                      |
-| File_library_name              |
-| PTF_type                       |
-| IPL_action                     |
-| Action_pending                 |
-| Action_required                |
-| PTF_is_released                |
-| Target_release                 |
-| Superseding_PTF                |
-| Current_IPL_source             |
-| Minimum_level                  |
-| Maximum_level                  |
-| Format_information_available   |
-| Status_date_and_time           |
-| Licensed_Internal_Code_group   |
-| Superseded_by_PTF_ID           |
-| Current_server_IPL_source      |
-| Server_IPL_required            |
-| Creation_date_and_time         |
-| Technology_refresh_PTF         |
-| Reserved                       |
-
-**IBM i API:**
-
-[QPZRTVFX](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/qpzrtvfx.htm)
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.getPTFInfo('SI54708', (error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log(output);
-});
-
-```
-
-## Toolkit.getProductInfo(name, option, callback)
-
-**Description:**
-
-Get the status of specified product.
-
-**Syntax:**
-
-getProductInfo (name, [option,] callback)
-
-Parameters
-- **name** `<string>` the product name.
-
-- [option] `<object>` the option of the product. If it is not set, then the *BASE option("0000") is selected. The valid value is (0 - 99).
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-
-**output**
-
-| Key                                            |
-| -----                                          |
-| Product_ID                                     |
-| Release_level                                  |
-| Product_option                                 |
-| Load_ID                                        |
-| Loaded_type                                    |
-| Symbolic_load_state                            |
-| Load_error_indicator                           |
-| Load_state                                     |
-| Supported_flag                                 |
-| Registration_type                              |
-| Registration_value                             |
-| Offset_to_additional_information               |
-| Primary_language_load_identifier               |
-| Minimum_target_release                         |
-| Minimum_VRM_of_*BASE_required_by_option        |
-| Requirements_met_between_base_and_option_value |
-| Level                                          |
-| Reserved                                       |
-
-**IBM i API:**
-
-[QSZRTVPR](https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_74/apis/qszrtvpr.htm)
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.getProductInfo('5770DG1', (error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log(output);
-});
-```
-
-## Toolkit.getInstalledProducts(callback)
-
-**Description:**
-
-Get the list of all installed products.
-
-**Syntax:**
-
-getInstalledProducts(callback)
-
-**Parameters:**
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is an `<array>` of objects when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**each object in the array has:**
-
-| Key                           |
-| -----                         |
-| Product_ID                    |
-| Product_option                |
-| Release_level                 |
-| Description_text_message_ID   |
-| Description_text_object_name  |
-| Description_text_library_name |
-| Installed_flag                |
-| Supported_flag                |
-| Registration_type             |
-| Registration_value            |
-| Description_text              |
-
-
-**IBM i API:**
-
-[QSZSLTPR](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/qszsltpr.htm)
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.getInstalledProducts((error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log(output);
-});
-```
 
 ## Toolkit.createUserSpace(name, library, attribute, size, authority, description, callback)
 
@@ -2437,12 +2238,206 @@ The `iPgm` class is deprecated. Use the [ProgramCall](#Class-ProgramCall) class 
 
 ## iProd
 
-The `iProd` class is deprecated. Use the [Toolkit](#Class-Toolkit) class instead.
+### iProd.getPTFInfo(number, callback)
 
-From the Toolkit class you may access:
-- [getPTFInfo](#ToolkitgetPTFInfonumber-callback)
-- [getProductInfo](#ToolkitgetProductInfoname-option-callback)
-- [getInstalledProducts](#ToolkitgetInstalledProductscallback)
+**Description:**
+
+Get the load status of specified PTF.
+
+**Syntax:**
+
+getPTFInfo(number, callback)
+
+**Parameters:**
+- **number** `<string>` The PTF number to be queried.
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**output**
+
+| Key                            |
+| -----                          |
+| Product_ID                     |
+| PTF_ID                         |
+| Release_level                  |
+| Product_option                 |
+| Load_ID                        |
+| Loaded_status                  |
+| Cover_letter_status            |
+| On-order_status                |
+| Save_file_status               |
+| File_name                      |
+| File_library_name              |
+| PTF_type                       |
+| IPL_action                     |
+| Action_pending                 |
+| Action_required                |
+| PTF_is_released                |
+| Target_release                 |
+| Superseding_PTF                |
+| Current_IPL_source             |
+| Minimum_level                  |
+| Maximum_level                  |
+| Format_information_available   |
+| Status_date_and_time           |
+| Licensed_Internal_Code_group   |
+| Superseded_by_PTF_ID           |
+| Current_server_IPL_source      |
+| Server_IPL_required            |
+| Creation_date_and_time         |
+| Technology_refresh_PTF         |
+| Reserved                       |
+
+**IBM i API:**
+
+[QPZRTVFX](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/qpzrtvfx.htm)
+
+**Example:**
+
+```js
+const { Connection, iProd } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const prod = new iProd(connection);
+
+prod.getPTFInfo('SI54708', (error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log(output);
+});
+
+```
+
+### iProd.getProductInfo(name, option, callback)
+
+**Description:**
+
+Get the status of specified product.
+
+**Syntax:**
+
+getProductInfo (name, [option,] callback)
+
+Parameters
+- **name** `<string>` the product name.
+
+- **[option]** `<number>` the option of the product. If it is not set, then the *BASE option("0000") is selected. The valid value is (0 - 99).
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+
+**output**
+
+| Key                                            |
+| -----                                          |
+| Product_ID                                     |
+| Release_level                                  |
+| Product_option                                 |
+| Load_ID                                        |
+| Loaded_type                                    |
+| Symbolic_load_state                            |
+| Load_error_indicator                           |
+| Load_state                                     |
+| Supported_flag                                 |
+| Registration_type                              |
+| Registration_value                             |
+| Offset_to_additional_information               |
+| Primary_language_load_identifier               |
+| Minimum_target_release                         |
+| Minimum_VRM_of_*BASE_required_by_option        |
+| Requirements_met_between_base_and_option_value |
+| Level                                          |
+| Reserved                                       |
+
+**IBM i API:**
+
+[QSZRTVPR](https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_74/apis/qszrtvpr.htm)
+
+**Example:**
+
+```js
+const { Connection, iProd } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const prod = new iProd(connection);
+
+prod.getProductInfo('5770DG1', (error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log(output);
+});
+```
+
+### iProd.getInstalledProducts(callback)
+
+**Description:**
+
+Get the list of all installed products.
+
+**Syntax:**
+
+getInstalledProducts(callback)
+
+**Parameters:**
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is an `<array>` of objects when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**each object in the array has:**
+
+| Key                           |
+| -----                         |
+| Product_ID                    |
+| Product_option                |
+| Release_level                 |
+| Description_text_message_ID   |
+| Description_text_object_name  |
+| Description_text_library_name |
+| Installed_flag                |
+| Supported_flag                |
+| Registration_type             |
+| Registration_value            |
+| Description_text              |
+
+
+**IBM i API:**
+
+[QSZSLTPR](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/qszsltpr.htm)
+
+**Example:**
+
+```js
+const { Connection, iProd } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const prod = new iProd(connection);
+
+prod.getInstalledProducts((error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log(output);
+});
+```
 
 ## iQsh
 
