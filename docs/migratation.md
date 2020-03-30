@@ -1,6 +1,6 @@
 # Migrating from itoolkit v0 to v1
 
-If you upgrading an existing application its a great idea to have good test coverage before upgrading.
+If you are upgrading an existing application its a great idea to have good test coverage before upgrading.
 
 Most applications applications using a version < 1.0.0 should continue to work but it is still highly recommended to test your application first.
 
