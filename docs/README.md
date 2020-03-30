@@ -22,8 +22,8 @@
 - [Class ProgramCall](#Class-ProgramCall)
   - [Example](#Example-1)
   - [Constructor: ProgramCall(program[, options])](#Constructor-ProgramCallprogram-options)
-  - [ProgramCall.addParam(value, [options])](#ProgramCalladdParamvalue-options)
-  - [ProgramCall.addReturn(value, type[, options])](#ProgramCalladdReturnvalue-type-options)
+  - [ProgramCall.addParam(parameter)](#ProgramCalladdParamparameter)
+  - [ProgramCall.addReturn(data)](#ProgramCalladdReturndata)
   - [ProgramCall.toXML()](#ProgramCalltoXML)
 - [Deprecated Classes and Functions](#Deprecated-Classes-and-Functions)
   - [iConn](#iConn)
@@ -529,40 +529,73 @@ For calling system programs it is recommended to review the [API manual](https:/
 const { Connection, ProgramCall } = require('itoolkit');
 const { parseString } = require('xml2js');
 
-
-const connection = new Connection({
+const conn = new Connection({
   transport: 'ssh',
   transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
 });
 
-const output = [
-  ['0', '10i0'],
-  ['0', '10i0'],
-  ['', '10A'],
-  ['', '1A'],
-  ['', '1A'],
-  ['0', '10i0'],
-  ['0', '10i0'],
-];
+const receiver = {
+  name: 'receiver',
+  type: 'ds',
+  io: 'out',
+  len: 'rec1',
+  fields: [
+    { name: 'bytes_returned', type: '10i0', value: '0' },
+    { name: 'bytes_available', type: '10i0', value: '0' },
+    { name: 'object_name', type: '10A', value: '' },
+    { name: 'object_library_name', type: '10A', value: '' },
+    { name: 'object_type', type: '10A', value: '' },
+    { name: 'return_library', type: '10A', value: '0' },
+    { name: 'storage_pool_number', type: '10i0', value: '0' },
+    { name: 'object_owner', type: '10A', value: '' },
+    { name: 'object_domain', type: '2A', value: '' },
+    { name: 'creation_datetime', type: '13A', value: '' },
+    { name: 'object_change_datetime', type: '13A', value: '' },
+  ],
+};
 
-const errno = [
-  ['0', '10i0'],
-  ['0', '10i0', { setlen: 'rec2' }],
-  ['', '7A'],
-  ['', '1A'],
-];
+const errno = {
+  name: 'error_code',
+  type: 'ds',
+  io: 'both',
+  len: 'rec2',
+  fields: [
+    {
+      name: 'bytes_provided',
+      type: '10i0',
+      value: 0,
+      setlen: 'rec2',
+    },
+    { name: 'bytes_available', type: '10i0', value: 0 },
+    { name: 'msgid', type: '7A', value: '' },
+    { type: '1A', value: '' },
+  ],
+};
 
-const program = new ProgramCall('QWCRSVAL', { lib: 'QSYS' });
+const objectAndLibrary = {
+  type: 'ds',
+  fields: [
+    { name: 'object', type: '10A', value: 'QCSRC' },
+    { name: 'lib', type: '10A', value: '*LIBL' },
+  ],
+};
 
-program.addParam(output, { io: 'out', len: 'rec1' });
-program.addParam('0', '10i0', { setlen: 'rec1' });
-program.addParam('1', '10i0');
-program.addParam('QCCSID', '10A');
-program.addParam(errno, { io: 'both', len: 'rec2' });
+const program = new ProgramCall('QUSROBJD', { lib: 'QSYS' });
+program.addParam(receiver);
+program.addParam({
+  name: 'length_of_receiver',
+  type: '10i0',
+  setlen: 'rec1',
+  value: '0',
+});
+program.addParam({ name: 'format_name', type: '8A', value: 'OBJD0100' });
+program.addParam(objectAndLibrary);
+program.addParam({ name: 'object_type', type: '10A', value: '*FILE' });
+program.addParam(errno);
 
-connection.add(program);
+conn.add(program);
 
-connection.run((error, xmlOutput) => {
+conn.run((error, xmlOutput) => {
   if (error) {
     throw error;
   }
@@ -601,39 +634,25 @@ Creates a new ProgramCall object,
 `<object>` a ProgramCall object.
 
 
-## ProgramCall.addParam(value, [options])
+## ProgramCall.addParam(parameter)
 
 **Description:**
 
 Add a new parameter element to the ProgramCall.
 
-**Syntax 1:**
+**Syntax:**
 
-addParam(data, type[,options])
-
-**Syntax 2:**
-
-addParam(data, [,options])
+addParam(parameter)
 
 **Parameters:**
 
-- **value** `<string> | <array>` The parameter element value.
-
-  If the parameter is a data structure, then use syntax 2 where data is an 2D `<array>`.
-
-  Each element of the array can have: `[data, type, options]`.
-
-  Otherwise use syntax 1 where data is the value of the parameter as a `<string>`.
-  
-- **type** `<string>` The parameter data type.
-
-- **[options]** `<object>` additional configuration for the parameter.<br>Refer to the [param, ds, and data tag](http://youngiprofessionals.com/wiki/index.php/XMLSERVICE/XMLSERVICEQuick) for available options.
+- **parameter** `<object>` the parameter.
 
 **Example:**
 
 Refer to the [ProgramCall](#Example-1) example.
 
-## ProgramCall.addReturn(value, type[, options])
+## ProgramCall.addReturn(data)
 
 **Description:**
 
@@ -645,15 +664,11 @@ This should only be used when calling service programs.
 
 **Parameters:**
 
-- **value** `<string> | <array>` The parameter element value. If the parameter is a data structure, then value is a 2D array of values.
-  
-- **type** `<string>` The parameter data type.<br>Refer to the [data tag](http://youngiprofessionals.com/wiki/index.php/XMLSERVICE/XMLSERVICEQuick) for more type details.
-
-- **[options]** `<object>` additional configuration for the parameter.
+- **data** `<object>` the service program return data.
 
 **Syntax:**
 
-addReturn(value, type[, options])
+addReturn(data)
 
 **Example:**
 
@@ -669,10 +684,8 @@ const connection = new Connection({
 
 const program = new ProgramCall('ZZSRV6', { lib: 'XMLSERVICE', func: 'ZZVARY4' });
 
-const testName = 'Clark Jones';
-
-program.addParam(testName, '10A', { varying: '4' });
-program.addReturn('0', '20A', { varying: '4' });
+program.addParam({ type: '10A', varying: '4', value: 'Clark Jones' });
+program.addReturn({ type: '20A', varying: '4', value: '' });
 
 connection.add(program);
 
