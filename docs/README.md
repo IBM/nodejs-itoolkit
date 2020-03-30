@@ -49,13 +49,13 @@
   - [Toolkit.retrUserInfo(user, callback)](#ToolkitretrUserInfouser-callback)
   - [Toolkit.retrUserAuthToObj(path, callback)](#ToolkitretrUserAuthToObjpath-callback)
   - [Toolkit.addToLibraryList(library, callback)](#ToolkitaddToLibraryListlibrary-callback)
-  - [Toolkit.sendToDataQueue(name, library, data, callback)](#ToolkitsendToDataQueuename-library-data-callback)
-  - [Toolkit.receiveFromDataQueue(name, library, size, callback)](#ToolkitreceiveFromDataQueuename-library-size-callback)
-  - [Toolkit.clearDataQueue(name, library, callback)](#ToolkitclearDataQueuename-library-callback)
 - [Deprecated Classes and Functions](#Deprecated-Classes-and-Functions)
   - [iConn](#iConn)
   - [iCmd](#iCmd)
   - [iDataQueue](#iDataQueue)
+    - [iDataQueue.sendToDataQueue(name, library, data, callback)](#iDataQueuesendToDataQueuename-library-data-callback)
+    - [iDataQueue.receiveFromDataQueue(name, library, size, callback)](#iDataQueuereceiveFromDataQueuename-library-size-callback)
+    - [iDataQueue.clearDataQueue(name, library, callback)](#iDataQueueclearDataQueuename-library-callback)
   - [iNetwork](#iNetwork)
   - [iObj](#iObj)
   - [iPgm](#iPgm)
@@ -2246,144 +2246,6 @@ toolkit.addToLibraryList('QHTTPSVR', (error, output) => {
 
 ```
 
-## Toolkit.sendToDataQueue(name, library, data, callback)
-
-**Description:**
-
-Sends data to the specified data queue.
-
-**Syntax:**
-
-sendToDataQueue(name, library, data, callback)
-
-**Parameters:**
-
-- **name** `<string>` the data queue name. (10 characters max).
-
-- **library** `<string>` name of the library where the data queue is located (10 characters max). If it is blank then `*CURLIB` is used.
-
-- **data** `<string>` the new data to be sent to the data queue.
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is `<boolean> true` when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**IBM i API:**
-
-[QSNDDTAQ](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/qsnddtaq.htm)
-
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.sendToDataQueue('TESTQ', 'TEST', 'Hello World!', (error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log(output);
-});
-```
-
-## Toolkit.receiveFromDataQueue(name, library, size, callback)
-
-**Description:**
-
-Receives data from the specified data queue.
-
-**Syntax:**
-
-receiveFromDataQueue(name, library, size, callback)
-
-**Parameters:**
-
-- **name** `<string>` the data queue name. (10 characters max).
-
-- **library** `<string>` name of the library where the data queue is located (10 characters max). If it is blank then `*CURLIB` is used.
-
-- **size** `<number>` the length of the data to retrieve. The length must be greater than 0.
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is `<string>` output from the data queue when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**IBM i API:**
-
-[QRCVDTAQ](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/qrcvdtaq.htm)
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.receiveFromDataQueue('mydq', 'mylib', 20, (error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log(output);
-});
-```
-
-## Toolkit.clearDataQueue(name, library, callback)
-
-**Description:**
-
-Clear the data queue.
-
-**Syntax:**
-
-clearDataQueue(name, library, callback)
-
-**Parameters:**
-
-- **name** `<string>` the data queue name. (10 characters max).
-
-- **library** `<string>` name of the library where the data queue is located (10 characters max). If it is blank then `*CURLIB` is used.
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is `<boolean> true` when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**IBM i API:**
-
-[QCLRDTAQ](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/qclrdtaq.htm)
-
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.clearDataQueue('mydq', 'mylib', (error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log(output);
-});
-```
-
 # Deprecated Classes and Functions
 
 As of version 1.0.0 the following is deprecated:
@@ -2403,12 +2265,166 @@ The `iCmd` class is deprecated. Use the [CommandCall](#Class-CommandCall) class 
 
 ## iDataQueue
 
-The `iDataQueue` class is deprecated. Use the [Toolkit](#Class-Toolkit) class instead.
+### Constructor: iDataQueue(connection)
 
-From the Toolkit class you may access:
-- [sendToDataQueue](#ToolkitsendToDataQueuename-library-data-callback)
-- [receiveFromDataQueue](#ToolkitreceiveFromDataQueuename-library-size-callback)
-- [clearDataQueue](#ToolkitclearDataQueuename-library-callback)
+**Description:**
+
+Constructs a new iDataQueue object.
+
+**Parameters:**
+
+- **connection** `<object>` [Connection](#constructor-connectionoptions) object to run requests.
+
+**Example:**
+
+```js
+const { Connection, iDataQueue } = require("itoolkit");
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' }
+});
+
+const dq = new iDataQueue(connection);
+```
+
+### iDataQueue.sendToDataQueue(name, library, data, callback)
+
+**Description:**
+
+Sends data to the specified data queue.
+
+**Syntax:**
+
+sendToDataQueue(name, library, data, callback)
+
+**Parameters:**
+
+- **name** `<string>` the data queue name. (10 characters max).
+
+- **library** `<string>` name of the library where the data queue is located (10 characters max). If it is blank then `*CURLIB` is used.
+
+- **data** `<string>` the new data to be sent to the data queue.
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is `<boolean> true` when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**IBM i API:**
+
+[QSNDDTAQ](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/qsnddtaq.htm)
+
+
+**Example:**
+
+```js
+const { Connection, iDataQueue } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const dq = new iDataQueue(connection);
+
+toolkit.sendToDataQueue('TESTQ', 'TEST', 'Hello World!', (error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log(output);
+});
+```
+
+### iDataQueue.receiveFromDataQueue(name, library, size, callback)
+
+**Description:**
+
+Receives data from the specified data queue.
+
+**Syntax:**
+
+receiveFromDataQueue(name, library, size, callback)
+
+**Parameters:**
+
+- **name** `<string>` the data queue name. (10 characters max).
+
+- **library** `<string>` name of the library where the data queue is located (10 characters max). If it is blank then `*CURLIB` is used.
+
+- **size** `<number>` the length of the data to retrieve. The length must be greater than 0.
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is `<string>` output from the data queue when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**IBM i API:**
+
+[QRCVDTAQ](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/qrcvdtaq.htm)
+
+**Example:**
+
+```js
+const { Connection, iDataQueue } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const dq = new iDataQueue(connection);
+
+dq.receiveFromDataQueue('mydq', 'mylib', 20, (error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log(output);
+});
+```
+
+### iDataQueue.clearDataQueue(name, library, callback)
+
+**Description:**
+
+Clear the data queue.
+
+**Syntax:**
+
+clearDataQueue(name, library, callback)
+
+**Parameters:**
+
+- **name** `<string>` the data queue name. (10 characters max).
+
+- **library** `<string>` name of the library where the data queue is located (10 characters max). If it is blank then `*CURLIB` is used.
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is `<boolean> true` when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**IBM i API:**
+
+[QCLRDTAQ](https://www.ibm.com/support/knowledgecenter/ssw_ibm_i_74/apis/qclrdtaq.htm)
+
+
+**Example:**
+
+```js
+const { Connection, iDataQueue } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const dq = new Toolkit(connection);
+
+dq.clearDataQueue('mydq', 'mylib', (error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log(output);
+});
+```
 
 ## iNetwork
 
