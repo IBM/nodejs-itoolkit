@@ -33,8 +33,6 @@
   - [Toolkit.getJobStatus(id, callback)](#ToolkitgetJobStatusid-callback)
   - [Toolkit.getJobInfo(name, user, number, callback)](#ToolkitgetJobInfoname-user-number-callback)
   - [Toolkit.getDataArea(library, area, length, callback)](#ToolkitgetDataArealibrary-area-length-callback)
-  - [Toolkit.getTCPIPAttr(callback)](#ToolkitgetTCPIPAttrcallback)
-  - [Toolkit.getNetInterfaceData(ip, callback)](#ToolkitgetNetInterfaceDataip-callback)
   - [Toolkit.retrUsrAuth(user, type, name, library, callback)](#ToolkitretrUsrAuthuser-type-name-library-callback)
   - [Toolkit.retrCmdInfo(command, [library,] callback)](#ToolkitretrCmdInfocommand-library-callback)
   - [Toolkit.retrPgmInfo(program, library, callback)](#ToolkitretrPgmInfoprogram-library-callback)
@@ -50,6 +48,8 @@
     - [iDataQueue.receiveFromDataQueue(name, library, size, callback)](#iDataQueuereceiveFromDataQueuename-library-size-callback)
     - [iDataQueue.clearDataQueue(name, library, callback)](#iDataQueueclearDataQueuename-library-callback)
   - [iNetwork](#iNetwork)
+    - [iNetwork.getTCPIPAttr(callback)](#iNetworkgetTCPIPAttrcallback)
+    - [iNetwork.getNetInterfaceData(ip, callback)](#iNetworkgetNetInterfaceDataip-callback)
   - [iObj](#iObj)
   - [iPgm](#iPgm)
   - [iProd](#iProd)
@@ -1124,173 +1124,6 @@ toolkit.getDataArea('mylibrary', 'mydataarea', 100, (error, output) => {
 
 
 
-## Toolkit.getTCPIPAttr(callback)
-
-**Description:**
-
-Retrieve TCP/IP Attributes.
-
-**Syntax:**
-
-getTCPIPAttr(callback)
-
-**Parameters:**
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**output**
-
-| Key                                         |
-| -----                                       |
-| TCP/IPv4_stack_status                       |
-| How_long_active                             |
-| When_last_started_-_date                    |
-| When_last_started_-_time                    |
-| When_last_ended_-_date                      |
-| When_last_ended_-_time                      |
-| Who_last_started_-_job_name                 |
-| Who_last_started_-_job_user_name            |
-| Who_last_started_-_job_number               |
-| Who_last_started_-_internal_job_identifier  |
-| Who_last_ended_-_job_name                   |
-| Who_last_ended_-_job_user_name              |
-| Who_last_ended_-_job_number                 |
-| Who_last_ended_-_internal_job_identifier    |
-| Offset_to_additional_information            |
-| Length_of_additional_information            |
-| Limited_mode                                |
-| Offset_to_list_of_Internet_addresses        |
-| Number_of_Internet_addresses                |
-| Entry_length_for_list_of_Internet_addresses |
-| DNS_protocol                                |
-| Retries                                     |
-| Time_interval                               |
-| Search_order                                |
-| Initial_domain_name_server                  |
-| DNS_listening_port                          |
-| Host_name                                   |
-| Domain_name                                 |
-| Reserved                                    |
-| Domain_search_list                          |
-
-**IBM i API:**
-
-[QTOCNETSTS/QtocRtvTCPA](https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_74/apis/qtocrtvtcpa.htm)
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.getTCPIPAttr((error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log((output));
-});
-```
-
-## Toolkit.getNetInterfaceData(ip, callback)
-
-**Description:**
-
-Retrieves detailed information about a specified IPv4 network interface.
-
-**Syntax:**
-
-getNetInterfaceData(ip, callback)
-
-**Parameters:**
-- **ip** `<string>` the IP address of the interface to be checked.
-
-- **callback** `<function>` to handle the output.
-  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
-  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs.<br>If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
-
-**output**
-
-| Key                                           |
-| -----                                         |
-| Internet_address                              |
-| Internet_address_binary                       |
-| Network_address                               |
-| Network_address_binary                        |
-| Line_description                              |
-| Interface_status                              |
-| Interface_type_of_service                     |
-| Interface_MTU                                 |
-| Interface_line_type                           |
-| Host_address                                  |
-| Host_address_binary                           |
-| Interface_subnet_mask                         |
-| Interface_subnet_mask_binary                  |
-| Directed_broadcast_address                    |
-| Directed_broadcast_address_binary             |
-| Change_date                                   |
-| Change_time                                   |
-| Associated_local_interface                    |
-| Associated_local_interface_binary             |
-| Change_status                                 |
-| Packet_rules                                  |
-| Automatic_start                               |
-| TRLAN_bit_sequencing                          |
-| Interface_type                                |
-| Proxy_ARP_allowed                             |
-| Proxy_ARP_enabled                             |
-| Configured_MTU                                |
-| Network_name                                  |
-| Interface_name                                |
-| Alias_name                                    |
-| Interface_description                         |
-| Offset_to_preferred_interface_list            |
-| Number_of_entries_in_preferred_interface_list |
-| Length_of_one_preferred_interface_list_entry  |
-| DHCP_created                                  |
-| DHCP_dynamic_DNS_updates                      |
-| DHCP_lease_expiration                         |
-| DHCP_lease_expiration_-_date                  |
-| DHCP_lease_expiration_-_time                  |
-| DHCP_lease_obtained                           |
-| DHCP_lease_obtained_-_date                    |
-| DHCP_lease_obtained_-_time                    |
-| Use_DHCP_unique_identifier                    |
-| DHCP_server_IP_address                        |
-| Preferred_interface_Internet_address          |
-| Preferred_interface_Internet_address_binary   |
-
-**IBM i API:**
-
-[QTOCNETSTS/QtocRtvNetIfcDta](https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_74/apis/qtocrtvnetifcdta.htm)
-
-**Example:**
-
-```js
-const { Connection, Toolkit } = require('itoolkit');
-
-const connection = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
-});
-
-const toolkit = new Toolkit(connection);
-
-toolkit.getNetInterfaceData('127.0.0.1', (error, output) => {
-  if (error) {
-    throw error;
-  }
-  console.log(output);
-});
-```
-
 ## Toolkit.retrUsrAuth(user, type, name, library, callback)
 
 **Description:**
@@ -2035,11 +1868,172 @@ dq.clearDataQueue('mydq', 'mylib', (error, output) => {
 
 ## iNetwork
 
-The `iNetwork` class is deprecated. Use the [Toolkit](#Class-Toolkit) class instead.
+### iNetwork.getTCPIPAttr(callback)
 
-From the Toolkit class you may access:
-- [getTCPIPAttr](#ToolkitgetTCPIPAttrcallback)
-- [getNetInterfaceData](#ToolkitgetNetInterfaceDataip-callback)
+**Description:**
+
+Retrieve TCP/IP Attributes.
+
+**Syntax:**
+
+getTCPIPAttr(callback)
+
+**Parameters:**
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**output**
+
+| Key                                         |
+| -----                                       |
+| TCP/IPv4_stack_status                       |
+| How_long_active                             |
+| When_last_started_-_date                    |
+| When_last_started_-_time                    |
+| When_last_ended_-_date                      |
+| When_last_ended_-_time                      |
+| Who_last_started_-_job_name                 |
+| Who_last_started_-_job_user_name            |
+| Who_last_started_-_job_number               |
+| Who_last_started_-_internal_job_identifier  |
+| Who_last_ended_-_job_name                   |
+| Who_last_ended_-_job_user_name              |
+| Who_last_ended_-_job_number                 |
+| Who_last_ended_-_internal_job_identifier    |
+| Offset_to_additional_information            |
+| Length_of_additional_information            |
+| Limited_mode                                |
+| Offset_to_list_of_Internet_addresses        |
+| Number_of_Internet_addresses                |
+| Entry_length_for_list_of_Internet_addresses |
+| DNS_protocol                                |
+| Retries                                     |
+| Time_interval                               |
+| Search_order                                |
+| Initial_domain_name_server                  |
+| DNS_listening_port                          |
+| Host_name                                   |
+| Domain_name                                 |
+| Reserved                                    |
+| Domain_search_list                          |
+
+**IBM i API:**
+
+[QTOCNETSTS/QtocRtvTCPA](https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_74/apis/qtocrtvtcpa.htm)
+
+**Example:**
+
+```js
+const { Connection, iNetwork } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const net = new iNetwork(connection);
+
+net.getTCPIPAttr((error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log((output));
+});
+```
+
+### iNetwork.getNetInterfaceData(ip, callback)
+
+**Description:**
+
+Retrieves detailed information about a specified IPv4 network interface.
+
+**Syntax:**
+
+getNetInterfaceData(ip, callback)
+
+**Parameters:**
+- **ip** `<string>` the IP address of the interface to be checked.
+
+- **callback** `<function>` to handle the output.
+  - The first parameter added to the callback is `error`. This is an `Error` object when a occurs or `null`.
+  - The second parameter added to the callback is `output`. This is an `<object>` when successful or `null` when transport error occurs. If there was a problem parsing the xmlOutput this will resolve to `<string>` raw xml output from XMLSERVICE.
+
+**output**
+
+| Key                                           |
+| -----                                         |
+| Internet_address                              |
+| Internet_address_binary                       |
+| Network_address                               |
+| Network_address_binary                        |
+| Line_description                              |
+| Interface_status                              |
+| Interface_type_of_service                     |
+| Interface_MTU                                 |
+| Interface_line_type                           |
+| Host_address                                  |
+| Host_address_binary                           |
+| Interface_subnet_mask                         |
+| Interface_subnet_mask_binary                  |
+| Directed_broadcast_address                    |
+| Directed_broadcast_address_binary             |
+| Change_date                                   |
+| Change_time                                   |
+| Associated_local_interface                    |
+| Associated_local_interface_binary             |
+| Change_status                                 |
+| Packet_rules                                  |
+| Automatic_start                               |
+| TRLAN_bit_sequencing                          |
+| Interface_type                                |
+| Proxy_ARP_allowed                             |
+| Proxy_ARP_enabled                             |
+| Configured_MTU                                |
+| Network_name                                  |
+| Interface_name                                |
+| Alias_name                                    |
+| Interface_description                         |
+| Offset_to_preferred_interface_list            |
+| Number_of_entries_in_preferred_interface_list |
+| Length_of_one_preferred_interface_list_entry  |
+| DHCP_created                                  |
+| DHCP_dynamic_DNS_updates                      |
+| DHCP_lease_expiration                         |
+| DHCP_lease_expiration_-_date                  |
+| DHCP_lease_expiration_-_time                  |
+| DHCP_lease_obtained                           |
+| DHCP_lease_obtained_-_date                    |
+| DHCP_lease_obtained_-_time                    |
+| Use_DHCP_unique_identifier                    |
+| DHCP_server_IP_address                        |
+| Preferred_interface_Internet_address          |
+| Preferred_interface_Internet_address_binary   |
+
+**IBM i API:**
+
+[QTOCNETSTS/QtocRtvNetIfcDta](https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_74/apis/qtocrtvnetifcdta.htm)
+
+**Example:**
+
+```js
+const { Connection, iNetwork } = require('itoolkit');
+
+const connection = new Connection({
+  transport: 'ssh',
+  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' },
+});
+
+const net = new iNetwork(connection);
+
+net.getNetInterfaceData('127.0.0.1', (error, output) => {
+  if (error) {
+    throw error;
+  }
+  console.log(output);
+});
+```
 
 ## iObj
 
