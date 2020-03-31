@@ -139,7 +139,7 @@ describe('ProgramCall Class Unit Tests', () => {
       const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
       pgm.addParam({ value: '', type: '1A', by: 'val' });
-      pgm.addReturn('', '2A', 'output');
+      pgm.addReturn({ name: 'output', type: '2A', value: '' });
 
       const lookAtXML = pgm.toXML();
       expect(lookAtXML).to.match(/<parm .*by='val'.*>/);
@@ -156,7 +156,7 @@ describe('ProgramCall Class Unit Tests', () => {
       pgm.addParam({
         name: 'inds', type: 'ds', by: 'val', fields: params,
       });
-      pgm.addReturn('', '2A', { name: 'output' });
+      pgm.addReturn({ name: 'output', type: '2A', value: '' });
 
       const lookAtXML = pgm.toXML();
       expect(lookAtXML).to.match(/<parm .*by='val'.*>/);
@@ -168,7 +168,7 @@ describe('ProgramCall Class Unit Tests', () => {
       pgm.addParam({
         value: '', type: '1A', by: 'val', io: 'both',
       });
-      pgm.addReturn('', '2A', { name: 'output' });
+      pgm.addReturn({ name: 'output', type: '2A', value: '' });
 
       const lookAtXML = pgm.toXML();
       expect(lookAtXML).to.match(/<parm .*by='val'.*>/);
@@ -186,7 +186,7 @@ describe('ProgramCall Class Unit Tests', () => {
       pgm.addParam({
         name: 'inds', type: 'ds', by: 'val', io: 'both', fields: params,
       });
-      pgm.addReturn('', '2A', { name: 'output' });
+      pgm.addReturn({ name: 'output', type: '2A', value: '' });
 
       const lookAtXML = pgm.toXML();
       expect(lookAtXML).to.match(/<parm .*by='val'.*>/);
@@ -204,10 +204,30 @@ describe('ProgramCall Class Unit Tests', () => {
           error: 'fast',
         });
 
-      pgm.addReturn('0', '20A');
+      pgm.addReturn({ type: '20A', value: '0' });
 
       const expectedXML = '<pgm name=\'QTOCNETSTS\' lib=\'QSYS\' func=\'QtoRtvTCPA\' '
       + 'error=\'fast\'><return><data type=\'20A\'>0</data></return></pgm>';
+
+      expect(pgm.toXML()).to.equal(expectedXML);
+    });
+
+    it('appends return with ds to pgm xml', () => {
+      const pgm = new ProgramCall('TEST');
+
+      const ds = {
+        name: 'test_ds',
+        type: 'ds',
+        io: 'out',
+        fields: [
+          { type: '10i0', value: 0 },
+          { type: '10A', value: '' },
+        ],
+      };
+      pgm.addReturn(ds);
+
+      const expectedXML = "<pgm name='TEST' error='fast'><return><ds name='test_ds'>"
+      + "<data type='10i0'>0</data><data type='10A'></data></ds></return></pgm>";
 
       expect(pgm.toXML()).to.equal(expectedXML);
     });
