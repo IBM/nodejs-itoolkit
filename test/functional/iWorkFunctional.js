@@ -19,13 +19,11 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
-const { Toolkit, Connection } = require('../../lib/itoolkit');
+const { Connection, iWork } = require('../../lib/itoolkit');
 const { config, printConfig } = require('./config');
 const { checkObjectExists } = require('./checkObjectExists');
 
-const lib = 'NODETKTEST';
-
-describe('Toolkit Functional Tests', () => {
+describe('iWork Functional Tests', () => {
   before(() => {
     printConfig();
   });
@@ -34,9 +32,9 @@ describe('Toolkit Functional Tests', () => {
     it('returns the value of system variable', (done) => {
       const connection = new Connection(config);
 
-      const toolkit = new Toolkit(connection);
+      const work = new iWork(connection);
 
-      toolkit.getSysValue('QCENTURY', (error, output) => {
+      work.getSysValue('QCENTURY', (error, output) => {
         expect(error).to.equal(null);
         expect(output).to.be.a('string').and.to.equal('1');
         done();
@@ -45,13 +43,11 @@ describe('Toolkit Functional Tests', () => {
   });
 
   describe('getSysStatus', () => {
-    it('returns basic system status information about the signed-on users '
-             + 'and batch jobs',
-    (done) => {
+    it('returns basic system status information about the signed-on users and batch jobs', (done) => {
       const connection = new Connection(config);
-      const toolkit = new Toolkit(connection);
+      const work = new iWork(connection);
 
-      toolkit.getSysStatus((error, output) => {
+      work.getSysStatus((error, output) => {
         expect(error).to.equal(null);
         expect(output).to.be.an('Object');
         expect(output).to.have.a.property('Current_date_and_time');
@@ -76,75 +72,73 @@ describe('Toolkit Functional Tests', () => {
   });
 
   describe('getSysStatusExt', () => {
-    it('returns more detailed system status info',
-      (done) => {
-        const connection = new Connection(config);
+    it('returns more detailed system status info', (done) => {
+      const connection = new Connection(config);
 
-        const toolkit = new Toolkit(connection);
+      const work = new iWork(connection);
 
-        toolkit.getSysStatusExt((error, output) => {
-          expect(error).to.equal(null);
-          expect(output).to.be.an('Object');
-          expect(output).to.have.a.property('Current_date_and_time');
-          expect(output).to.have.a.property('System_name');
-          expect(output).to.have.a.property('Elapsed_time');
-          expect(output).to.have.a.property('Restricted_state_flag');
-          expect(output).to.have.a.property('%_processing_unit_used');
-          expect(output).to.have.a.property('Jobs_in_system');
-          expect(output).to.have.a.property('%_permanent_addresses');
-          expect(output).to.have.a.property('%_temporary_addresses');
-          expect(output).to.have.a.property('System_ASP');
-          expect(output).to.have.a.property('%_system_ASP_used');
-          expect(output).to.have.a.property('Total_auxiliary_storage');
-          expect(output).to.have.a.property('Current_unprotected_storage_used');
-          expect(output).to.have.a.property('Maximum_unprotected_storage_used');
-          expect(output).to.have.a.property('%_DB_capability');
-          expect(output).to.have.a.property('Main_storage_size');
-          expect(output).to.have.a.property('Number_of_partitions');
-          expect(output).to.have.a.property('Partition_identifier');
-          expect(output).to.have.a.property('Current_processing_capacity');
-          expect(output).to.have.a.property('Processor_sharing_attribute');
-          expect(output).to.have.a.property('Number_of_processors');
-          expect(output).to.have.a.property('Active_jobs_in_system');
-          expect(output).to.have.a.property('Active_threads_in_system');
-          expect(output).to.have.a.property('Maximum_jobs_in_system');
-          expect(output).to.have.a.property('%_temporary_256MB_segments_used');
-          expect(output).to.have.a.property('%_temporary_4GB_segments_used');
-          expect(output).to.have.a.property('%_permanent_256MB_segments_used');
-          expect(output).to.have.a.property('%_permanent_4GB_segments_used');
-          expect(output).to.have.a.property('%_current_interactive_performance');
-          expect(output).to.have.a.property('%_uncapped_CPU_capacity_used');
-          expect(output).to.have.a.property('%_shared_processor_pool_used');
-          expect(output).to.have.a.property('Main_storage_size_(long)');
-          done();
-        });
+      work.getSysStatusExt((error, output) => {
+        expect(error).to.equal(null);
+        expect(output).to.be.an('Object');
+        expect(output).to.have.a.property('Current_date_and_time');
+        expect(output).to.have.a.property('System_name');
+        expect(output).to.have.a.property('Elapsed_time');
+        expect(output).to.have.a.property('Restricted_state_flag');
+        expect(output).to.have.a.property('%_processing_unit_used');
+        expect(output).to.have.a.property('Jobs_in_system');
+        expect(output).to.have.a.property('%_permanent_addresses');
+        expect(output).to.have.a.property('%_temporary_addresses');
+        expect(output).to.have.a.property('System_ASP');
+        expect(output).to.have.a.property('%_system_ASP_used');
+        expect(output).to.have.a.property('Total_auxiliary_storage');
+        expect(output).to.have.a.property('Current_unprotected_storage_used');
+        expect(output).to.have.a.property('Maximum_unprotected_storage_used');
+        expect(output).to.have.a.property('%_DB_capability');
+        expect(output).to.have.a.property('Main_storage_size');
+        expect(output).to.have.a.property('Number_of_partitions');
+        expect(output).to.have.a.property('Partition_identifier');
+        expect(output).to.have.a.property('Current_processing_capacity');
+        expect(output).to.have.a.property('Processor_sharing_attribute');
+        expect(output).to.have.a.property('Number_of_processors');
+        expect(output).to.have.a.property('Active_jobs_in_system');
+        expect(output).to.have.a.property('Active_threads_in_system');
+        expect(output).to.have.a.property('Maximum_jobs_in_system');
+        expect(output).to.have.a.property('%_temporary_256MB_segments_used');
+        expect(output).to.have.a.property('%_temporary_4GB_segments_used');
+        expect(output).to.have.a.property('%_permanent_256MB_segments_used');
+        expect(output).to.have.a.property('%_permanent_4GB_segments_used');
+        expect(output).to.have.a.property('%_current_interactive_performance');
+        expect(output).to.have.a.property('%_uncapped_CPU_capacity_used');
+        expect(output).to.have.a.property('%_shared_processor_pool_used');
+        expect(output).to.have.a.property('Main_storage_size_(long)');
+        done();
       });
+    });
   });
 
   describe('getJobStatus', () => {
-    it('returns status of specified job',
-      (done) => {
-        const connection = new Connection(config);
+    it('returns status of specified job', (done) => {
+      const connection = new Connection(config);
 
-        const toolkit = new Toolkit(connection);
+      const work = new iWork(connection);
 
-        toolkit.getJobStatus('000000', (error, output) => {
-          expect(error).to.equal(null);
-          expect(output).to.be.an('Object');
-          expect(output).to.have.a.property('Job_status');
-          expect(output).to.have.a.property('Fully_qualified_job_name');
-          done();
-        });
+      work.getJobStatus('000000', (error, output) => {
+        expect(error).to.equal(null);
+        expect(output).to.be.an('Object');
+        expect(output).to.have.a.property('Job_status');
+        expect(output).to.have.a.property('Fully_qualified_job_name');
+        done();
       });
+    });
   });
 
   describe('getJobInfo', () => {
     it('returns info on specfed job', (done) => {
       const connection = new Connection(config);
 
-      const toolkit = new Toolkit(connection);
+      const work = new iWork(connection);
 
-      toolkit.getJobInfo('SCPF', 'QSYS', '000000', (error, output) => {
+      work.getJobInfo('SCPF', 'QSYS', '000000', (error, output) => {
         expect(error).to.equal(null);
         expect(output).to.be.an('Object');
         expect(output).to.have.a.property('Job_name');
@@ -197,9 +191,9 @@ describe('Toolkit Functional Tests', () => {
     it('returns contents of a data area', (done) => {
       const connection = new Connection(config);
 
-      const toolkit = new Toolkit(connection);
+      const work = new iWork(connection);
 
-      toolkit.getDataArea('NODETKTEST', 'TESTDA', 20, (error, output) => {
+      work.getDataArea('NODETKTEST', 'TESTDA', 20, (error, output) => {
         expect(error).to.equal(null);
         expect(output).to.be.an('Object');
         expect(output).to.have.a.property('Type_of_value_returned');
