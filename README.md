@@ -18,7 +18,6 @@
     - [Example](#example)
   - [CommandCall](#commandcall)
     - [Example](#example-1)
-  - [Utility Toolkit Functions](#utility-toolkit-functions)
 - [Documentation](#documentation)
 - [Testing](#testing)
 - [Contributing](#contributing)
@@ -231,36 +230,6 @@ conn.run((error, xmlOutput) => {
     }
     console.log(JSON.stringify(result));
   });
-});
-```
-
-
-## Utility Toolkit Functions
-
-Aside from the main classes this toolkit also provides helper functions to access:
-- Data Queues
-- User Space objects
-- Object info
-- Product info
-- Network info
-
-```js
-const {
-  Connection, Toolkit,
-} = require('itoolkit');
-
-const conn = new Connection({
-  transport: 'ssh',
-  transportOptions: { host: 'myhost', username: 'myuser', password: 'mypassword' }
-});
-
-const toolkit = new Toolkit(conn);
-
-toolkit.getSysValue('QCCSID', (error, value) => {
-  if (error) {
-    throw error;
-  }
-  console.log(`QCCSID = ${value}`);
 });
 ```
 
