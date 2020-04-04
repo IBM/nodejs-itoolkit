@@ -192,6 +192,50 @@ describe('ProgramCall Class Unit Tests', () => {
       expect(lookAtXML).to.match(/<parm .*by='val'.*>/);
       expect(lookAtXML).to.match(/<parm .*io='both'.*>/);
     });
+
+    it('add nested data structure parameter', () => {
+      const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB' });
+
+      const nestedDs = {
+        name: 'outer-ds',
+        type: 'ds',
+        fields: [
+          {
+            name: 'sub-ds1',
+            type: 'ds',
+            fields: [
+              { type: '10i0', value: 0 },
+              { type: '4A', value: 'test' },
+            ],
+          },
+          {
+            name: 'sub-ds2',
+            type: 'ds',
+            fields: [
+              { type: '20i0', value: 1 },
+              { type: '6A', value: 'test 2' },
+            ],
+          },
+        ],
+      };
+
+      pgm.addParam(nestedDs);
+      const expectedXML = '<pgm name=\'MYPGM\' lib=\'MYLIB\' error=\'fast\'>'
+                             + '<parm name=\'outer-ds\'>'
+                              + '<ds name=\'outer-ds\'>'
+                              + '<ds name=\'sub-ds1\'>'
+                              + '<data type=\'10i0\'>0</data>'
+                              + '<data type=\'4A\'>test</data>'
+                              + '</ds>'
+                              + '<ds name=\'sub-ds2\'>'
+                              + '<data type=\'20i0\'>1</data>'
+                              + '<data type=\'6A\'>test 2</data>'
+                              + '</ds>'
+                              + '</ds>'
+                             + '</parm>'
+                           + '</pgm>';
+      expect(pgm.toXML()).to.equal(expectedXML);
+    });
   });
 
 
