@@ -33,3 +33,11 @@ jobs:
         TKUSER: ${{ secrets.IBMI_USERNAME }}
         TKPASS: ${{ secrets.IBMI_PASSWORD }}
 
+  eslint:
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: hallee/eslint-action@master
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
