@@ -86,17 +86,13 @@ describe('iObj Functional Tests', () => {
         expect(output).to.have.a.property('Adopted_data_update');
         expect(output).to.have.a.property('Adopted_data_delete');
         expect(output).to.have.a.property('Adopted_data_execute');
-        expect(output).to.have.a.property('Reserved');
         expect(output).to.have.a.property('Adopted_object_alter');
         expect(output).to.have.a.property('Adopted_object_reference');
-        expect(output).to.have.a.property('Reserved');
         expect(output).to.have.a.property('Data_execute');
-        expect(output).to.have.a.property('Reserved');
         expect(output).to.have.a.property('Object_alter');
         expect(output).to.have.a.property('Object_reference');
         expect(output).to.have.a.property('ASP_device_name_of_library');
         expect(output).to.have.a.property('ASP_device_name_of_object');
-        expect(output).to.have.a.property('Reserved');
         expect(output).to.have.a.property('Offset_to_group_information_table');
         expect(output).to.have.a.property('Number_of_group_table_entries_returned');
         done();
@@ -182,7 +178,6 @@ describe('iObj Functional Tests', () => {
         expect(output).to.have.a.property('Text_description');
         expect(output).to.have.a.property('Type_of_program');
         expect(output).to.have.a.property('Teraspace_storage-enabled_program');
-        expect(output).to.have.a.property('Reserved');
         expect(output).to.have.a.property('Minimum_number_of_parameters');
         expect(output).to.have.a.property('Maximum_number_of_parameters');
         expect(output).to.have.a.property('Program_size');
@@ -200,13 +195,11 @@ describe('iObj Functional Tests', () => {
         expect(output).to.have.a.property('Program_domain');
         expect(output).to.have.a.property('Conversion_required');
         expect(output).to.have.a.property('Conversion_details');
-        expect(output).to.have.a.property('Reserved');
         expect(output).to.have.a.property('Optimization');
         expect(output).to.have.a.property('Paging_pool');
         expect(output).to.have.a.property('Update_program_automatic_storage_area_(PASA)');
         expect(output).to.have.a.property('Clear_program_automatic_storage_area_(PASA)');
         expect(output).to.have.a.property('Paging_amount');
-        expect(output).to.have.a.property('Reserved');
         expect(output).to.have.a.property('Program_entry_procedure_module');
         expect(output).to.have.a.property('Program_entry_procedure_module_library');
         expect(output).to.have.a.property('Activation_group_attribute');
@@ -269,7 +262,6 @@ describe('iObj Functional Tests', () => {
         expect(output).to.have.a.property('Teraspace_storage_enabled_modules');
         expect(output).to.have.a.property('Storage_model');
         expect(output).to.have.a.property('Uses_argument_optimization_(ARGOPT)');
-        expect(output).to.have.a.property('Reserved_\'00\'X');
         expect(output).to.have.a.property('Service_program_state');
         expect(output).to.have.a.property('Service_program_domain');
         expect(output).to.have.a.property('Associated_space_size');
@@ -282,7 +274,6 @@ describe('iObj Functional Tests', () => {
         expect(output).to.have.a.property('Conversion_required');
         expect(output).to.have.a.property('All_creation_data');
         expect(output).to.have.a.property('Conversion_details');
-        expect(output).to.have.a.property('Reserved');
         expect(output).to.have.a.property('Paging_pool');
         expect(output).to.have.a.property('Paging_amount');
         done();
@@ -300,12 +291,10 @@ describe('iObj Functional Tests', () => {
         expect(output).to.be.an('Object');
         expect(output).to.have.a.property('User_profile_name');
         expect(output).to.have.a.property('Previous_sign-on_date_and_time');
-        expect(output).to.have.a.property('Reserved');
         expect(output).to.have.a.property('Sign-on_attempts_not_valid');
         expect(output).to.have.a.property('Status');
         expect(output).to.have.a.property('Password_change_date');
         expect(output).to.have.a.property('No_password_indicator');
-        expect(output).to.have.a.property('Reserved');
         expect(output).to.have.a.property('Password_expiration_interval');
         expect(output).to.have.a.property('Date_password_expires');
         expect(output).to.have.a.property('Days_until_password_expires');
@@ -334,7 +323,6 @@ describe('iObj Functional Tests', () => {
         expect(output).to.have.a.property('Object_existence');
         expect(output).to.have.a.property('Object_alter');
         expect(output).to.have.a.property('Object_reference');
-        expect(output).to.have.a.property('Reserved');
         expect(output).to.have.a.property('Object_operational');
         expect(output).to.have.a.property('Data_read');
         expect(output).to.have.a.property('Data_add');

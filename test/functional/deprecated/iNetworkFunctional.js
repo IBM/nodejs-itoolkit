@@ -92,7 +92,6 @@ describe('iNetwork Functional Tests', () => {
         expect(output).to.have.a.property('DNS_listening_port');
         expect(output).to.have.a.property('Host_name');
         expect(output).to.have.a.property('Domain_name');
-        expect(output).to.have.a.property('Reserved');
         expect(output).to.have.a.property('Domain_search_list');
         done();
       });
