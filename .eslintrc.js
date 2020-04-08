@@ -8,6 +8,6 @@ module.exports =  {
         'no-console': 'off', // allow console
         'import/no-extraneous-dependencies': ["error", {"optionalDependencies": true}], // Allow optional dep import
         // Warn unreoslved imports ie: idb-connector import will be unresolved when on non IBM i system.
-        'import/no-unresolved': ['warn', { commonjs: true, caseSensitive: true }],
+        'import/no-unresolved': ['off', { commonjs: true }],
       },
 };
