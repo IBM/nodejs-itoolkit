@@ -1,6 +1,6 @@
 {
   "name": "itoolkit",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Wrapper over XMLSERVICE for access to all things IBM i",
   "main": "lib/itoolkit.js",
   "directories": {
