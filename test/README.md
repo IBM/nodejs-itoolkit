@@ -1,93 +1,44 @@
 # Node.js Toolkit Tests
 
-Ensure dependencies are installed
+Ensure dependencies are installed by running `npm install` from the project root.
 
-From the root of the project run: `npm install`
+## Running Tests
 
-***NOTE***
+- Run unit tests with `npm test`.
 
-Some tests require creating libraries, objects, tables, etc. 
-
-A before hook is setup to check for theses objects and create if needed.
-
-These hooks are ran with `idb-pconnector` which requires to be run on IBM i.
-
-In any case, the functional tests test for both transports Db2 and REST.
-
-Using Db2 transport requires `idb-connector` which only runs on IBM i systems.
-
-Tests using these hooks will fail on non IBM i systems.
-
-# Running Tests
-
-From the project root
-
-`npm test test/foo`
-
-where foo is the name of subdir such as `unit` or or individual test file.
+- Run functional tests with `npm run test-integration`.
 
 ***NOTE***
 
-If you experience timeout issue with network calls add
+Integration tests require additional setup and configuration. Some tests require objects to preexist on the IBM i. The test case will check if the object exists and log instructions if the object is not found.
 
-`"test": "./node_modules/mocha/bin/mocha" --timeout Xs `
-
-within `package.json` file, where X is the number of seconds before timeout
-
-# Setup Rest interface
+## Setup Rest interface
 - view the [README](../README.md#rest)
 
-# Setup SSH interface
+## Setup SSH interface
 - view the [README](../README.md#ssh)
 
-# Configuring Tests
-Each functional test contains an config object that is used to create connections
+## Configuring Tests
 
-It is recommend to setup environment variables for these configurations
+Functional tests can be configured using the following enviornment variables.
 
-Instead of hard coding credentials with the test file.
+- `TKTRANSPORT` - The transport to use. Defaults to use `ssh`.
 
-you can set environment varaibales with `export KEY='value'`
+- `TKVERBOSE`- Enables verbose output.
 
+- `TKHOST` - The hostname. Defaults to `localhost`.
 
-For all tests
----
-- verbose `TKVERBOSE` enables verbose mode
+- `TKUSER` - The user to connect as.
 
-For idb-connector Tests
----
+- `TKPASS` - The user's password.
 
-- user `TKUSER` defaults to ''
+- `TKDB` - The database to connect to. Defaults to `*LOCAL`.
 
-- password `TKPASS` defaults to ''
+- `TKPORT` - The port to use to connect.
 
-- database `TKDB` defaults to `*LOCAL`
+- `TKPATH` - The path to xmlcgi. Defaults to `/cgi-bin/xmlcgi.pgm`
 
+- `TKPK` - The path to a private key file when using `ssh` transport.
 
-For Rest Tests
----
-- host `TKHOST` defaults to `localhost`
-
-- user `TKUSER` defaults to ''
-
-- password `TKPASS` defaults to ''
-
-- port `TKPORT`
-
-- path `TKPATH` defaults to `/cgi-bin/xmlcgi.pgm`
-
-For SSH Tests
----
-
-- host `TKHOST` defaults to `localhost`
-
-- user `TKUSER` defaults to ''
-
-- password `TKPASS` defaults to ''
-
-- port `TKPORT`
-
-- privateKey `TKPK`
-
-- passphrase `TKPHRASE`
+- `TKPHRASE` - The passphrase to decrypt the private key.
 
