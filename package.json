@@ -10,6 +10,7 @@
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha --recursive test/unit",
     "test-integration": "./node_modules/mocha/bin/mocha --timeout 5s test/functional/*.js",
+    "lint": "./node_modules/eslint/bin/eslint.js lib/ test/",
     "release": "standard-version"
   },
   "repository": {

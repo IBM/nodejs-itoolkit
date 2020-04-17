@@ -34,8 +34,8 @@ describe('DataQueue Functional Tests', () => {
     checkObjectExists(config, dqName, '*DTAQ', (error) => {
       if (error) { throw error; }
 
-      checkObjectExists(config, dqName2, '*DTAQ', (error) => {
-        if (error) { throw error; }
+      checkObjectExists(config, dqName2, '*DTAQ', (error2) => {
+        if (error2) { throw error2; }
         done();
       });
     });

@@ -130,7 +130,6 @@ describe('iProd Functional Tests', () => {
   // REST transport currently failing with 414 URI Too Long response code
   // The requested URL's length exceeds the capacity limit for this server
   describe('getInstalledProducts', () => {
-    // eslint-disable-next-line func-names
     it('returns info for installed products', (done) => {
       const connection = new iConn(database, username, password, restOptions);
 
