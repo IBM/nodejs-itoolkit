@@ -65,7 +65,6 @@ describe('iProd Functional Tests', () => {
         expect(ptf).to.have.a.property('Server_IPL_required');
         expect(ptf).to.have.a.property('Creation_date_and_time');
         expect(ptf).to.have.a.property('Technology_refresh_PTF');
-        expect(ptf).to.have.a.property('Reserved');
         done();
       });
     });
@@ -80,7 +79,6 @@ describe('iProd Functional Tests', () => {
       prod.getProductInfo('5770DG1', (error, product) => {
         expect(error).to.equal(null);
         expect(product).to.be.an('Object');
-        expect(product).to.have.a.property('Reserved');
         expect(product).to.have.a.property('Product_ID');
         expect(product).to.have.a.property('Release_level');
         expect(product).to.have.a.property('Product_option');

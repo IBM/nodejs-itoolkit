@@ -40,6 +40,17 @@ describe('iWork Functional Tests', () => {
         done();
       });
     });
+
+    it('returns an error when the specified system value is invalid', (done) => {
+      const connection = new Connection(config);
+
+      const work = new iWork(connection);
+
+      work.getSysValue('invalid', (error) => {
+        expect(error).to.be.a('error');
+        done();
+      });
+    });
   });
 
   describe('getSysStatus', () => {
