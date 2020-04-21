@@ -169,6 +169,8 @@ function checkObjectExists(config, name, type, callback) {
     checkObjectExistsODBC(config.transportOptions, object, callback);
   } else if (config.transport === 'ssh') {
     checkObjectExistsSSH(config.transportOptions, object, callback);
+  } else { // we cannot check object existence using the rest transport
+    callback(null);
   }
 }
 
