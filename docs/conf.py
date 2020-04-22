@@ -37,6 +37,7 @@ with open('../package.json', 'r') as read_file:
 # ones.
 extensions = [ 
   'sphinx_js',
+  'recommonmark',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -49,6 +50,9 @@ master_doc = 'index'
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+
+# The suffix of source filenames.
+source_suffix = ['.rst', '.md']
 
 # -- Options for HTML output -------------------------------------------------
 

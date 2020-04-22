@@ -4,7 +4,7 @@ If you are upgrading an existing application its a great idea to have good test 
 
 Most applications applications using a version < 1.0.0 should continue to work but it's still highly recommended to test your application first.
 
-## :rotating_light: BREAKING CHANGES :rotating_light:
+## 🚨 BREAKING CHANGES 🚨
 
 ### `iConn.run()` no longer supports sync mode
 Sync mode did not work properly to begin with see ([#32](https://github.com/IBM/nodejs-itoolkit/issues/32)).
