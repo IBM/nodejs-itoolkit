@@ -2,6 +2,7 @@
 
 #### The toolkit is a Node.js wrapper over the XMLSERVICE open source project from IBM. 
 
+![Supported Node Versions](https://img.shields.io/node/v-lts/itoolkit)
 [![NPM](https://nodei.co/npm/itoolkit.png?downloads=true&downloadRank=true)](https://nodei.co/npm/itoolkit/)
 
 # Installation  
