@@ -19,7 +19,7 @@
 # Installation
 
 ```sh
-    $ npm install itoolkit
+$ npm install itoolkit
 ```
 
 # Features
