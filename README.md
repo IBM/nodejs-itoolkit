@@ -2,6 +2,7 @@
 
 [![NPM](https://nodei.co/npm/itoolkit.png?downloads=true&downloadRank=true)](https://nodei.co/npm/itoolkit/)
 
+[![Documentation Status](https://readthedocs.org/projects/nodejs-itoolkit/badge/?version=latest)](https://nodejs-itoolkit.readthedocs.io/en/latest/?badge=latest)
 
 `itoolkit` is a Node.js interface to [XMLSERVICE](https://github.com/IBM/xmlservice) to access all things IBM i.
 
@@ -234,7 +235,7 @@ conn.run((error, xmlOutput) => {
 ```
 
 # Documentation
-Please read the [docs](docs/README.md).
+Please read the [docs](https://nodejs-itoolkit.readthedocs.io/en/latest/).
 
 # Testing
 Refer to the [README](test/README.md)
