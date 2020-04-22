@@ -38,6 +38,8 @@ Functional tests can be configured using the following enviornment variables.
 
 - `TKPATH` - The path to xmlcgi. Defaults to `/cgi-bin/xmlcgi.pgm`
 
+- `TKURL` - The url to the xmlcgi endpoint.
+
 - `TKPK` - The path to a private key file when using `ssh` transport.
 
 - `TKPHRASE` - The passphrase to decrypt the private key.
