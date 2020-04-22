@@ -30,14 +30,16 @@ if (config.transport !== 'idb' && config.transport !== 'rest') {
   throw new Error('Only idb and rest transports are available for deprecated tests');
 }
 
-const { database, username, password } = config.transportOptions;
+const {
+  database, username, password, host, port = 80, path,
+} = config.transportOptions;
 
 let restOptions = null;
 if (config.transport === 'rest') {
   restOptions = {
-    hodt: config.host,
-    port: config.port || 80,
-    path: config.path,
+    host,
+    port,
+    path,
   };
 }
 
