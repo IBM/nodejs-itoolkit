@@ -1,6 +1,7 @@
 # Node.js iToolkit <!-- omit in toc -->
 
 [![npm](https://img.shields.io/npm/v/itoolkit?logo=npm)](https://www.npmjs.com/package/itoolkit)
+![Supported Node Versions](https://img.shields.io/node/v-lts/itoolkit)
 [![ryver-chat](https://img.shields.io/badge/Ryver-Chat-blue)](https://ibmioss.ryver.com/index.html#forums/1000127)
 [![ryver-signup](https://img.shields.io/badge/Ryver-Signup-blue)](https://ibmioss.ryver.com/application/signup/members/9tJsXDG7_iSSi1Q)
 [![Documentation Status](https://readthedocs.org/projects/nodejs-itoolkit/badge/?version=latest)](https://nodejs-itoolkit.readthedocs.io/en/latest/?badge=latest)
