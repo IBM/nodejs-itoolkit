@@ -44,5 +44,8 @@
   "optionalDependencies": {
     "idb-connector": "^1.1.8",
     "idb-pconnector": "^1.0.2"
+  },
+  "engines": {
+    "node": ">= 8.0"
   }
 }
