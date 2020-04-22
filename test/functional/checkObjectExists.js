@@ -170,7 +170,7 @@ function checkObjectExists(config, name, type, callback) {
   } else if (config.transport === 'ssh') {
     checkObjectExistsSSH(config.transportOptions, object, callback);
   } else { // we cannot check object existence using the rest transport
-    callback(null);
+    callback(null, true);
   }
 }
 
