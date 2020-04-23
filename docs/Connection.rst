@@ -128,6 +128,6 @@ Creating a ``Connection`` using the ``REST`` tranport.
         database: '*LOCAL',
         username: 'myuser',
         password: 'mypass'
-        url: 'http://myhost:80/cgi-bin/xmlcgi.pgm',
+        url: 'http://myhost.example.com/cgi-bin/xmlcgi.pgm',
       }
    });
