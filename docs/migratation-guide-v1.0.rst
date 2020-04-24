@@ -74,32 +74,42 @@ Differences
    first
    callbacks <https://nodejs.org/api/errors.html#errors_error_first_callbacks>`__.
 
+Migrating from ``iConn`` to ``Connection``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 .. WARNING::
    Beware that the Connection and iConn classes differ in how they call the callbacks
    passed to their run methods. You cannot simply replace iConn with Connection without adjusting
    your callbacks. See the :ref:`iconn-to-connection-run` section.
 
-Migrating from ``iConn`` to ``Connection`` Constructor
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+When connecting using idb-connector, ``iConn`` takes 3 arguments: ``database``, ``username``, 
+and ``password``. These can be passed as attributes on the ``transportOptions`` attribute of the 
+object passed to ``Connection`` and specify the transport is ``idb``. eg.
 
 .. code:: js
 
-   // using idb transport
-
-   // const conn = new iConn("*LOCAL", "myuser", "mypassword");
+   // const conn = new iConn('*LOCAL', 'myuser', 'mypassword');
 
    const conn = new Connection({
      transport: 'idb',
+     returnError: false,
      transportOptions: { database: '*LOCAL', username: 'myuser', password: 'mypassword' }
    });
 
-   // using rest transport
+When connecting using rest, ``iConn`` takes 4 arguments: ``database``, ``username``, ``password``,
+and ``options``. The options object included ``host``, ``port``, and ``path`` to 
+generate the url string. Instead specify ``database``, ``username``, ``password``, and ``url`` 
+on the ``transportOptions`` attribute of the object passed to ``Connection`` and specify the 
+transport is ``rest``. eg.
+
+.. code:: js
 
    // const restConfig = { host: 'myhost.example.com', port: 80, path: '/cgi-bin/xmlcgi.pgm' }
    // const conn = new iConn('*LOCAL', 'myuser', 'mypassword', restConfig);
 
    const conn = new Connection({
      transport: 'rest',
+     returnError: false,
      transportOptions: {
        database: '*LOCAL',
        username: 'myuser',
