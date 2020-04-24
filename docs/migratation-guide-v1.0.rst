@@ -8,13 +8,11 @@ Most applications applications using a version < 1.0.0 should continue
 to work but it’s still highly recommended to test your application
 first.
 
+.. WARNING::
+   **BREAKING CHANGES**
+
 BREAKING CHANGES
 ================
-
-.. WARNING::
-   Beware that the Connection and iConn classes differ in how they call the callbacks
-   passed to their run methods. You cannot simply replace iConn with Connection without adjusting
-   your callbacks. See the :ref:`iconn-to-connection-run` section.
 
 ``iConn.run()`` no longer supports sync mode
 --------------------------------------------
@@ -76,6 +74,11 @@ Differences
    first
    callbacks <https://nodejs.org/api/errors.html#errors_error_first_callbacks>`__.
 
+.. WARNING::
+   Beware that the Connection and iConn classes differ in how they call the callbacks
+   passed to their run methods. You cannot simply replace iConn with Connection without adjusting
+   your callbacks. See the :ref:`iconn-to-connection-run` section.
+
 Migrating from ``iConn`` to ``Connection`` Constructor
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -109,9 +112,6 @@ Migrating from ``iConn`` to ``Connection`` Constructor
 
 Migrating from ``iConn.run()`` to ``Connection.run()``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-You should be able to figure out how to connect using Connection from the docs, however you may not
-realize that iConn -> Connection implies a change in behavior of the callbacks. Follow the steps 
-below to migrate from ``iConn.run()`` to ``Connection.run()``.
 
 1. Create an instance of Connection with ``returnError`` set to false.
    This is a compatabilty option to behave like ``iConn.run()`` and
