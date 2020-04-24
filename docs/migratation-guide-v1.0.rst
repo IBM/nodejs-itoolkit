@@ -15,7 +15,7 @@ BREAKING CHANGES
 ================
 
 Sync Mode Operations
----------------------
+--------------------
 
 ``iConn.run()`` no longer supports sync mode. Sync mode is not reccommended and since it did not work properly it was removed.
 See (`#32 <https://github.com/IBM/nodejs-itoolkit/issues/32>`__) for more details.
