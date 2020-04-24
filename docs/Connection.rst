@@ -125,11 +125,9 @@ Creating a ``Connection`` using the ``REST`` tranport.
    const connection = new Connection({
      transport: 'rest',
      transportOptions: {
-        host: 'myhost',
         database: '*LOCAL',
         username: 'myuser',
         password: 'mypass'
-        port: 80,
-        path:'/cgi-bin/xmlcgi.pgm',
+        url: 'http://myhost.example.com/cgi-bin/xmlcgi.pgm',
       }
    });
