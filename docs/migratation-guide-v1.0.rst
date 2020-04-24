@@ -8,11 +8,13 @@ Most applications applications using a version < 1.0.0 should continue
 to work but it’s still highly recommended to test your application
 first.
 
-.. WARNING::
-   **BREAKING CHANGES**
-
 BREAKING CHANGES
 ================
+
+.. WARNING::
+   Beware that the Connection and iConn classes differ in how they call the callbacks
+   passed to their run methods. You cannot simply replace iConn with Connection without adjusting
+   your callbacks. See the :ref:`iconn-to-connection-run` section.
 
 ``iConn.run()`` no longer supports sync mode
 --------------------------------------------
@@ -48,7 +50,7 @@ Support error first callbacks
    callbacks <https://nodejs.org/api/errors.html#errors_error_first_callbacks>`__.
    ``Connection`` still has a compatability option ``returnError`` to
    behave like ``iConn.run()`` and return the xml output as the first
-   parameter of the run callback.
+   parameter of the run callback. See the :ref:`iconn-to-connection-run` section.
 
 
 Support DS types within addReturn
@@ -90,7 +92,7 @@ Migrating from ``iConn`` to ``Connection`` Constructor
 
    // using rest transport
 
-   // const restConfig = { host: 'myhost', port: 80, path: '/' }
+   // const restConfig = { host: 'myhost.example.com', port: 80, path: '/cgi-bin/xmlcgi.pgm' }
    // const conn = new iConn('*LOCAL', 'myuser', 'mypassword', restConfig);
 
    const conn = new Connection({
@@ -99,12 +101,17 @@ Migrating from ``iConn`` to ``Connection`` Constructor
        database: '*LOCAL',
        username: 'myuser',
        password: 'mypassword',
-       url: 'http://myhost:80/',
+       url: 'http://myhost.example.com/cgi-bin/xmlcgi.pgm',
      }
    });
 
+.. _iconn-to-connection-run:
+
 Migrating from ``iConn.run()`` to ``Connection.run()``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+You should be able to figure out how to connect using Connection from the docs, however you may not
+realize that iConn -> Connection implies a change in behavior of the callbacks. Follow the steps 
+below to migrate from ``iConn.run()`` to ``Connection.run()``.
 
 1. Create an instance of Connection with ``returnError`` set to false.
    This is a compatabilty option to behave like ``iConn.run()`` and
@@ -166,7 +173,7 @@ Migrating from ``iPgm.addParam()`` to ``ProgramCall.addParam()``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Parameter and data options are passed with the object parameter. Ensure
-you specify the data type odefaulting to use ``1024a`` is deprecated.
+the data type is specified; defaulting to use ``1024a`` is deprecated.
 
 .. code:: js
 
