@@ -14,21 +14,20 @@ first.
 BREAKING CHANGES
 ================
 
-``iConn.run()`` no longer supports sync mode
---------------------------------------------
+Sync Mode Operations
+---------------------
 
-Sync mode did not work properly to begin with see
-(`#32 <https://github.com/IBM/nodejs-itoolkit/issues/32>`__).
+``iConn.run()`` no longer supports sync mode. Sync mode is not reccommended and since it did not work properly it was removed.
+See (`#32 <https://github.com/IBM/nodejs-itoolkit/issues/32>`__) for more details.
 
-``iConn.setTimeout()`` is removed
-----------------------------------
+``iConn.setTimeout()`` is removed. This function was used to set the timeout for ``iConn.run`` 
+sync mode.
 
-This function was used to set timeout for ``iConn.run`` sync mode.
+iSql Authentication
+-------------------
 
-``iSql.connect()`` and ``iSql.setOptions()`` are removed
---------------------------------------------------------
-
-These functions were used in conjunction for XMLSERVICE user
+``iSql.connect()`` and ``iSql.setOptions()`` are removed. These functions were used in conjunction 
+for XMLSERVICE user
 authentication. The transports already handle user authentication.
 
 New Features
@@ -92,7 +91,6 @@ object passed to ``Connection`` and specify the transport is ``idb``. eg.
 
    const conn = new Connection({
      transport: 'idb',
-     returnError: false,
      transportOptions: { database: '*LOCAL', username: 'myuser', password: 'mypassword' }
    });
 
@@ -109,7 +107,6 @@ transport is ``rest``. eg.
 
    const conn = new Connection({
      transport: 'rest',
-     returnError: false,
      transportOptions: {
        database: '*LOCAL',
        username: 'myuser',
