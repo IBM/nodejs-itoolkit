@@ -75,7 +75,7 @@ Differences
    callbacks <https://nodejs.org/api/errors.html#errors_error_first_callbacks>`__.
 
 Migrating from ``iConn`` to ``Connection``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. WARNING::
    Beware that the Connection and iConn classes differ in how they call the callbacks
