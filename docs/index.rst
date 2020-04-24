@@ -52,12 +52,16 @@ Installation
 
    $ npm install itoolkit
 
+.. NOTE::
+   If you are upgrading from ``0.1.x`` be sure to read the :doc:`migration guide </migratation-guide-v1.0>`.
+
 .. toctree::
    :maxdepth: 1
    :caption: Contents:
    
    features
    deprecated
+   migratation-guide-v1.0
 
 
 Indices and tables
