@@ -13,7 +13,7 @@ ProgramCall API
 .. autofunction:: returnConfig
 .. autofunction:: data
 
-Example
+Examples
 ^^^^^^^^
 
 Call the QUSROBJD Program
@@ -21,3 +21,10 @@ Call the QUSROBJD Program
 
 .. literalinclude:: examples/qusrobjd.js
    :language: javascript
+
+Retrieve the Return Value From a Service Program
+""""""""""""""""""""""""""""""""""""""""""""""""
+
+.. literalinclude:: examples/cosine.js
+   :language: javascript
+
