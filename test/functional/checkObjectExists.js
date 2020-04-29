@@ -30,14 +30,14 @@ function checkObjectExistsSSH(config, object = {}, callback) {
         if (checkLibCode !== 0) {
           if (config.verbose) { console.log(`Command exited abnormally with code: ${checkLibCode}`); }
           const libError = new Error(`${lib} lib was not found!\nCreate it by running: ${createLib}`);
-          client.end();
+          client.destroy();
           callback(libError, false);
           return;
         }
         client.exec(checkObjectCommand, (checkObjectError, checkObjectStream) => {
           if (config.verbose) { console.log(`executing ${checkObjectCommand}`); }
           if (checkObjectError) {
-            client.end();
+            client.destroy();
             callback(checkLibError, false);
             return;
           }
@@ -46,13 +46,13 @@ function checkObjectExistsSSH(config, object = {}, callback) {
           });
           checkObjectStream.on('exit', (checkObjectCode) => {
             if (checkObjectCode !== 0) {
-              client.end();
+              client.destroy();
               console.log(`Command exited abnormally with code: ${checkObjectCode}`);
               const objectError = new Error(`${object.name} was not found!\nCreate it by running: ${object.createObject}`);
               callback(objectError);
               return;
             }
-            client.end();
+            client.destroy();
             callback(null, true);
           });
         });
