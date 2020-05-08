@@ -2,6 +2,48 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/IBM/nodejs-itoolkit/compare/1.0.0-alpha.1...1.0.0) (2020-05-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* Remove iSql.connect() and iSql.setOptions()
+* Remove iConn.setTimeout()
+
+### Features
+
+* Allow DS for service program return value ([#217](https://github.com/IBM/nodejs-itoolkit/issues/217)) ([30e9f8a](https://github.com/IBM/nodejs-itoolkit/commit/30e9f8a69da829935dcee72dbd394032feef0e27))
+* Specify supported Node versions ([#264](https://github.com/IBM/nodejs-itoolkit/issues/264)) ([63ec53c](https://github.com/IBM/nodejs-itoolkit/commit/63ec53c0ac17e9d4130b79074a61075ce0ac897e))
+* use standard-version [#85](https://github.com/IBM/nodejs-itoolkit/issues/85) ([45f66a7](https://github.com/IBM/nodejs-itoolkit/commit/45f66a7f9ac5b5d37c907f5d088cb517cd4d3d66))
+
+
+### Bug Fixes
+
+* Add missing '?' in xml prolog ([bff8649](https://github.com/IBM/nodejs-itoolkit/commit/bff864991f73f5789c5dec563821c86eb1aab3fa))
+* data type issue in Toolkit.getSysStatus and Toolkit.getSysStatusExt ([#190](https://github.com/IBM/nodejs-itoolkit/issues/190)) ([15397c2](https://github.com/IBM/nodejs-itoolkit/commit/15397c279d51b9282ef948b7d61d7d403690ce6f))
+* Define errno structure correctly ([#192](https://github.com/IBM/nodejs-itoolkit/issues/192)) ([b1561f7](https://github.com/IBM/nodejs-itoolkit/commit/b1561f76e5803409c485f8b965745a060462852b)), closes [#191](https://github.com/IBM/nodejs-itoolkit/issues/191)
+* Deprecated functional tests rest transport options ([#255](https://github.com/IBM/nodejs-itoolkit/issues/255)) ([903dd3f](https://github.com/IBM/nodejs-itoolkit/commit/903dd3f70f635f37bb2abba4a61b5a99a4f16ba3))
+* eslint errors ([#243](https://github.com/IBM/nodejs-itoolkit/issues/243)) ([df40eb0](https://github.com/IBM/nodejs-itoolkit/commit/df40eb0c4898214493b22b9054d9eea57e6bccd9))
+* Faulty error thrown by ProgramCall.addParam ([#124](https://github.com/IBM/nodejs-itoolkit/issues/124)) ([75d081c](https://github.com/IBM/nodejs-itoolkit/commit/75d081c86ae35f0557ea7b5a1f8886018de6ff36))
+* Formatting errors in bug report template ([24a9262](https://github.com/IBM/nodejs-itoolkit/commit/24a92626e97f407dc7de998e2c65d6500d289eaf))
+* Homepage link in package.json ([#267](https://github.com/IBM/nodejs-itoolkit/issues/267)) ([d5787ce](https://github.com/IBM/nodejs-itoolkit/commit/d5787cef2ade2d8fa298986a73040158dd2b6f84))
+* HTTP transport should take a URL ([#252](https://github.com/IBM/nodejs-itoolkit/issues/252)) ([34e4e37](https://github.com/IBM/nodejs-itoolkit/commit/34e4e3765667a6060d82bd6dabf2bcd4569aa765))
+* iConn unit test failure ([52f0330](https://github.com/IBM/nodejs-itoolkit/commit/52f0330801a8b5bbdbac19af4ff60ee80927a9e3))
+* iConn unit test failure ([#274](https://github.com/IBM/nodejs-itoolkit/issues/274)) ([9e72857](https://github.com/IBM/nodejs-itoolkit/commit/9e728572fcfd734059d3a09e6934760518183250))
+* Improper TOC nesting in main README ([#175](https://github.com/IBM/nodejs-itoolkit/issues/175)) ([db5d44c](https://github.com/IBM/nodejs-itoolkit/commit/db5d44cdcc79dbded8d3fa6f0717ed268d5d7606))
+* minimist CVE ([#231](https://github.com/IBM/nodejs-itoolkit/issues/231)) ([6d02c43](https://github.com/IBM/nodejs-itoolkit/commit/6d02c43c38cf3c5fcc2e5ee559ea123ba97b12f2))
+* Move iConn compatibility code to iConn itself ([#218](https://github.com/IBM/nodejs-itoolkit/issues/218)) ([73d798d](https://github.com/IBM/nodejs-itoolkit/commit/73d798deaf1ca840d2c0d5742ded40712fe33955))
+* ssh transport econnreset ([#272](https://github.com/IBM/nodejs-itoolkit/issues/272)) ([d5e71c1](https://github.com/IBM/nodejs-itoolkit/commit/d5e71c159319574a937ee415df4c636d7f347ba7))
+* ssh transport silent failure ([#225](https://github.com/IBM/nodejs-itoolkit/issues/225)) ([6e3b8a0](https://github.com/IBM/nodejs-itoolkit/commit/6e3b8a0f11539ee04540cf12d97cd6b67b3ed967))
+* Test hooks timeout when using rest transport ([#253](https://github.com/IBM/nodejs-itoolkit/issues/253)) ([60fdd5b](https://github.com/IBM/nodejs-itoolkit/commit/60fdd5b75ba165646d8f888344aa1924c39272b1))
+* TODOs in Deprecated.js ([#240](https://github.com/IBM/nodejs-itoolkit/issues/240)) ([cd47476](https://github.com/IBM/nodejs-itoolkit/commit/cd474766d769d7832cf38fca40a5ed14b19f4bfa))
+* **idb:** Improve cleanup handling ([#233](https://github.com/IBM/nodejs-itoolkit/issues/233)) ([c2bb115](https://github.com/IBM/nodejs-itoolkit/commit/c2bb1152e13785a975597da41d6ca7df94bf4c09))
+* Use encodeURIComponent for URL params ([2c98b22](https://github.com/IBM/nodejs-itoolkit/commit/2c98b229148adbc3475d2eba1c1f397cd7367447)), closes [#72](https://github.com/IBM/nodejs-itoolkit/issues/72) [#71](https://github.com/IBM/nodejs-itoolkit/issues/71)
+
+
+* Remove iConn.setTimeout() ([c978c41](https://github.com/IBM/nodejs-itoolkit/commit/c978c41ad28f5e4db152bd4bd5e56ba3824ea650))
+* Remove iSql.connect() and iSql.setOptions() ([066e8ba](https://github.com/IBM/nodejs-itoolkit/commit/066e8ba43e0c68ff6165b4be8f1d00eac1242f38))
+
 ## [1.0.0-alpha.1](https://github.com/IBM/nodejs-itoolkit/compare/1.0.0-alpha.0...1.0.0-alpha.1) (2019-07-10)
 
 ### Bug Fixes
@@ -151,4 +193,3 @@ All notable changes to this project will be documented in this file. See [standa
 ### [0.1.5](https://github.com/IBM/nodejs-itoolkit/compare/0.1.4...0.1.5) (2019-01-08)
 
 ### 0.1.4 (2018-09-17)
-
