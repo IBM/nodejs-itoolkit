@@ -16,6 +16,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /* eslint-disable new-cap */
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable func-names */
 
 const { expect } = require('chai');
 const { iConn, iProd } = require('../../../lib/itoolkit');
@@ -41,13 +43,13 @@ if (config.transport === 'rest') {
   };
 }
 
-describe('iProd Functional Tests', () => {
-  before(() => {
+describe('iProd Functional Tests', function () {
+  before(function () {
     printConfig();
   });
 
-  describe('constructor', () => {
-    it('creates and returns an instance of iProd', () => {
+  describe('constructor', function () {
+    it('creates and returns an instance of iProd', function () {
       const connection = new iConn(database, config.user, password);
 
       const prod = new iProd(connection);
@@ -56,8 +58,8 @@ describe('iProd Functional Tests', () => {
     });
   });
 
-  describe('getPTFInfo', () => {
-    it('returns info for specified ptf', (done) => {
+  describe('getPTFInfo', function () {
+    it('returns info for specified ptf', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
       const prod = new iProd(connection);
@@ -98,8 +100,8 @@ describe('iProd Functional Tests', () => {
     });
   });
 
-  describe('getProductInfo', () => {
-    it('returns info for specified product', (done) => {
+  describe('getProductInfo', function () {
+    it('returns info for specified product', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
       const prod = new iProd(connection);
@@ -129,8 +131,8 @@ describe('iProd Functional Tests', () => {
 
   // REST transport currently failing with 414 URI Too Long response code
   // The requested URL's length exceeds the capacity limit for this server
-  describe('getInstalledProducts', () => {
-    it('returns info for installed products', (done) => {
+  describe('getInstalledProducts', function () {
+    it('returns info for installed products', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
       const prod = new iProd(connection);

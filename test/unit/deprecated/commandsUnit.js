@@ -16,12 +16,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /* eslint-env mocha */
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable func-names */
+
 const { expect } = require('chai');
 const { iSh, iQsh, iCmd } = require('../../../lib/itoolkit');
 
-describe('iSh, iCmd, iQsh, Unit Tests', () => {
-  describe('iSh function', () => {
-    it('accepts command input and returns <sh> XML output', () => {
+describe('iSh, iCmd, iQsh, Unit Tests', function () {
+  describe('iSh function', function () {
+    it('accepts command input and returns <sh> XML output', function () {
       const sh = iSh('ls -lah');
 
       const expectedXML = '<sh error=\'fast\'>ls -lah</sh>';
@@ -29,7 +32,7 @@ describe('iSh, iCmd, iQsh, Unit Tests', () => {
       expect(sh).to.be.a('string').and.to.equal(expectedXML);
     });
 
-    it('accepts command input and options returns <sh> with optional attributes', () => {
+    it('accepts command input and options returns <sh> with optional attributes', function () {
       const options = {
         error: 'on', before: '65535', after: '37', rows: 'on',
       };
@@ -42,8 +45,8 @@ describe('iSh, iCmd, iQsh, Unit Tests', () => {
     });
   });
 
-  describe('iCmd function', () => {
-    it('accepts command input and returns <cmd> XML output', () => {
+  describe('iCmd function', function () {
+    it('accepts command input and returns <cmd> XML output', function () {
       const cmd = iCmd('RTVJOBA USRLIBL(?) SYSLIBL(?)');
 
       const expectedXML = '<cmd exec=\'rexx\' error=\'fast\'>RTVJOBA USRLIBL(?) SYSLIBL(?)</cmd>';
@@ -51,7 +54,7 @@ describe('iSh, iCmd, iQsh, Unit Tests', () => {
       expect(cmd).to.be.a('string').and.to.equal(expectedXML);
     });
 
-    it('accepts command input and options returns <cmd> with optional attributes', () => {
+    it('accepts command input and options returns <cmd> with optional attributes', function () {
       const options = {
         exec: 'cmd', error: 'on', before: '65535', after: '37', hex: 'on',
       };
@@ -65,8 +68,8 @@ describe('iSh, iCmd, iQsh, Unit Tests', () => {
     });
   });
 
-  describe('iQsh function', () => {
-    it('accepts command input and returns <qsh> XML output', () => {
+  describe('iQsh function', function () {
+    it('accepts command input and returns <qsh> XML output', function () {
       const qsh = iQsh('RTVJOBA USRLIBL(?) SYSLIBL(?)');
 
       const expectedXML = '<qsh error=\'fast\'>RTVJOBA USRLIBL(?) SYSLIBL(?)</qsh>';
@@ -74,7 +77,7 @@ describe('iSh, iCmd, iQsh, Unit Tests', () => {
       expect(qsh).to.be.a('string').and.to.equal(expectedXML);
     });
 
-    it('accepts command input and options returns <qsh> with optional attributes', () => {
+    it('accepts command input and options returns <qsh> with optional attributes', function () {
       const options = {
         error: 'on', before: '65535', after: '37', rows: 'on',
       };

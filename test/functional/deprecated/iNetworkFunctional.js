@@ -16,6 +16,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /* eslint-disable new-cap */
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable func-names */
 
 const { expect } = require('chai');
 const { iConn, iNetwork } = require('../../../lib/itoolkit');
@@ -41,13 +43,13 @@ if (config.transport === 'rest') {
   };
 }
 
-describe('iNetwork Functional Tests', () => {
-  before(() => {
+describe('iNetwork Functional Tests', function () {
+  before(function () {
     printConfig();
   });
 
-  describe('constructor', () => {
-    it('creates and returns an instance of iNetwork', () => {
+  describe('constructor', function () {
+    it('creates and returns an instance of iNetwork', function () {
       const connection = new iConn(database, config.user, password);
 
       const net = new iNetwork(connection);
@@ -56,8 +58,8 @@ describe('iNetwork Functional Tests', () => {
     });
   });
 
-  describe('getTCPIPAttr', () => {
-    it('retrieves TCP/IP Attributes', (done) => {
+  describe('getTCPIPAttr', function () {
+    it('retrieves TCP/IP Attributes', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
       const net = new iNetwork(connection);
@@ -98,8 +100,8 @@ describe('iNetwork Functional Tests', () => {
     });
   });
 
-  describe('getNetInterfaceData', () => {
-    it('retrieves IPv4 network interface info', (done) => {
+  describe('getNetInterfaceData', function () {
+    it('retrieves IPv4 network interface info', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
       const net = new iNetwork(connection);

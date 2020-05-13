@@ -16,6 +16,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /* eslint-disable new-cap */
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable func-names */
 
 const { expect } = require('chai');
 const { iConn, iWork } = require('../../../lib/itoolkit');
@@ -42,13 +44,13 @@ if (config.transport === 'rest') {
   };
 }
 
-describe('iWork Functional Tests', () => {
-  before(() => {
+describe('iWork Functional Tests', function () {
+  before(function () {
     printConfig();
   });
 
-  describe('constructor', () => {
-    it('creates and returns an instance of iWork', () => {
+  describe('constructor', function () {
+    it('creates and returns an instance of iWork', function () {
       const connection = new iConn(database, config.user, password);
 
       const work = new iWork(connection);
@@ -57,8 +59,8 @@ describe('iWork Functional Tests', () => {
     });
   });
 
-  describe('getSysValue', () => {
-    it('returns the value of system variable', (done) => {
+  describe('getSysValue', function () {
+    it('returns the value of system variable', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
       const work = new iWork(connection);
@@ -70,10 +72,10 @@ describe('iWork Functional Tests', () => {
     });
   });
 
-  describe('getSysStatus', () => {
+  describe('getSysStatus', function () {
     it('returns basic system status information about the signed-on users '
            + 'and batch jobs',
-    (done) => {
+    function (done) {
       const connection = new iConn(database, username, password, restOptions);
       const work = new iWork(connection);
 
@@ -100,9 +102,9 @@ describe('iWork Functional Tests', () => {
     });
   });
 
-  describe('getSysStatusExt', () => {
+  describe('getSysStatusExt', function () {
     it('returns more detailed system status info',
-      (done) => {
+      function (done) {
         const connection = new iConn(database, username, password, restOptions);
 
         const work = new iWork(connection);
@@ -145,9 +147,9 @@ describe('iWork Functional Tests', () => {
       });
   });
 
-  describe('getJobStatus', () => {
+  describe('getJobStatus', function () {
     it('returns status of specified job',
-      (done) => {
+      function (done) {
         const connection = new iConn(database, username, password, restOptions);
 
         const work = new iWork(connection);
@@ -161,8 +163,8 @@ describe('iWork Functional Tests', () => {
       });
   });
 
-  describe('getJobInfo', () => {
-    it('returns info on specfed job', (done) => {
+  describe('getJobInfo', function () {
+    it('returns info on specfed job', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
       const work = new iWork(connection);
@@ -209,14 +211,14 @@ describe('iWork Functional Tests', () => {
     });
   });
 
-  describe('getDataArea', () => {
-    before('init lib, data area, and add data', (done) => {
+  describe('getDataArea', function () {
+    before('init lib, data area, and add data', function (done) {
       checkObjectExists(config, 'TESTDA', '*DTAARA', (error) => {
         if (error) { throw error; }
         done();
       });
     });
-    it('returns contents of a data area', (done) => {
+    it('returns contents of a data area', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
       const work = new iWork(connection);

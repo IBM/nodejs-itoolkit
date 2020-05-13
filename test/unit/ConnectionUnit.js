@@ -16,14 +16,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /* eslint-disable new-cap */
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable func-names */
 
 const { expect } = require('chai');
 const sinon = require('sinon');
 const { Connection, CommandCall } = require('../../lib/itoolkit');
 
-describe('Connection Class Unit Tests', () => {
-  describe('constructor', () => {
-    it('creates and returns an instance of Connection with idb transport', () => {
+describe('Connection Class Unit Tests', function () {
+  describe('constructor', function () {
+    it('creates and returns an instance of Connection with idb transport', function () {
       const options = {
         transport: 'idb',
         transportOptions: {
@@ -45,7 +47,7 @@ describe('Connection Class Unit Tests', () => {
       expect(connection.commandList.length).to.equal(0);
     });
 
-    it('creates and returns an instance of Connection with rest transport', () => {
+    it('creates and returns an instance of Connection with rest transport', function () {
       const options = {
         transport: 'rest',
         transportOptions: {
@@ -78,8 +80,8 @@ describe('Connection Class Unit Tests', () => {
     });
   });
 
-  describe('add', () => {
-    it('appends to xml service request to the command list using Connection class', () => {
+  describe('add', function () {
+    it('appends to xml service request to the command list using Connection class', function () {
       const options = {
         transport: 'idb',
         transportOptions: {
@@ -97,8 +99,8 @@ describe('Connection Class Unit Tests', () => {
   });
 
 
-  describe('debug', () => {
-    it('turns verbose mode on/off using Connection class', () => {
+  describe('debug', function () {
+    it('turns verbose mode on/off using Connection class', function () {
       const options = {
         transport: 'idb',
         transportOptions: {
@@ -117,8 +119,8 @@ describe('Connection Class Unit Tests', () => {
   });
 
 
-  describe('getTransportOptions', () => {
-    it('returns conn (object) property from Connection instance', () => {
+  describe('getTransportOptions', function () {
+    it('returns conn (object) property from Connection instance', function () {
       const options = {
         transport: 'rest',
         transportOptions: {
@@ -149,8 +151,8 @@ describe('Connection Class Unit Tests', () => {
   });
 
 
-  describe('run', () => {
-    it('(Connection) invokes transport to execute xml input and returns xml output in callback', () => {
+  describe('run', function () {
+    it('(Connection) invokes transport to execute xml input and returns xml output in callback', function () {
       const options = {
         transport: 'idb',
         transportOptions: {

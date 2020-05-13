@@ -16,6 +16,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /* eslint-disable new-cap */
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable func-names */
 
 const { expect } = require('chai');
 const { iConn, iDataQueue } = require('../../../lib/itoolkit');
@@ -44,8 +46,8 @@ if (config.transport === 'rest') {
 
 const lib = 'NODETKTEST'; const dqName = 'TESTQ';
 
-describe('iDataQueue Functional Tests', () => {
-  before('check if data queue exists for tests', (done) => {
+describe('iDataQueue Functional Tests', function () {
+  before('check if data queue exists for tests', function (done) {
     printConfig();
     checkObjectExists(config, dqName, '*DTAQ', (error) => {
       if (error) { throw error; }
@@ -53,8 +55,8 @@ describe('iDataQueue Functional Tests', () => {
     });
   });
 
-  describe('constructor', () => {
-    it('creates and returns an instance of iDataQueue', () => {
+  describe('constructor', function () {
+    it('creates and returns an instance of iDataQueue', function () {
       const connection = new iConn(database, config.user, password);
 
       const dq = new iDataQueue(connection);
@@ -62,8 +64,8 @@ describe('iDataQueue Functional Tests', () => {
     });
   });
 
-  describe('sendToDataQueue', () => {
-    it('sends data to specified DQ', (done) => {
+  describe('sendToDataQueue', function () {
+    it('sends data to specified DQ', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
       const dq = new iDataQueue(connection);
@@ -75,8 +77,8 @@ describe('iDataQueue Functional Tests', () => {
     });
   });
 
-  describe('receiveFromDataQueue', () => {
-    it('receives data from specfied DQ', (done) => {
+  describe('receiveFromDataQueue', function () {
+    it('receives data from specfied DQ', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
       const dq = new iDataQueue(connection);
@@ -88,8 +90,8 @@ describe('iDataQueue Functional Tests', () => {
     });
   });
 
-  describe('clearDataQueue', () => {
-    it('clears the specifed DQ', (done) => {
+  describe('clearDataQueue', function () {
+    it('clears the specifed DQ', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
       const dq = new iDataQueue(connection);

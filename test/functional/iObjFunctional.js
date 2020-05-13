@@ -16,18 +16,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /* eslint-disable new-cap */
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable func-names */
 
 const { expect } = require('chai');
 const { Connection, iObj } = require('../../lib/itoolkit');
 const { config, printConfig } = require('./config');
 
-describe('iObj Functional Tests', () => {
-  before(() => {
+describe('iObj Functional Tests', function () {
+  before(function () {
     printConfig();
   });
 
-  describe('retrUsrAuth', () => {
-    it('returns uses\'s authority for an object ', (done) => {
+  describe('retrUsrAuth', function () {
+    it('returns uses\'s authority for an object ', function (done) {
       const connection = new Connection(config);
 
       const obj = new iObj(connection);
@@ -71,8 +73,8 @@ describe('iObj Functional Tests', () => {
     });
   });
 
-  describe('rtrCmdInfo', () => {
-    it('returns command info', (done) => {
+  describe('rtrCmdInfo', function () {
+    it('returns command info', function (done) {
       const connection = new Connection(config);
 
       const obj = new iObj(connection);
@@ -124,8 +126,8 @@ describe('iObj Functional Tests', () => {
     });
   });
 
-  describe('retrPgmInfo', () => {
-    it('returns program info', (done) => {
+  describe('retrPgmInfo', function () {
+    it('returns program info', function (done) {
       const connection = new Connection(config);
 
       const obj = new iObj(connection);
@@ -199,8 +201,8 @@ describe('iObj Functional Tests', () => {
     });
   });
 
-  describe('retrSrvPgmInfo', () => {
-    it('returns service program info', (done) => {
+  describe('retrSrvPgmInfo', function () {
+    it('returns service program info', function (done) {
       const connection = new Connection(config);
 
       const obj = new iObj(connection);
@@ -255,8 +257,8 @@ describe('iObj Functional Tests', () => {
     });
   });
 
-  describe('retrUserInfo', () => {
-    it('returns specified user profile info', (done) => {
+  describe('retrUserInfo', function () {
+    it('returns specified user profile info', function (done) {
       const connection = new Connection(config);
 
       const obj = new iObj(connection);
@@ -282,8 +284,8 @@ describe('iObj Functional Tests', () => {
     });
   });
 
-  describe('retrUsrAuthToObj', () => {
-    it(`retrieves info for users who are authorized to an object using ${config.transport} transpsort`, (done) => {
+  describe('retrUsrAuthToObj', function () {
+    it(`retrieves info for users who are authorized to an object using ${config.transport} transpsort`, function (done) {
       const connection = new Connection(config);
 
       const obj = new iObj(connection);
@@ -310,8 +312,8 @@ describe('iObj Functional Tests', () => {
     });
   });
 
-  describe('addToLibraryList', () => {
-    it('appends lib to user\'s lib list', (done) => {
+  describe('addToLibraryList', function () {
+    it('appends lib to user\'s lib list', function (done) {
       const connection = new Connection(config);
 
       const obj = new iObj(connection);
