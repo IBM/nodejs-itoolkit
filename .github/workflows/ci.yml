@@ -34,10 +34,9 @@ jobs:
         TKPASS: ${{ secrets.IBMI_PASSWORD }}
 
   eslint:
-
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - uses: hallee/eslint-action@master
+    - uses: stefanoeb/eslint-action@1.0.2
       with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
+          files: lib/ test/
