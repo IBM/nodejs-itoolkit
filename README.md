@@ -72,6 +72,7 @@ connection.run((error, xmlOutput) => {
     }
     console.log(JSON.stringify(result));
   });
+});
 ```
 
 The purpose of this package is to simplify the process of creating XMLSERVICE input, invoking XMLSERVICE, and returning XMLSERVICE output from Node.js.
