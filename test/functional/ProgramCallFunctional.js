@@ -83,63 +83,6 @@ describe('ProgramCall Functional Tests', () => {
     });
   });
 
-
-  describe('Test ProgramCall()', () => {
-    it('calls QWCRSVAL program and returns arbitrarily named parameter', (done) => {
-      const connection = new Connection(config);
-
-      const program = new ProgramCall('QWCRSVAL', { lib: 'QSYS' });
-
-      const outBuf = {
-        type: 'ds',
-        io: 'out',
-        fields: [
-          { type: '10i0', value: 0 },
-          { type: '10i0', value: 0 },
-          { type: '36h', value: '' },
-          { type: '10A', value: '' },
-          { type: '1A', value: '' },
-          { type: '1A', value: '' },
-          { type: '10i0', value: 0 },
-          { type: '10i0', value: 0 },
-        ],
-      };
-
-      const errno = {
-        name: 'errno',
-        type: 'ds',
-        io: 'both',
-        len: 'rec2',
-        fields: [
-          {
-            name: 'bytes_provided',
-            type: '10i0',
-            value: 0,
-            setlen: 'rec2',
-          },
-          { name: 'bytes_available', type: '10i0', value: 0 },
-          { name: 'msgid', type: '7A', value: '' },
-          { type: '1A', value: '' },
-        ],
-      };
-
-      program.addParam(outBuf);
-      program.addParam({ type: '10i0', value: 66 });
-      program.addParam({ type: '10i0', value: 1 });
-      program.addParam({ type: '10A', value: 'QCCSID' });
-      program.addParam(errno);
-      connection.add(program);
-      connection.run((error, xmlOut) => {
-        expect(error).to.equal(null);
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          expect(result.myscript.pgm[0].success[0]).to.include('+++ success QSYS QWCRSVAL');
-          done();
-        });
-      });
-    });
-  });
-
   describe.skip('Test ProgramCall()', () => {
     // ZZSRV6 program requires XMLSERVICE built with tests
     // Skip for now, we need to add before hook to check ZZSRV6 is available

@@ -80,41 +80,6 @@ describe('iPgm Functional Tests', () => {
     });
   });
 
-
-  describe('Test iPgm()', () => {
-    it('calls QWCRSVAL program and returns arbitrarily named parameter', (done) => {
-      const connection = new iConn(database, username, password, restOptions);
-
-      const program = new iPgm('QWCRSVAL', { lib: 'QSYS' });
-
-      const outBuf = [
-        [0, '10i0'],
-        [0, '10i0'],
-        ['', '36h'],
-        ['', '10A'],
-        ['', '1A'],
-        ['', '1A'],
-        [0, '10i0'],
-        [0, '10i0'],
-      ];
-      program.addParam(outBuf, { io: 'out' });
-      program.addParam(66, '10i0');
-      program.addParam(1, '10i0');
-      program.addParam('QCCSID', '10A');
-      const paramValue = 'errno';
-
-      program.addParam(this.errno, { io: 'both', len: 'rec2', name: paramValue });
-      connection.add(program);
-      connection.run((xmlOut) => {
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          expect(result.myscript.pgm[0].success[0]).to.include('+++ success QSYS QWCRSVAL');
-          done();
-        });
-      });
-    });
-  });
-
   describe.skip('Test iPgm()', () => {
     // ZZSRV6 program requires XMLSERVICE built with tests
     // Skip for now, we need to add before hook to check if ZZSRV6 is available
