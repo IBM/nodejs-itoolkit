@@ -8,4 +8,13 @@ module.exports = {
     // We need to allow use of console.log for verbose mode
     'no-console': 'off',
   },
+  overrides: [
+    {
+      files: ['test/**/*.js'],
+      env: {
+        node: true,
+        mocha: true,
+      },
+    },
+  ],
 };
