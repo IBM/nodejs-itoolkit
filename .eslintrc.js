@@ -15,6 +15,13 @@ module.exports = {
         node: true,
         mocha: true,
       },
+      rules: {
+        // These are set by airbnb-base, but go against Mocha conventions
+        // See https://mochajs.org/#arrow-functions
+        // and https://github.com/airbnb/javascript/issues/433
+        'func-names': 'off',
+        'prefer-arrow-callback': 'off',
+      },
     },
   ],
 };
