@@ -3,7 +3,9 @@ const createLib = `CRTLIB LIB(${lib}) TYPE(*TEST) TEXT('Used to test Node.js too
 const findLib = `SELECT SCHEMA_NAME FROM qsys2.sysschemas WHERE SCHEMA_NAME = '${lib}'`;
 
 function checkObjectExistsSSH(config, object = {}, callback) {
-  /* eslint-disable global-require */
+  // ssh2 is an optional dependency, since users may not use this transport
+  // thus we can't globally require it
+  // eslint-disable-next-line global-require, import/no-extraneous-dependencies
   const { Client } = require('ssh2');
 
   const client = new Client();
@@ -68,6 +70,9 @@ function checkObjectExistsSSH(config, object = {}, callback) {
 }
 
 function checkObjectExistsODBC(config, object = {}, callback) {
+  // odbc is an optional dependency, since users may not use this transport
+  // thus we can't globally require it
+  // eslint-disable-next-line global-require, import/no-extraneous-dependencies
   const odbc = require('odbc');
 
   const connectionString = config.dsn || `DRIVER=IBM i Access ODBC Driver;SYSTEM=${config.host};UID=${config.username};PWD=${config.password};`;
@@ -110,6 +115,10 @@ function checkObjectExistsODBC(config, object = {}, callback) {
 }
 
 function checkObjectExistsIDB(config, object = {}, callback) {
+  // idb-connector is an optional dependency, since users may not use this transport
+  // thus we can't globally require it
+  // eslint-disable-next-line max-len
+  // eslint-disable-next-line global-require, import/no-extraneous-dependencies, import/no-unresolved
   const { dbconn, dbstmt } = require('idb-connector');
 
   /* eslint-disable new-cap */
