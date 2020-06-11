@@ -43,13 +43,13 @@ if (config.transport === 'rest') {
 
 const lib = 'NODETKTEST';
 
-describe('iUserSpace Functional Tests', () => {
-  before(() => {
+describe('iUserSpace Functional Tests', function () {
+  before(function () {
     printConfig();
   });
 
-  describe('constructor', () => {
-    it('returns an instance of iUserSpace', () => {
+  describe('constructor', function () {
+    it('returns an instance of iUserSpace', function () {
       const connection = new iConn(database, config.user, password);
 
       const userSpace = new iUserSpace(connection);
@@ -58,8 +58,8 @@ describe('iUserSpace Functional Tests', () => {
     });
   });
 
-  describe('createUserSpace', () => {
-    it('creates a user space', (done) => {
+  describe('createUserSpace', function () {
+    it('creates a user space', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
       const userSpace = new iUserSpace(connection);
@@ -76,8 +76,8 @@ describe('iUserSpace Functional Tests', () => {
     });
   });
 
-  describe('setUserSpaceData', () => {
-    it('sets data within the user space', (done) => {
+  describe('setUserSpaceData', function () {
+    it('sets data within the user space', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
       const userSpace = new iUserSpace(connection);
@@ -94,8 +94,8 @@ describe('iUserSpace Functional Tests', () => {
     });
   });
 
-  describe('getUserSpaceData', () => {
-    it('returns specified length of data', (done) => {
+  describe('getUserSpaceData', function () {
+    it('returns specified length of data', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
       const userSpace = new iUserSpace(connection);
@@ -109,8 +109,8 @@ describe('iUserSpace Functional Tests', () => {
     });
   });
 
-  describe('deleteUserSpace', () => {
-    it('removes a user space', (done) => {
+  describe('deleteUserSpace', function () {
+    it('removes a user space', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
       const userSpace = new iUserSpace(connection);

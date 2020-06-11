@@ -22,13 +22,13 @@ const { Connection, iNetwork } = require('../../lib/itoolkit');
 const { config, printConfig } = require('./config');
 
 
-describe('iNetwork Functional Tests', () => {
-  before(() => {
+describe('iNetwork Functional Tests', function () {
+  before(function () {
     printConfig();
   });
 
-  describe('getTCPIPAttr', () => {
-    it('retrieves TCP/IP Attributes', (done) => {
+  describe('getTCPIPAttr', function () {
+    it('retrieves TCP/IP Attributes', function (done) {
       const connection = new Connection(config);
 
       const net = new iNetwork(connection);
@@ -70,8 +70,8 @@ describe('iNetwork Functional Tests', () => {
     });
   });
 
-  describe('getNetInterfaceData', () => {
-    it('retrieves IPv4 network interface info', (done) => {
+  describe('getNetInterfaceData', function () {
+    it('retrieves IPv4 network interface info', function (done) {
       const connection = new Connection(config);
 
       const net = new iNetwork(connection);

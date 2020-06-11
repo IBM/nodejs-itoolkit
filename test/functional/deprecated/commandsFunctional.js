@@ -17,7 +17,6 @@
 
 /* eslint-disable new-cap */
 
-
 const { expect } = require('chai');
 const { parseString } = require('xml2js');
 const {
@@ -45,13 +44,13 @@ if (config.transport === 'rest') {
   };
 }
 
-describe('iSh, iCmd, iQsh, Functional Tests', () => {
-  before(() => {
+describe('iSh, iCmd, iQsh, Functional Tests', function () {
+  before(function () {
     printConfig();
   });
 
-  describe('iCmd()', () => {
-    it('calls CL command', (done) => {
+  describe('iCmd()', function () {
+    it('calls CL command', function (done) {
       const connection = new iConn(database, username, password, restOptions);
       connection.add(iCmd('RTVJOBA USRLIBL(?) SYSLIBL(?)'));
       connection.run((xmlOut) => {
@@ -64,8 +63,8 @@ describe('iSh, iCmd, iQsh, Functional Tests', () => {
     });
   });
 
-  describe('iSh()', () => {
-    it('calls PASE shell command', (done) => {
+  describe('iSh()', function () {
+    it('calls PASE shell command', function (done) {
       const connection = new iConn(database, username, password, restOptions);
       connection.add(iSh('system -i wrksyssts'));
       connection.run((xmlOut) => {
@@ -80,8 +79,8 @@ describe('iSh, iCmd, iQsh, Functional Tests', () => {
     });
   });
 
-  describe('iQsh()', () => {
-    it('calls QSH command', (done) => {
+  describe('iQsh()', function () {
+    it('calls QSH command', function (done) {
       const connection = new iConn(database, username, password, restOptions);
       connection.add(iQsh('system wrksyssts'));
       connection.run((xmlOut) => {

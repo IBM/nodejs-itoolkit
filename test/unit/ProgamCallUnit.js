@@ -15,8 +15,6 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-/* eslint-disable new-cap */
-
 const { expect } = require('chai');
 const { ProgramCall } = require('../../lib/itoolkit');
 
@@ -37,16 +35,16 @@ const errno = [
   { type: '1A', value: '' },
 ];
 
-describe('ProgramCall Class Unit Tests', () => {
-  describe('constructor', () => {
-    it('creates and returns an instance of ProgramCall with lib and function set', () => {
+describe('ProgramCall Class Unit Tests', function () {
+  describe('constructor', function () {
+    it('creates and returns an instance of ProgramCall with lib and function set', function () {
       const pgm = new ProgramCall('QTOCNETSTS');
       expect(pgm).to.be.instanceOf(ProgramCall);
     });
   });
 
-  describe('toXML', () => {
-    it('returns pgm XML', () => {
+  describe('toXML', function () {
+    it('returns pgm XML', function () {
       const pgm = new ProgramCall('QTOCNETSTS',
         {
           lib: 'QSYS',
@@ -60,8 +58,8 @@ describe('ProgramCall Class Unit Tests', () => {
     });
   });
 
-  describe('addParam', () => {
-    it('appends param to pgm xml', () => {
+  describe('addParam', function () {
+    it('appends param to pgm xml', function () {
       const pgm = new ProgramCall('QTOCNETSTS',
         {
           lib: 'QSYS',
@@ -134,7 +132,7 @@ describe('ProgramCall Class Unit Tests', () => {
       expect(pgm.toXML()).to.equal(expectedXML);
     });
 
-    it('regular <parm> contains by=\'val\'', () => {
+    it('regular <parm> contains by=\'val\'', function () {
       const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
       pgm.addParam({ value: '', type: '1A', by: 'val' });
@@ -144,7 +142,7 @@ describe('ProgramCall Class Unit Tests', () => {
       expect(lookAtXML).to.match(/<parm .*by='val'.*>/);
     });
 
-    it('data structure <parm> contains by=\'val\'', () => {
+    it('data structure <parm> contains by=\'val\'', function () {
       const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
       const params = [
@@ -161,7 +159,7 @@ describe('ProgramCall Class Unit Tests', () => {
       expect(lookAtXML).to.match(/<parm .*by='val'.*>/);
     });
 
-    it('regular <parm> contains by=\'val\', with io=\'both\'', () => {
+    it('regular <parm> contains by=\'val\', with io=\'both\'', function () {
       const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
       pgm.addParam({
@@ -174,7 +172,7 @@ describe('ProgramCall Class Unit Tests', () => {
       expect(lookAtXML).to.match(/<parm .*io='both'.*>/);
     });
 
-    it('data structure <parm> contains by=\'val\', with io=\'both\'', () => {
+    it('data structure <parm> contains by=\'val\', with io=\'both\'', function () {
       const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
       const params = [
@@ -192,7 +190,7 @@ describe('ProgramCall Class Unit Tests', () => {
       expect(lookAtXML).to.match(/<parm .*io='both'.*>/);
     });
 
-    it('add nested data structure parameter', () => {
+    it('add nested data structure parameter', function () {
       const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB' });
 
       const nestedDs = {
@@ -238,8 +236,8 @@ describe('ProgramCall Class Unit Tests', () => {
   });
 
 
-  describe('addReturn', () => {
-    it('appends return to pgm xml', () => {
+  describe('addReturn', function () {
+    it('appends return to pgm xml', function () {
       const pgm = new ProgramCall('QTOCNETSTS',
         {
           lib: 'QSYS',
@@ -255,7 +253,7 @@ describe('ProgramCall Class Unit Tests', () => {
       expect(pgm.toXML()).to.equal(expectedXML);
     });
 
-    it('appends return with ds to pgm xml', () => {
+    it('appends return with ds to pgm xml', function () {
       const pgm = new ProgramCall('TEST');
 
       const ds = {

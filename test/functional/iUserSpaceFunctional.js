@@ -37,15 +37,15 @@ function generateRandomName() {
   return name.toUpperCase();
 }
 
-describe('UserSpace Functional Tests', () => {
-  before(() => {
+describe('UserSpace Functional Tests', function () {
+  before(function () {
     printConfig();
   });
 
   let userSpaceName;
 
-  describe('createUserSpace', () => {
-    it('creates a user space', (done) => {
+  describe('createUserSpace', function () {
+    it('creates a user space', function (done) {
       const connection = new Connection(config);
 
       const userSpace = new iUserSpace(connection);
@@ -64,8 +64,8 @@ describe('UserSpace Functional Tests', () => {
     });
   });
 
-  describe('setUserSpaceData', () => {
-    it('sets data within the user space', (done) => {
+  describe('setUserSpaceData', function () {
+    it('sets data within the user space', function (done) {
       if (!userSpaceName) {
         this.skip();
       }
@@ -85,8 +85,8 @@ describe('UserSpace Functional Tests', () => {
     });
   });
 
-  describe('getUserSpaceData', () => {
-    it('returns specified length of data', (done) => {
+  describe('getUserSpaceData', function () {
+    it('returns specified length of data', function (done) {
       if (!userSpaceName) {
         this.skip();
       }
@@ -103,8 +103,8 @@ describe('UserSpace Functional Tests', () => {
     });
   });
 
-  describe('deleteUserSpace', () => {
-    it('removes a user space', (done) => {
+  describe('deleteUserSpace', function () {
+    it('removes a user space', function (done) {
       if (!userSpaceName) {
         this.skip();
       }

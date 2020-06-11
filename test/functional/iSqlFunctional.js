@@ -22,13 +22,13 @@ const { parseString } = require('xml2js');
 const { iSql, Connection } = require('../../lib/itoolkit');
 const { config, printConfig } = require('./config');
 
-describe('iSql Functional Tests', () => {
-  before(() => {
+describe('iSql Functional Tests', function () {
+  before(function () {
     printConfig();
   });
 
-  describe('prepare & execute', () => {
-    it('prepares & executes stored procedure then fetch results', (done) => {
+  describe('prepare & execute', function () {
+    it('prepares & executes stored procedure then fetch results', function (done) {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -61,8 +61,8 @@ describe('iSql Functional Tests', () => {
     });
   });
 
-  describe('addQuery & fetch', () => {
-    it('runs a query and fetches results', (done) => {
+  describe('addQuery & fetch', function () {
+    it('runs a query and fetches results', function (done) {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -87,8 +87,8 @@ describe('iSql Functional Tests', () => {
     });
   });
 
-  describe('added test to ensure issue #11 was resolved', () => {
-    it('should parse SQL result set empty data tags correctly', (done) => {
+  describe('added test to ensure issue #11 was resolved', function () {
+    it('should parse SQL result set empty data tags correctly', function (done) {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -114,8 +114,8 @@ describe('iSql Functional Tests', () => {
     });
   });
 
-  describe('tables', () => {
-    it('returns meta data for specified table', (done) => {
+  describe('tables', function () {
+    it('returns meta data for specified table', function (done) {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -139,8 +139,8 @@ describe('iSql Functional Tests', () => {
     });
   });
 
-  describe('tablePriv', () => {
-    it('returns privilege data for a table', (done) => {
+  describe('tablePriv', function () {
+    it('returns privilege data for a table', function (done) {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -166,8 +166,8 @@ describe('iSql Functional Tests', () => {
     });
   });
 
-  describe('columns', () => {
-    it('returns meta data for a column', (done) => {
+  describe('columns', function () {
+    it('returns meta data for a column', function (done) {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -204,8 +204,8 @@ describe('iSql Functional Tests', () => {
     });
   });
 
-  describe('columnPriv', () => {
-    it('returns privilege data for a column', (done) => {
+  describe('columnPriv', function () {
+    it('returns privilege data for a column', function (done) {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -233,8 +233,8 @@ describe('iSql Functional Tests', () => {
     });
   });
 
-  describe('procedures', () => {
-    it('returns meta data on for a procedure', (done) => {
+  describe('procedures', function () {
+    it('returns meta data on for a procedure', function (done) {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -261,8 +261,8 @@ describe('iSql Functional Tests', () => {
     });
   });
 
-  describe('pColumns', () => {
-    it('returns meta data for procedure column', (done) => {
+  describe('pColumns', function () {
+    it('returns meta data for procedure column', function (done) {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -300,8 +300,8 @@ describe('iSql Functional Tests', () => {
     });
   });
 
-  describe('primaryKeys', () => {
-    it('returns meta data for a primary key', (done) => {
+  describe('primaryKeys', function () {
+    it('returns meta data for a primary key', function (done) {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -326,8 +326,8 @@ describe('iSql Functional Tests', () => {
     });
   });
 
-  describe('foreignKeys', () => {
-    it('returns meta data for a foreign key', (done) => {
+  describe('foreignKeys', function () {
+    it('returns meta data for a foreign key', function (done) {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -361,8 +361,8 @@ describe('iSql Functional Tests', () => {
     });
   });
 
-  describe('statistics', () => {
-    it('returns stats info for table', (done) => {
+  describe('statistics', function () {
+    it('returns stats info for table', function (done) {
       const connection = new Connection(config);
 
       const sql = new iSql();
@@ -394,10 +394,10 @@ describe('iSql Functional Tests', () => {
     });
   });
 
-  describe.skip('special', () => {
+  describe.skip('special', function () {
     // TODO: find passing case
     // Below test fails with error code 9- argument value not valid
-    it.skip('returns meta data for special columns', (done) => {
+    it.skip('returns meta data for special columns', function (done) {
       // [catalog, schema, table, row | transaction |session, no | nullable]
       const connection = new Connection(config);
 
@@ -418,9 +418,9 @@ describe('iSql Functional Tests', () => {
     });
   });
 
-  describe.skip('rowCount', () => {
+  describe.skip('rowCount', function () {
     // Skip for now need to create a table for this test  to insert to.
-    it.skip('returns the number of rows affected by statement', (done) => {
+    it.skip('returns the number of rows affected by statement', function (done) {
       const connection = new Connection(config);
 
       const sql = new iSql();

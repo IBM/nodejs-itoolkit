@@ -22,13 +22,13 @@ const { Connection, iWork } = require('../../lib/itoolkit');
 const { config, printConfig } = require('./config');
 const { checkObjectExists } = require('./checkObjectExists');
 
-describe('iWork Functional Tests', () => {
-  before(() => {
+describe('iWork Functional Tests', function () {
+  before(function () {
     printConfig();
   });
 
-  describe('getSysValue', () => {
-    it('returns the value of system variable', (done) => {
+  describe('getSysValue', function () {
+    it('returns the value of system variable', function (done) {
       const connection = new Connection(config);
 
       const work = new iWork(connection);
@@ -40,7 +40,7 @@ describe('iWork Functional Tests', () => {
       });
     });
 
-    it('returns an error when the specified system value is invalid', (done) => {
+    it('returns an error when the specified system value is invalid', function (done) {
       const connection = new Connection(config);
 
       const work = new iWork(connection);
@@ -52,8 +52,8 @@ describe('iWork Functional Tests', () => {
     });
   });
 
-  describe('getSysStatus', () => {
-    it('returns basic system status information about the signed-on users and batch jobs', (done) => {
+  describe('getSysStatus', function () {
+    it('returns basic system status information about the signed-on users and batch jobs', function (done) {
       const connection = new Connection(config);
       const work = new iWork(connection);
 
@@ -81,8 +81,8 @@ describe('iWork Functional Tests', () => {
     });
   });
 
-  describe('getSysStatusExt', () => {
-    it('returns more detailed system status info', (done) => {
+  describe('getSysStatusExt', function () {
+    it('returns more detailed system status info', function (done) {
       const connection = new Connection(config);
 
       const work = new iWork(connection);
@@ -126,8 +126,8 @@ describe('iWork Functional Tests', () => {
     });
   });
 
-  describe('getJobStatus', () => {
-    it('returns status of specified job', (done) => {
+  describe('getJobStatus', function () {
+    it('returns status of specified job', function (done) {
       const connection = new Connection(config);
 
       const work = new iWork(connection);
@@ -142,8 +142,8 @@ describe('iWork Functional Tests', () => {
     });
   });
 
-  describe('getJobInfo', () => {
-    it('returns info on specfed job', (done) => {
+  describe('getJobInfo', function () {
+    it('returns info on specfed job', function (done) {
       const connection = new Connection(config);
 
       const work = new iWork(connection);
@@ -191,14 +191,14 @@ describe('iWork Functional Tests', () => {
     });
   });
 
-  describe('getDataArea', () => {
-    before('check if data area exists for tests', (done) => {
+  describe('getDataArea', function () {
+    before('check if data area exists for tests', function (done) {
       checkObjectExists(config, 'TESTDA', '*DTAARA', (error) => {
         if (error) { throw error; }
         done();
       });
     });
-    it('returns contents of a data area', (done) => {
+    it('returns contents of a data area', function (done) {
       const connection = new Connection(config);
 
       const work = new iWork(connection);

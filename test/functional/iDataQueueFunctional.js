@@ -24,11 +24,11 @@ const { checkObjectExists } = require('./checkObjectExists');
 
 const lib = 'NODETKTEST';
 
-describe('DataQueue Functional Tests', () => {
+describe('DataQueue Functional Tests', function () {
   const dqName = 'TESTQ';
   const dqName2 = 'TESTQ2';
 
-  before('check if data queue exists for tests', (done) => {
+  before('check if data queue exists for tests', function (done) {
     printConfig();
     checkObjectExists(config, dqName, '*DTAQ', (error) => {
       if (error) { throw error; }
@@ -39,8 +39,8 @@ describe('DataQueue Functional Tests', () => {
       });
     });
   });
-  describe('sendToDataQueue', () => {
-    it('sends data to specified DQ', (done) => {
+  describe('sendToDataQueue', function () {
+    it('sends data to specified DQ', function (done) {
       const connection = new Connection(config);
 
       const dq = new iDataQueue(connection);
@@ -53,8 +53,8 @@ describe('DataQueue Functional Tests', () => {
     });
   });
 
-  describe('receiveFromDataQueue', () => {
-    it('receives data from specfied DQ', (done) => {
+  describe('receiveFromDataQueue', function () {
+    it('receives data from specfied DQ', function (done) {
       const connection = new Connection(config);
 
       const dq = new iDataQueue(connection);
@@ -67,8 +67,8 @@ describe('DataQueue Functional Tests', () => {
     });
   });
 
-  describe('clearDataQueue', () => {
-    it('clears the specifed DQ', (done) => {
+  describe('clearDataQueue', function () {
+    it('clears the specifed DQ', function (done) {
       const connection = new Connection(config);
 
       const dq = new iDataQueue(connection);
