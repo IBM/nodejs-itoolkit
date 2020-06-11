@@ -33,3 +33,9 @@ jobs:
         TKUSER: ${{ secrets.IBMI_USERNAME }}
         TKPASS: ${{ secrets.IBMI_PASSWORD }}
 
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: npm ci
+    - run: npm run lint
