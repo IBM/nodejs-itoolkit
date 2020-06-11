@@ -16,8 +16,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 /* eslint-disable new-cap */
-/* eslint-disable prefer-arrow-callback */
-/* eslint-disable func-names */
 
 const { expect } = require('chai');
 const { parseString } = require('xml2js');
@@ -81,7 +79,7 @@ describe('iPgm Functional Tests', function () {
     });
   });
 
-  describe.skip('Test iPgm()', () => {
+  describe.skip('Test iPgm()', function () {
     // ZZSRV6 program requires XMLSERVICE built with tests
     // Skip for now, we need to add before hook to check if ZZSRV6 is available
     it.skip('Should be successful with addReturn arbitrary attribute specified using', function (done) {

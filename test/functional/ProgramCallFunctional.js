@@ -81,7 +81,7 @@ describe('ProgramCall Functional Tests', function () {
     });
   });
 
-  describe.skip('Test ProgramCall()', () => {
+  describe.skip('Test ProgramCall()', function () {
     // ZZSRV6 program requires XMLSERVICE built with tests
     // Skip for now, we need to add before hook to check ZZSRV6 is available
     it.skip('Should be successful with addReturn arbitrary attribute specified', function (done) {
