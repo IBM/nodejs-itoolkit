@@ -12,11 +12,9 @@ Ensure dependencies are installed by running `npm install` from the project root
 
 Integration tests require additional setup and configuration. Some tests require objects to preexist on the IBM i. The test case will check if the object exists and log instructions if the object is not found.
 
-## Setup Rest interface
-- view the [README](../README.md#rest)
+## [Setup Rest interface](https://nodejs-itoolkit.readthedocs.io/en/latest/Connection.html#rest)
 
-## Setup SSH interface
-- view the [README](../README.md#ssh)
+## [Setup SSH interface](https://nodejs-itoolkit.readthedocs.io/en/latest/Connection.html#ssh)
 
 ## Configuring Tests
 
