@@ -21,7 +21,28 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const { iConn, iSh } = require('../../../lib/itoolkit');
 
+let deprecation = null;
+function deprecationHandler(dep) {
+  deprecation = dep;
+}
+
+function getDeprecation() {
+  const temp = deprecation;
+  deprecation = null;
+  return temp;
+}
+
+const iConnDepMessage = "As of v1.0, class 'iConn' is deprecated. Please use 'Connection' instead.";
+
 describe('iConn Class Unit Tests', function () {
+  before(function () {
+    process.on('deprecation', deprecationHandler);
+  });
+
+  after(function () {
+    process.removeAllListeners('deprecation', deprecationHandler);
+  });
+
   describe('constructor', function () {
     it('creates and returns an instance of iConn with idb transport', function () {
       const database = process.env.TKDB || '*LOCAL';
@@ -29,6 +50,7 @@ describe('iConn Class Unit Tests', function () {
       const password = process.env.TKPASS || '';
 
       const connection = new iConn(database, username, password);
+      expect(getDeprecation().message).to.equal(iConnDepMessage);
 
       expect(connection).to.be.instanceOf(iConn);
       expect(connection.connection.transportOptions).to.be.an('Object');
@@ -58,6 +80,8 @@ describe('iConn Class Unit Tests', function () {
       const connection = new iConn(database, username, password, options);
 
       expect(connection).to.be.instanceOf(iConn);
+      expect(getDeprecation().message).to.equal(iConnDepMessage);
+
       expect(connection.connection.transportOptions).to.be.an('Object');
       expect(connection.connection.transportOptions.database).to.equal(database);
       expect(connection.connection.transportOptions.username).to.equal(username);
@@ -80,6 +104,8 @@ describe('iConn Class Unit Tests', function () {
       const connection = new iConn(database, username, password);
 
       connection.add(iSh('ls -lah'));
+      expect(getDeprecation().message).to
+        .equal("As of v1.0, 'iConn.add()' is deprecated. Please use 'Connection.add()' instead");
       expect(connection.connection.commandList.length).to.equal(1);
       expect(connection.connection.commandList[0]).to.equal('<sh error=\'fast\'>ls -lah</sh>');
     });
@@ -94,6 +120,8 @@ describe('iConn Class Unit Tests', function () {
       const connection = new iConn(database, username, password);
 
       connection.debug(true);
+      expect(getDeprecation().message).to
+        .equal("As of v1.0, 'iConn.debug()' is deprecated. Please use 'Connection.debug()' instead");
       expect(connection.debug()).to.equal(true);
       connection.debug(false);
       expect(connection.debug()).to.equal(false);
@@ -111,6 +139,8 @@ describe('iConn Class Unit Tests', function () {
 
       // iConn.getConnection() calls -> Connection.getTransportOptions()
       const options = connection.getConnection();
+      expect(getDeprecation().message).to
+        .equal("As of v1.0, 'iConn.getConnection()' is deprecated. Please use 'Connection.getTransportOptions()' instead");
 
       expect(options).to.be.an('Object');
       expect(options.database).to.equal(database);
@@ -153,6 +183,8 @@ describe('iConn Class Unit Tests', function () {
 
       sinon.stub(connection, 'run').yields(xmlOut);
 
+      // we dont assert iConn.run deprecation warning is emitted
+      // because the .run methoh is being mocked here
       connection.run((result) => {
         expect(result).to.equal(xmlOut);
       });

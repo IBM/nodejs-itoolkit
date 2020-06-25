@@ -41,9 +41,25 @@ if (config.transport === 'rest') {
   };
 }
 
+let deprecation = null;
+function deprecationHandler(dep) {
+  deprecation = dep;
+}
+
+function getDeprecation() {
+  const temp = deprecation;
+  deprecation = null;
+  return temp;
+}
+
 describe('iProd Functional Tests', function () {
   before(function () {
     printConfig();
+    process.on('deprecation', deprecationHandler);
+  });
+
+  after(function () {
+    process.removeAllListeners('deprecation', deprecationHandler);
   });
 
   describe('constructor', function () {
@@ -53,6 +69,8 @@ describe('iProd Functional Tests', function () {
       const prod = new iProd(connection);
 
       expect(prod).to.be.instanceOf(iProd);
+      expect(getDeprecation().message).to
+        .equal("As of v1.0, class 'iProd' is deprecated and will be removed at a later time.");
     });
   });
 
@@ -63,6 +81,8 @@ describe('iProd Functional Tests', function () {
       const prod = new iProd(connection);
 
       prod.getPTFInfo('SI67726', (ptf) => {
+        expect(getDeprecation().message).to
+          .equal("As of v1.0, 'iProd.getPTFInfo()' is deprecated and will be removed at a later time");
         expect(ptf).to.be.an('Object');
         expect(ptf).to.have.a.property('Product_ID');
         expect(ptf).to.have.a.property('PTF_ID');
@@ -105,6 +125,8 @@ describe('iProd Functional Tests', function () {
       const prod = new iProd(connection);
 
       prod.getProductInfo('5770DG1', (product) => {
+        expect(getDeprecation().message).to
+          .equal("As of v1.0, 'iProd.getProductInfo()' is deprecated and will be removed at a later time");
         expect(product).to.be.an('Object');
         expect(product).to.have.a.property('Product_ID');
         expect(product).to.have.a.property('Release_level');
@@ -136,6 +158,8 @@ describe('iProd Functional Tests', function () {
       const prod = new iProd(connection);
 
       prod.getInstalledProducts((products) => {
+        expect(getDeprecation().message).to
+          .equal("As of v1.0, 'iProd.getInstalledProducts()' is deprecated and will be removed at a later time");
         expect(products).to.be.an('Array');
         expect(products.length).to.be.greaterThan(0);
 

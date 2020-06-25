@@ -20,17 +20,39 @@
 const { expect } = require('chai');
 const { iSql } = require('../../../lib/itoolkit');
 
+let deprecation = null;
+function deprecationHandler(dep) {
+  deprecation = dep;
+}
+
+function getDeprecation() {
+  const temp = deprecation;
+  deprecation = null;
+  return temp;
+}
+
+const iSqlDepMessage = ("As of v1.0, class 'iSql' is deprecated. Use odbc, idb-connector, or idb-pconnector npm package instead.");
+
 describe('iSql Class Unit Tests', function () {
+  before(function () {
+    process.on('deprecation', deprecationHandler);
+  });
+
+  after(function () {
+    process.removeAllListeners('deprecation', deprecationHandler);
+  });
+
   describe('constructor', function () {
     it('creates returns an instance of iSql', function () {
       const sql = new iSql();
-
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
       expect(sql).to.be.instanceOf(iSql);
     });
   });
   describe('toXML', function () {
     it('returns current sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql></sql>';
 
@@ -40,6 +62,7 @@ describe('iSql Class Unit Tests', function () {
   describe('addQuery', function () {
     it('appends query with error is on to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><query error=\'on\'>select * from QIWS.QCUSTCDT</query></sql>';
 
@@ -49,6 +72,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends query with options object to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><query error=\'fast\'>select * from QIWS.QCUSTCDT</query></sql>';
 
@@ -60,6 +84,7 @@ describe('iSql Class Unit Tests', function () {
   describe('fetch', function () {
     it('appends fetch without options object to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><fetch block=\'all\' desc=\'on\' error=\'fast\'></fetch></sql>';
 
@@ -68,6 +93,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends fetch with block is 10 to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><fetch block=\'10\' desc=\'on\' error=\'fast\'></fetch></sql>';
 
@@ -76,6 +102,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends fetch with desc is off to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><fetch block=\'all\' desc=\'off\' error=\'fast\'></fetch></sql>';
 
@@ -84,6 +111,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends fetch with error is on to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><fetch block=\'all\' desc=\'on\' error=\'on\'></fetch></sql>';
 
@@ -94,6 +122,7 @@ describe('iSql Class Unit Tests', function () {
   describe('commit', function () {
     it('appends commit with action commit to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><commit action=\'commit\' error=\'fast\'></commit></sql>';
 
@@ -102,6 +131,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends commit with action rollback to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><commit action=\'rollback\' error=\'fast\'></commit></sql>';
 
@@ -110,6 +140,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends commit with default action to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><commit action=\'commit\' error=\'fast\'></commit></sql>';
 
@@ -118,6 +149,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends commit with error is on to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><commit action=\'commit\' error=\'on\'></commit></sql>';
 
@@ -128,6 +160,7 @@ describe('iSql Class Unit Tests', function () {
   describe('prepare', function () {
     it('appends prepare to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><prepare error=\'fast\'>SELECT * FROM QIWS.QCUSTCDT WHERE BALDUE > ?</prepare></sql>';
 
@@ -136,6 +169,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends prepare with error on to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><prepare error=\'on\'>SELECT * FROM QIWS.QCUSTCDT WHERE BALDUE > ?</prepare></sql>';
 
@@ -147,6 +181,7 @@ describe('iSql Class Unit Tests', function () {
   describe('execute', function () {
     it('appends execute with parameters to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><execute error=\'fast\'><parm io=\'in\'>30</parm></execute></sql>';
 
@@ -155,6 +190,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends execute with parameters and error on to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><execute error=\'on\'><parm io=\'in\'>30</parm></execute></sql>';
 
@@ -163,6 +199,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends execute without parameters to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><execute error=\'fast\'></execute></sql>';
 
@@ -171,6 +208,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends execute without parameters and error on to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><execute error=\'on\'></execute></sql>';
 
@@ -181,6 +219,7 @@ describe('iSql Class Unit Tests', function () {
   describe('tables', function () {
     it('appends tables to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><tables error=\'fast\'><parm></parm><parm>QIWS</parm><parm></parm><parm></parm></tables></sql>';
       // catalog, schema, table, table type
@@ -189,6 +228,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends tables with error on to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><tables error=\'on\'><parm></parm><parm>QIWS</parm><parm></parm><parm></parm></tables></sql>';
       // catalog, schema, table, table type
@@ -199,6 +239,7 @@ describe('iSql Class Unit Tests', function () {
   describe('tablePriv', function () {
     it('appends tablepriv to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><tablepriv error=\'fast\'><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm></tablepriv></sql>';
       // catalog, schema, table
@@ -207,6 +248,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends tablepriv with error on to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><tablepriv error=\'on\'><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm></tablepriv></sql>';
       // catalog, schema, table
@@ -217,6 +259,7 @@ describe('iSql Class Unit Tests', function () {
   describe('columns', function () {
     it('appends columns to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><columns error=\'fast\'><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm><parm></parm></columns></sql>';
       // catalog, schema, table, column
@@ -225,6 +268,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends columns with error on to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><columns error=\'on\'><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm><parm></parm></columns></sql>';
       // catalog, schema, table, column
@@ -235,6 +279,7 @@ describe('iSql Class Unit Tests', function () {
   describe('columnPriv', function () {
     it('appends columnpriv to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><columnpriv error=\'fast\'><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm><parm></parm></columnpriv></sql>';
       // catalog, schema, table, column
@@ -243,6 +288,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends columnpriv with error on to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><columnpriv error=\'on\'><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm><parm></parm></columnpriv></sql>';
       // catalog, schema, table, column
@@ -253,6 +299,7 @@ describe('iSql Class Unit Tests', function () {
   describe('procedures', function () {
     it('appends procedures to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><procedures error=\'fast\'><parm></parm><parm>QSYS2</parm><parm>TCPIP_INFO</parm></procedures></sql>';
       // catalog, schema, procedure
@@ -261,6 +308,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends procedures with error on to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><procedures error=\'on\'><parm></parm><parm>QSYS2</parm><parm>TCPIP_INFO</parm></procedures></sql>';
       // catalog, schema, procedure
@@ -272,6 +320,7 @@ describe('iSql Class Unit Tests', function () {
     it('appends pColumns to sql XML', function () {
       // procedure columns:
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><pcolumns error=\'fast\'><parm></parm><parm>QSYS2</parm><parm>QCMDEXC</parm><parm>COMMAND</parm></pcolumns></sql>';
       // catalog, schema, procedure, column
@@ -281,6 +330,7 @@ describe('iSql Class Unit Tests', function () {
     it('appends pColumns with error on to sql XML', function () {
       // procedure columns:
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><pcolumns error=\'on\'><parm></parm><parm>QSYS2</parm><parm>QCMDEXC</parm><parm>COMMAND</parm></pcolumns></sql>';
       // catalog, schema, procedure, column
@@ -291,6 +341,7 @@ describe('iSql Class Unit Tests', function () {
   describe('primaryKeys', function () {
     it('appends primarykeys to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><primarykeys error=\'fast\'><parm></parm><parm>QUSRSYS</parm><parm>QASZRAIRX</parm></primarykeys></sql>';
       // catalog, schema, table
@@ -299,6 +350,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends primarykeys with error on to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><primarykeys error=\'on\'><parm></parm><parm>QUSRSYS</parm><parm>QASZRAIRX</parm></primarykeys></sql>';
       // catalog, schema, table
@@ -309,6 +361,7 @@ describe('iSql Class Unit Tests', function () {
   describe('foreignKeys', function () {
     it('appends foreignkeys to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><foreignkeys error=\'fast\'><parm></parm><parm>QUSRSYS</parm><parm>QASZRAIRC</parm><parm></parm><parm>QUSRSYS</parm><parm>QASZRAIRX</parm></foreignkeys></sql>';
 
@@ -319,6 +372,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends foreignkeys with error on to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><foreignkeys error=\'on\'><parm></parm><parm>QUSRSYS</parm><parm>QASZRAIRC</parm><parm></parm><parm>QUSRSYS</parm><parm>QASZRAIRX</parm></foreignkeys></sql>';
 
@@ -331,6 +385,7 @@ describe('iSql Class Unit Tests', function () {
   describe('statistics', function () {
     it('appends statistics to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><statistics error=\'fast\'><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm><parm>all</parm></statistics></sql>';
       // catalog, schema, table, all | unique
@@ -339,6 +394,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends statistics with error on to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><statistics error=\'on\'><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm><parm>all</parm></statistics></sql>';
       // catalog, schema, table, all | unique
@@ -349,6 +405,7 @@ describe('iSql Class Unit Tests', function () {
   describe('special', function () {
     it('appends special to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><special error=\'fast\'><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm><parm>row</parm><parm>no</parm></special></sql>';
       // catalog, schema, table, row | transaction | session, no | unique
@@ -357,6 +414,8 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends special with error on to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
+
 
       const expectedXML = '<sql><special error=\'on\'><parm></parm><parm>QIWS</parm><parm>QCUSTCDT</parm><parm>row</parm><parm>no</parm></special></sql>';
       // catalog, schema, table, row | transaction | session, no | unique
@@ -367,6 +426,7 @@ describe('iSql Class Unit Tests', function () {
   describe('count', function () {
     it('appends count to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><count desc=\'both\' error=\'fast\'></count></sql>';
       sql.count({ desc: 'both' });
@@ -374,6 +434,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends count without options object to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><count desc=\'both\' error=\'fast\'></count></sql>';
       sql.count();
@@ -381,6 +442,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends count with error on to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><count desc=\'both\' error=\'on\'></count></sql>';
       sql.count({ error: 'on' });
@@ -390,6 +452,7 @@ describe('iSql Class Unit Tests', function () {
   describe('rowCount', function () {
     it('appends rowcount to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><rowcount error=\'fast\'></rowcount></sql>';
       sql.rowCount();
@@ -397,6 +460,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends rowcount with error on to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><rowcount error=\'on\'></rowcount></sql>';
       sql.rowCount({ error: 'on' });
@@ -406,6 +470,7 @@ describe('iSql Class Unit Tests', function () {
   describe('free', function () {
     it('appends free to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><free></free></sql>';
       sql.free();
@@ -415,6 +480,7 @@ describe('iSql Class Unit Tests', function () {
   describe('describe', function () {
     it('appends describe to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><describe desc=\'both\' error=\'fast\'></describe></sql>';
 
@@ -423,6 +489,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends describe without options object to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><describe desc=\'both\' error=\'fast\'></describe></sql>';
 
@@ -431,6 +498,7 @@ describe('iSql Class Unit Tests', function () {
     });
     it('appends describe with error on to sql XML', function () {
       const sql = new iSql();
+      expect(getDeprecation().message).to.equal(iSqlDepMessage);
 
       const expectedXML = '<sql><describe desc=\'both\' error=\'on\'></describe></sql>';
 

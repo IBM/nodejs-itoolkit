@@ -41,9 +41,25 @@ if (config.transport === 'rest') {
   };
 }
 
+let deprecation = null;
+function deprecationHandler(dep) {
+  deprecation = dep;
+}
+
+function getDeprecation() {
+  const temp = deprecation;
+  deprecation = null;
+  return temp;
+}
+
 describe('iObj Functional Tests', function () {
   before(function () {
     printConfig();
+    process.on('deprecation', deprecationHandler);
+  });
+
+  after(function () {
+    process.removeAllListeners('deprecation', deprecationHandler);
   });
 
   describe('constructor', function () {
@@ -53,6 +69,8 @@ describe('iObj Functional Tests', function () {
       const obj = new iObj(connection);
 
       expect(obj).to.be.instanceOf(iObj);
+      expect(getDeprecation().message).to
+        .equal("As of v1.0, class 'iObj' is deprecated and will be removed at a later time.");
     });
   });
 
@@ -63,6 +81,8 @@ describe('iObj Functional Tests', function () {
       const obj = new iObj(connection);
 
       obj.retrUsrAuth('*PUBLIC', '*PGM', 'XMLCGI', 'QXMLSERV', (output) => {
+        expect(getDeprecation().message).to
+          .equal("As of v1.0, 'iObj.retrUsrAuth()' is deprecated and will be removed at a later time.");
         expect(output).to.be.an('Object');
         expect(output).to.have.a.property('Object_authority_/_Data_authority');
         expect(output).to.have.a.property('Authorization_list_management');
@@ -107,6 +127,8 @@ describe('iObj Functional Tests', function () {
       const obj = new iObj(connection);
 
       obj.retrCmdInfo('CRTLIB', '*LIBL', (output) => {
+        expect(getDeprecation().message).to
+          .equal("As of v1.0, 'iObj.retrCmdInfo()' is deprecated and will be removed at a later time.");
         expect(output).to.be.an('Object');
         expect(output).to.have.a.property('Command_name');
         expect(output).to.have.a.property('Command_library_name');
@@ -159,6 +181,8 @@ describe('iObj Functional Tests', function () {
       const obj = new iObj(connection);
 
       obj.retrPgmInfo('XMLCGI', 'QXMLSERV', (output) => {
+        expect(getDeprecation().message).to
+          .equal("As of v1.0, 'iObj.retrPgmInfo()' is deprecated and will be removed at a later time.");
         expect(output).to.be.an('Object');
         expect(output).to.have.a.property('Program_name');
         expect(output).to.have.a.property('Program_library_name');
@@ -233,6 +257,8 @@ describe('iObj Functional Tests', function () {
       const obj = new iObj(connection);
 
       obj.retrSrvPgmInfo('QZSRVSSL', 'QHTTPSVR', (output) => {
+        expect(getDeprecation().message).to
+          .equal("As of v1.0, 'iObj.retrSrvPgmInfo()' is deprecated and will be removed at a later time.");
         expect(output).to.be.an('Object');
         expect(output).to.have.a.property('Service_program_name');
         expect(output).to.have.a.property('Service_program_name');
@@ -288,6 +314,8 @@ describe('iObj Functional Tests', function () {
       const obj = new iObj(connection);
 
       obj.retrUserInfo('QSYS', (output) => {
+        expect(getDeprecation().message).to
+          .equal("As of v1.0, 'iObj.retrUserInfo()' is deprecated and will be removed at a later time.");
         expect(output).to.be.an('Object');
         expect(output).to.have.a.property('User_profile_name');
         expect(output).to.have.a.property('Previous_sign-on_date_and_time');
@@ -314,6 +342,8 @@ describe('iObj Functional Tests', function () {
       const obj = new iObj(connection);
 
       obj.retrUserAuthToObj('/home', (output) => {
+        expect(getDeprecation().message).to
+          .equal("As of v1.0, 'iObj.retrUserAuthToObj()' is deprecated and will be removed at a later time.");
         expect(output).to.be.an('Object');
         expect(output).to.have.a.property('Profile_name');
         expect(output).to.have.a.property('User_or_group_indicator');
@@ -341,6 +371,8 @@ describe('iObj Functional Tests', function () {
       const obj = new iObj(connection);
 
       obj.addToLibraryList('QHTTPSVR', (output) => {
+        expect(getDeprecation().message).to
+          .equal("As of v1.0, 'iObj.addToLibraryList()' is deprecated and will be removed at a later time.");
         expect(output).to.be.a('boolean').and.to.equal(true);
         done();
       });
