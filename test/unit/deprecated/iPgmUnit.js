@@ -226,10 +226,8 @@ describe('iPgm Class Unit Tests', function () {
         });
 
       pgm.addReturn('0', '20A');
-      // iPgm.addReturn() needs to emit a deprecation warning
-      // expect(getDeprecation().message).to
-      //   .equal("As of v1.0, 'iPgm.addReturn()' is deprecated. \
-      //           Please use 'ProgramCall.addReturn()' instead.");
+      expect(getDeprecation().message).to
+        .equal("As of v1.0, 'iPgm.addReturn()' is deprecated. Please use 'ProgramCall.addReturn()' instead.");
 
       const expectedXML = '<pgm name=\'QTOCNETSTS\' lib=\'QSYS\' func=\'QtoRtvTCPA\' '
       + 'error=\'fast\'><return><data type=\'20A\'>0</data></return></pgm>';
