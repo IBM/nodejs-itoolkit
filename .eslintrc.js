@@ -29,7 +29,6 @@ module.exports = {
         // The following rules cause problems for our existing tests, so they are disabled for now:
         'mocha/no-skipped-tests': 'off',
         'mocha/no-hooks-for-single-case': 'off',
-        'mocha/no-identical-title': 'off',
       },
     },
   ],

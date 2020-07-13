@@ -26,7 +26,7 @@ describe('ProgramCall Functional Tests', function () {
     printConfig();
   });
 
-  describe('Test ProgramCall()', function () {
+  describe('addParam', function () {
     it('calls QWCRSVAL program checks if it ran successfully', function (done) {
       const connection = new Connection(config);
 
@@ -81,10 +81,10 @@ describe('ProgramCall Functional Tests', function () {
     });
   });
 
-  describe.skip('Test ProgramCall()', function () {
+  describe.skip('addReturn', function () {
     // ZZSRV6 program requires XMLSERVICE built with tests
     // Skip for now, we need to add before hook to check ZZSRV6 is available
-    it.skip('Should be successful with addReturn arbitrary attribute specified', function (done) {
+    it.skip('calls ZZVARY4 and checks the return value', function (done) {
       const connection = new Connection(config);
 
       const program = new ProgramCall('ZZSRV6', { lib: 'XMLSERVICE', func: 'ZZVARY4' });
