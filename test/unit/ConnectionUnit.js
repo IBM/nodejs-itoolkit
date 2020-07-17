@@ -22,6 +22,7 @@ const { Connection, CommandCall } = require('../../lib/itoolkit');
 describe('Connection Class Unit Tests', function () {
   describe('constructor', function () {
     it('creates and returns an instance of Connection with idb transport', function () {
+      this.slow(4);
       const options = {
         transport: 'idb',
         transportOptions: {
@@ -44,6 +45,7 @@ describe('Connection Class Unit Tests', function () {
     });
 
     it('creates and returns an instance of Connection with rest transport', function () {
+      this.slow(2);
       const options = {
         transport: 'rest',
         transportOptions: {
@@ -77,6 +79,7 @@ describe('Connection Class Unit Tests', function () {
   });
 
   describe('add', function () {
+    this.slow(1);
     it('appends to xml service request to the command list using Connection class', function () {
       const options = {
         transport: 'idb',
@@ -96,6 +99,7 @@ describe('Connection Class Unit Tests', function () {
 
 
   describe('debug', function () {
+    this.slow(1);
     it('turns verbose mode on/off using Connection class', function () {
       const options = {
         transport: 'idb',
@@ -116,6 +120,7 @@ describe('Connection Class Unit Tests', function () {
 
 
   describe('getTransportOptions', function () {
+    this.slow(1);
     it('returns conn (object) property from Connection instance', function () {
       const options = {
         transport: 'rest',
@@ -148,6 +153,7 @@ describe('Connection Class Unit Tests', function () {
 
 
   describe('run', function () {
+    this.slow(2);
     it('(Connection) invokes transport to execute xml input and returns xml output in callback', function () {
       const options = {
         transport: 'idb',

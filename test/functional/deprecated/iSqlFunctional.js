@@ -48,6 +48,7 @@ describe('iSql Functional Tests', function () {
   });
 
   describe('prepare & execute', function () {
+    this.slow(685);
     it('prepares & executes stored procedure then fetch results', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -80,6 +81,7 @@ describe('iSql Functional Tests', function () {
   });
 
   describe('addQuery & fetch', function () {
+    this.slow(463);
     it('runs a query and fetches results', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -105,6 +107,7 @@ describe('iSql Functional Tests', function () {
   });
 
   describe('added test to ensure issue #11 was resolved', function () {
+    this.slow(576);
     it('should parse SQL result set empty data tags correctly', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -131,6 +134,7 @@ describe('iSql Functional Tests', function () {
   });
 
   describe('tables', function () {
+    this.slow(477);
     it('returns meta data for specified table', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -155,6 +159,7 @@ describe('iSql Functional Tests', function () {
   });
 
   describe('tablePriv', function () {
+    this.slow(489);
     it('returns privilege data for a table', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -181,6 +186,7 @@ describe('iSql Functional Tests', function () {
   });
 
   describe('columns', function () {
+    this.slow(519);
     it('returns meta data for a column', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -218,6 +224,7 @@ describe('iSql Functional Tests', function () {
   });
 
   describe('columnPriv', function () {
+    this.slow(476);
     it('returns privilege data for a column', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -246,6 +253,7 @@ describe('iSql Functional Tests', function () {
   });
 
   describe('procedures', function () {
+    this.slow(474);
     it('returns meta data on for a procedure', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -273,6 +281,7 @@ describe('iSql Functional Tests', function () {
   });
 
   describe('pColumns', function () {
+    this.slow(485);
     it('returns meta data for procedure column', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -311,6 +320,7 @@ describe('iSql Functional Tests', function () {
   });
 
   describe('primaryKeys', function () {
+    this.slow(468);
     it('returns meta data for a primary key', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -336,6 +346,7 @@ describe('iSql Functional Tests', function () {
   });
 
   describe('foreignKeys', function () {
+    this.slow(467);
     it('returns meta data for a foreign key', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -370,6 +381,7 @@ describe('iSql Functional Tests', function () {
   });
 
   describe('statistics', function () {
+    this.slow(848);
     it('returns stats info for table', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 

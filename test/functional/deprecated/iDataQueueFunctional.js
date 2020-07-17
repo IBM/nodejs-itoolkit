@@ -54,6 +54,7 @@ describe('iDataQueue Functional Tests', function () {
   });
 
   describe('constructor', function () {
+    this.slow(1);
     it('creates and returns an instance of iDataQueue', function () {
       const connection = new iConn(database, config.user, password);
 
@@ -63,6 +64,7 @@ describe('iDataQueue Functional Tests', function () {
   });
 
   describe('sendToDataQueue', function () {
+    this.slow(348);
     it('sends data to specified DQ', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -76,6 +78,7 @@ describe('iDataQueue Functional Tests', function () {
   });
 
   describe('receiveFromDataQueue', function () {
+    this.slow(356);
     it('receives data from specfied DQ', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -89,6 +92,7 @@ describe('iDataQueue Functional Tests', function () {
   });
 
   describe('clearDataQueue', function () {
+    this.slow(360);
     it('clears the specifed DQ', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 

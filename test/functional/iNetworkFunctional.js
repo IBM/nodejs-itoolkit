@@ -28,6 +28,7 @@ describe('iNetwork Functional Tests', function () {
   });
 
   describe('getTCPIPAttr', function () {
+    this.slow(1638);
     it('retrieves TCP/IP Attributes', function (done) {
       const connection = new Connection(config);
 
@@ -71,6 +72,7 @@ describe('iNetwork Functional Tests', function () {
   });
 
   describe('getNetInterfaceData', function () {
+    this.slow(1509);
     it('retrieves IPv4 network interface info', function (done) {
       const connection = new Connection(config);
 

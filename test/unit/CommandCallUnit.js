@@ -21,6 +21,7 @@ const { CommandCall } = require('../../lib/itoolkit');
 describe('Command Call Unit Tests', function () {
   describe('SH command tests', function () {
     it('accepts command input and returns <sh> XML output', function () {
+      this.slow(3);
       const command = new CommandCall({ command: 'ls -lah', type: 'sh' });
 
       const expectedXML = '<sh error=\'fast\'>ls -lah</sh>';
@@ -29,6 +30,7 @@ describe('Command Call Unit Tests', function () {
     });
 
     it('accepts command input and options returns <sh> with optional attributes', function () {
+      this.slow(1);
       const options = {
         error: 'on', before: '65535', after: '37', rows: 'on',
       };
@@ -43,6 +45,7 @@ describe('Command Call Unit Tests', function () {
 
   describe('CL command tests', function () {
     it('accepts command input and returns <cmd> XML output', function () {
+      this.slow(1);
       const command = new CommandCall({ command: 'RTVJOBA USRLIBL(?) SYSLIBL(?)', type: 'cl' });
 
       const expectedXML = '<cmd exec=\'rexx\' error=\'fast\'>RTVJOBA USRLIBL(?) SYSLIBL(?)</cmd>';
@@ -51,6 +54,7 @@ describe('Command Call Unit Tests', function () {
     });
 
     it('accepts command input and options returns <cmd> with optional attributes', function () {
+      this.slow(1);
       const options = {
         exec: 'cmd', error: 'on', before: '65535', after: '37', hex: 'on',
       };
@@ -66,6 +70,7 @@ describe('Command Call Unit Tests', function () {
 
   describe('QSH command tests', function () {
     it('accepts command input and returns <qsh> XML output', function () {
+      this.slow(1);
       const command = new CommandCall({ command: 'ls -lah', type: 'qsh' });
 
       const expectedXML = '<qsh error=\'fast\'>ls -lah</qsh>';
@@ -74,6 +79,7 @@ describe('Command Call Unit Tests', function () {
     });
 
     it('accepts command input and options returns <qsh> with optional attributes', function () {
+      this.slow(1);
       const options = {
         error: 'on', before: '65535', after: '37', rows: 'on',
       };

@@ -48,6 +48,7 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('constructor', function () {
+    this.slow(1);
     it('creates and returns an instance of iWork', function () {
       const connection = new iConn(database, config.user, password);
 
@@ -58,6 +59,7 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('getSysValue', function () {
+    this.slow(326);
     it('returns the value of system variable', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -71,6 +73,7 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('getSysStatus', function () {
+    this.slow(372);
     it('returns basic system status information about the signed-on users '
            + 'and batch jobs',
     function (done) {
@@ -101,6 +104,7 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('getSysStatusExt', function () {
+    this.slow(1419);
     it('returns more detailed system status info',
       function (done) {
         const connection = new iConn(database, username, password, restOptions);
@@ -146,6 +150,7 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('getJobStatus', function () {
+    this.slow(312);
     it('returns status of specified job',
       function (done) {
         const connection = new iConn(database, username, password, restOptions);
@@ -162,6 +167,7 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('getJobInfo', function () {
+    this.slow(323);
     it('returns info on specfed job', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -216,6 +222,7 @@ describe('iWork Functional Tests', function () {
         done();
       });
     });
+    this.slow(336);
     it('returns contents of a data area', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 

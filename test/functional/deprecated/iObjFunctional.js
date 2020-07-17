@@ -47,6 +47,7 @@ describe('iObj Functional Tests', function () {
   });
 
   describe('constructor', function () {
+    this.slow(1);
     it('creates and returns an instance of iObj', function () {
       const connection = new iConn(database, config.user, password);
 
@@ -57,6 +58,7 @@ describe('iObj Functional Tests', function () {
   });
 
   describe('retrUsrAuth', function () {
+    this.slow(326);
     it(`returns uses's authority for an object using ${config.transport} tranport`, function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -101,6 +103,7 @@ describe('iObj Functional Tests', function () {
   });
 
   describe('rtrCmdInfo', function () {
+    this.slow(320);
     it('returns command info', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -153,6 +156,7 @@ describe('iObj Functional Tests', function () {
   });
 
   describe('retrPgmInfo', function () {
+    this.slow(357);
     it('returns program info', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -227,6 +231,7 @@ describe('iObj Functional Tests', function () {
   });
 
   describe('retrSrvPgmInfo', function () {
+    this.slow(343);
     it('returns service program info', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -282,6 +287,7 @@ describe('iObj Functional Tests', function () {
   });
 
   describe('retrUserInfo', function () {
+    this.slow(356);
     it('returns specified user profile info', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -308,6 +314,7 @@ describe('iObj Functional Tests', function () {
   });
 
   describe('retrUsrAuthToObj', function () {
+    this.slow(324);
     it(`retrieves info for users who are authorized to an object using ${config.transport} transpsort`, function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -335,6 +342,7 @@ describe('iObj Functional Tests', function () {
   });
 
   describe('addToLibraryList', function () {
+    this.slow(317);
     it('appends lib to user\'s lib list', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 

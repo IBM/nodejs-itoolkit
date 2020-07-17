@@ -27,6 +27,7 @@ describe('CommandCall Functional Tests', function () {
   });
 
   describe('CL command tests', function () {
+    this.slow(1840);
     it('calls CL command', function (done) {
       const connection = new Connection(config);
       connection.add(new CommandCall({ command: 'RTVJOBA USRLIBL(?) SYSLIBL(?)', type: 'cl' }));
@@ -42,6 +43,7 @@ describe('CommandCall Functional Tests', function () {
   });
 
   describe('SH command tests', function () {
+    this.slow(2985);
     it('calls PASE shell command', function (done) {
       const connection = new Connection(config);
       connection.add(new CommandCall({ command: 'system -i wrksyssts', type: 'sh' }));
@@ -59,6 +61,7 @@ describe('CommandCall Functional Tests', function () {
   });
 
   describe('QSH command tests', function () {
+    this.slow(3300);
     it('calls QSH command', function (done) {
       const connection = new Connection(config);
       connection.add(new CommandCall({ command: 'system wrksyssts', type: 'qsh' }));
