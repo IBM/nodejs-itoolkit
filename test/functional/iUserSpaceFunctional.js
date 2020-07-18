@@ -45,6 +45,7 @@ describe('UserSpace Functional Tests', function () {
   let userSpaceName;
 
   describe('createUserSpace', function () {
+    this.timeout(2916);
     it('creates a user space', function (done) {
       const connection = new Connection(config);
 
@@ -65,6 +66,7 @@ describe('UserSpace Functional Tests', function () {
   });
 
   describe('setUserSpaceData', function () {
+    this.timeout(2700);
     it('sets data within the user space', function (done) {
       if (!userSpaceName) {
         this.skip();
@@ -86,6 +88,7 @@ describe('UserSpace Functional Tests', function () {
   });
 
   describe('getUserSpaceData', function () {
+    this.timeout(2644);
     it('returns specified length of data', function (done) {
       if (!userSpaceName) {
         this.skip();
@@ -104,6 +107,7 @@ describe('UserSpace Functional Tests', function () {
   });
 
   describe('deleteUserSpace', function () {
+    this.timeout(2656);
     it('removes a user space', function (done) {
       if (!userSpaceName) {
         this.skip();

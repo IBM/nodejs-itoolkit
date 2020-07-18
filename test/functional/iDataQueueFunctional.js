@@ -29,6 +29,7 @@ describe('DataQueue Functional Tests', function () {
   const dqName2 = 'TESTQ2';
 
   before('check if data queue exists for tests', function (done) {
+    this.timeout(0);
     printConfig();
     checkObjectExists(config, dqName, '*DTAQ', (error) => {
       if (error) { throw error; }
@@ -40,6 +41,7 @@ describe('DataQueue Functional Tests', function () {
     });
   });
   describe('sendToDataQueue', function () {
+    this.timeout(2792);
     it('sends data to specified DQ', function (done) {
       const connection = new Connection(config);
 
@@ -54,6 +56,7 @@ describe('DataQueue Functional Tests', function () {
   });
 
   describe('receiveFromDataQueue', function () {
+    this.timeout(2776);
     it('receives data from specfied DQ', function (done) {
       const connection = new Connection(config);
 
@@ -68,6 +71,7 @@ describe('DataQueue Functional Tests', function () {
   });
 
   describe('clearDataQueue', function () {
+    this.timeout(2830);
     it('clears the specifed DQ', function (done) {
       const connection = new Connection(config);
 

@@ -48,6 +48,7 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('constructor', function () {
+    this.timeout(2);
     it('creates and returns an instance of iWork', function () {
       const connection = new iConn(database, config.user, password);
 
@@ -58,6 +59,7 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('getSysValue', function () {
+    this.timeout(652);
     it('returns the value of system variable', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -71,6 +73,7 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('getSysStatus', function () {
+    this.timeout(744);
     it('returns basic system status information about the signed-on users '
            + 'and batch jobs',
     function (done) {
@@ -101,6 +104,7 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('getSysStatusExt', function () {
+    this.timeout(2838);
     it('returns more detailed system status info',
       function (done) {
         const connection = new iConn(database, username, password, restOptions);
@@ -146,6 +150,7 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('getJobStatus', function () {
+    this.timeout(624);
     it('returns status of specified job',
       function (done) {
         const connection = new iConn(database, username, password, restOptions);
@@ -162,6 +167,7 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('getJobInfo', function () {
+    this.timeout(646);
     it('returns info on specfed job', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -211,11 +217,13 @@ describe('iWork Functional Tests', function () {
 
   describe('getDataArea', function () {
     before('init lib, data area, and add data', function (done) {
+      this.timeout(0);
       checkObjectExists(config, 'TESTDA', '*DTAARA', (error) => {
         if (error) { throw error; }
         done();
       });
     });
+    this.timeout(672);
     it('returns contents of a data area', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 

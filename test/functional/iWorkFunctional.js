@@ -28,6 +28,7 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('getSysValue', function () {
+    this.timeout(2802);
     it('returns the value of system variable', function (done) {
       const connection = new Connection(config);
 
@@ -53,6 +54,7 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('getSysStatus', function () {
+    this.timeout(3504);
     it('returns basic system status information about the signed-on users and batch jobs', function (done) {
       const connection = new Connection(config);
       const work = new iWork(connection);
@@ -82,6 +84,7 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('getSysStatusExt', function () {
+    this.timeout(4814);
     it('returns more detailed system status info', function (done) {
       const connection = new Connection(config);
 
@@ -127,6 +130,7 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('getJobStatus', function () {
+    this.timeout(2658);
     it('returns status of specified job', function (done) {
       const connection = new Connection(config);
 
@@ -143,6 +147,7 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('getJobInfo', function () {
+    this.timeout(2630);
     it('returns info on specfed job', function (done) {
       const connection = new Connection(config);
 
@@ -193,11 +198,13 @@ describe('iWork Functional Tests', function () {
 
   describe('getDataArea', function () {
     before('check if data area exists for tests', function (done) {
+      this.timeout(0);
       checkObjectExists(config, 'TESTDA', '*DTAARA', (error) => {
         if (error) { throw error; }
         done();
       });
     });
+    this.timeout(2654);
     it('returns contents of a data area', function (done) {
       const connection = new Connection(config);
 

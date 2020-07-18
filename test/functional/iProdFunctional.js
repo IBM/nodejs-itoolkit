@@ -27,6 +27,7 @@ describe('iProd Functional Tests', function () {
   });
 
   describe('getPTFInfo', function () {
+    this.timeout(3000);
     it('returns info for specified ptf', function (done) {
       const connection = new Connection(config);
 
@@ -70,6 +71,7 @@ describe('iProd Functional Tests', function () {
   });
 
   describe('getProductInfo', function () {
+    this.timeout(2670);
     it('returns info for specified product', function (done) {
       const connection = new Connection(config);
 
@@ -102,7 +104,7 @@ describe('iProd Functional Tests', function () {
   // REST transport currently failing with 414 URI Too Long response code
   // The requested URL's length exceeds the capacity limit for this server
   describe('getInstalledProducts', function () {
-    // eslint-disable-next-line func-names
+    this.timeout(4968);
     it('returns info for installed products', function (done) {
       const connection = new Connection(config);
 

@@ -40,12 +40,14 @@ const errno = [
 describe('iPgm Class Unit Tests', function () {
   describe('constructor', function () {
     it('creates and returns an instance of iPgm with lib and function set', function () {
+      this.timeout(8);
       const pgm = new iPgm('QTOCNETSTS');
       expect(pgm).to.be.instanceOf(iPgm);
     });
   });
 
   describe('toXML', function () {
+    this.timeout(2);
     it('returns pgm XML', function () {
       const pgm = new iPgm('QTOCNETSTS',
         {
@@ -62,6 +64,7 @@ describe('iPgm Class Unit Tests', function () {
 
   describe('addParam', function () {
     it('appends param to pgm xml', function () {
+      this.timeout(4);
       const pgm = new iPgm('QTOCNETSTS',
         {
           lib: 'QSYS',
@@ -133,6 +136,7 @@ describe('iPgm Class Unit Tests', function () {
     });
 
     it('regular <parm> contains by=\'val\'', function () {
+      this.timeout(2);
       const pgm = new iPgm('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
       pgm.addParam('', '1A', { by: 'val' });
@@ -143,6 +147,7 @@ describe('iPgm Class Unit Tests', function () {
     });
 
     it('data structure <parm> contains by=\'val\'', function () {
+      this.timeout(2);
       const pgm = new iPgm('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
       const params = [
@@ -158,6 +163,7 @@ describe('iPgm Class Unit Tests', function () {
     });
 
     it('regular <parm> contains by=\'val\', with io=\'both\'', function () {
+      this.timeout(2);
       const pgm = new iPgm('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
       pgm.addParam('', '1A', { by: 'val', io: 'both' });
@@ -169,6 +175,7 @@ describe('iPgm Class Unit Tests', function () {
     });
 
     it('data structure <parm> contains by=\'val\', with io=\'both\'', function () {
+      this.timeout(2);
       const pgm = new iPgm('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
       const params = [
@@ -188,6 +195,7 @@ describe('iPgm Class Unit Tests', function () {
 
   describe('addReturn', function () {
     it('appends return to pgm xml', function () {
+      this.timeout(2);
       const pgm = new iPgm('QTOCNETSTS',
         {
           lib: 'QSYS',
