@@ -17,8 +17,9 @@
 
 const { expect } = require('chai');
 const { parseString } = require('xml2js');
-const { CommandCall, Connection } = require('../../lib/itoolkit');
+const { CommandCall, Connection, ProgramCall } = require('../../lib/itoolkit');
 const { config, printConfig } = require('./config');
+const { isQSHSupported } = require('./checkVersion');
 
 
 describe('CommandCall Functional Tests', function () {
@@ -61,6 +62,7 @@ describe('CommandCall Functional Tests', function () {
   describe('QSH command tests', function () {
     it('calls QSH command', function (done) {
       const connection = new Connection(config);
+      connection.add(new ProgramCall('MYPGMTOOLONG'));
       connection.add(new CommandCall({ command: 'system wrksyssts', type: 'qsh' }));
       connection.run((error, xmlOut) => {
         expect(error).to.equal(null);
@@ -68,6 +70,15 @@ describe('CommandCall Functional Tests', function () {
         // but on error sh or qsh node will not have any inner data
         parseString(xmlOut, (parseError, result) => {
           expect(parseError).to.equal(null);
+          const match = result.myscript.pgm[0].version[0].match(/\d\.\d\.\d/);
+          if (!match) {
+            throw Error('Unable to determine XMLSERVICE version');
+          }
+          if (!isQSHSupported(match[0])) {
+            // skip if QSH is unsupported
+            console.log(`XMLSERVICE version ${match[0]} does not support QSH`);
+            this.skip();
+          }
           expect(result.myscript.qsh[0]._).to.match(/(System\sStatus\sInformation)/);
           done();
         });
