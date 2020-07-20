@@ -20,7 +20,7 @@
 const { expect } = require('chai');
 const { parseString } = require('xml2js');
 const {
-  iCmd, iSh, iQsh, iConn, iPgm
+  iCmd, iSh, iQsh, iConn, iPgm,
 } = require('../../../lib/itoolkit');
 
 const { config, printConfig } = require('../config');
