@@ -4,7 +4,8 @@
  * @param {string} version - expects sematic version i.e. 1.2.3
  */
 function isQSHSupported(version) {
-  const semver = version.split('.');
+  // maps array of strings to numbers i.e. ['1', '2', '3'] -> [1, 2, 3]
+  const semver = version.split('.').map(Number);
   if (semver[0] === 1 && semver[1] < 9) {
     return false;
   } if (semver[0] === 1 && semver[1] === 9 && semver[2] < 8) {
