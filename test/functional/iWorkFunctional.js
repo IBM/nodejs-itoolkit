@@ -193,7 +193,7 @@ describe('iWork Functional Tests', function () {
 
   describe('getDataArea', function () {
     it('returns contents of a data area', function (done) {
-      checkObjectExists(config, 'TESTDA', '*DTAARA', (error) => {
+      checkObjectExists(config, { name: 'TESTDA', type: '*DTAARA' }, (error) => {
         if (error) { throw error; }
         const connection = new Connection(config);
 
