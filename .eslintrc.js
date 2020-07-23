@@ -10,6 +10,9 @@ module.exports = {
     // Tweak rules set by airbnb config
     // We need to allow use of console.log for verbose mode
     'no-console': 'off',
+    // airbnb config forbids optionalDependencies
+    // https://github.com/airbnb/javascript/blob/c5bee75b1b358a3749f1a6d38ee6fad73de28e29/packages/eslint-config-airbnb-base/rules/imports.js#L95
+    "import/no-extraneous-dependencies": [ "error", { "optionalDependencies": true }]
   },
   overrides: [
     {
