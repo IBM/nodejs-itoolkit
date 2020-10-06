@@ -16,9 +16,9 @@ jobs:
         stale-issue-message: ':wave: Hi! This issue has been marked stale due to inactivity. If no further activity occurs, it will automatically be closed.'
         stale-pr-message: ':wave: Hi! This pull request has been marked stale due to inactivity. If no further activity occurs, it will automatically be closed.'
         stale-issue-label: 'stale'
-        exempt-issue-label: 'keep-open'
-        exempt-pr-label: 'keep-open'
         stale-pr-label: 'stale'
+        exempt-issue-labels: 'keep-open'
+        exempt-pr-labels: 'keep-open'
         days-before-stale: 30
         days-before-close: 7
         remove-stale-when-updated: true
