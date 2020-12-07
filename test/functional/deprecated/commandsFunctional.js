@@ -20,10 +20,11 @@
 const { expect } = require('chai');
 const { parseString } = require('xml2js');
 const {
-  iCmd, iSh, iQsh, iConn,
+  iCmd, iSh, iQsh, iConn, iPgm,
 } = require('../../../lib/itoolkit');
 
 const { config, printConfig } = require('../config');
+const { isQSHSupported } = require('../checkVersion');
 
 // deprecated tests are in place to test compatability using deprecated classes and functions
 // these tests use deprecated iConn Class to create a connnection
@@ -82,12 +83,22 @@ describe('iSh, iCmd, iQsh, Functional Tests', function () {
   describe('iQsh()', function () {
     it('calls QSH command', function (done) {
       const connection = new iConn(database, username, password, restOptions);
+      connection.add(new iPgm('MYPGMTOOLONG'));
       connection.add(iQsh('system wrksyssts'));
       connection.run((xmlOut) => {
         // xs does not return success property for sh or qsh command calls
         // but on error sh or qsh node will not have any inner data
         parseString(xmlOut, (parseError, result) => {
           expect(parseError).to.equal(null);
+          const match = result.myscript.pgm[0].version[0].match(/\d\.\d\.\d/);
+          if (!match) {
+            throw Error('Unable to determine XMLSERVICE version');
+          }
+          if (!isQSHSupported(match[0])) {
+            // skip if QSH is unsupported
+            console.log(`XMLSERVICE version ${match[0]} does not support QSH`);
+            this.skip();
+          }
           expect(result.myscript.qsh[0]._).to.match(/(System\sStatus\sInformation)/);
           done();
         });
