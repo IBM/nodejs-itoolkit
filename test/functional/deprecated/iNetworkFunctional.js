@@ -47,6 +47,7 @@ describe('iNetwork Functional Tests', function () {
   });
 
   describe('constructor', function () {
+    this.slow(1);
     it('creates and returns an instance of iNetwork', function () {
       const connection = new iConn(database, config.user, password);
 
@@ -57,6 +58,7 @@ describe('iNetwork Functional Tests', function () {
   });
 
   describe('getTCPIPAttr', function () {
+    this.slow(407);
     it('retrieves TCP/IP Attributes', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -99,6 +101,7 @@ describe('iNetwork Functional Tests', function () {
   });
 
   describe('getNetInterfaceData', function () {
+    this.slow(405);
     it('retrieves IPv4 network interface info', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 

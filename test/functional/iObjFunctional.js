@@ -27,6 +27,7 @@ describe('iObj Functional Tests', function () {
   });
 
   describe('retrUsrAuth', function () {
+    this.slow(1515);
     it('returns uses\'s authority for an object ', function (done) {
       const connection = new Connection(config);
 
@@ -72,6 +73,7 @@ describe('iObj Functional Tests', function () {
   });
 
   describe('rtrCmdInfo', function () {
+    this.slow(1482);
     it('returns command info', function (done) {
       const connection = new Connection(config);
 
@@ -125,6 +127,7 @@ describe('iObj Functional Tests', function () {
   });
 
   describe('retrPgmInfo', function () {
+    this.slow(1869);
     it('returns program info', function (done) {
       const connection = new Connection(config);
 
@@ -200,6 +203,7 @@ describe('iObj Functional Tests', function () {
   });
 
   describe('retrSrvPgmInfo', function () {
+    this.slow(1473);
     it('returns service program info', function (done) {
       const connection = new Connection(config);
 
@@ -256,6 +260,7 @@ describe('iObj Functional Tests', function () {
   });
 
   describe('retrUserInfo', function () {
+    this.slow(1378);
     it('returns specified user profile info', function (done) {
       const connection = new Connection(config);
 
@@ -283,6 +288,7 @@ describe('iObj Functional Tests', function () {
   });
 
   describe('retrUsrAuthToObj', function () {
+    this.slow(1346);
     it(`retrieves info for users who are authorized to an object using ${config.transport} transpsort`, function (done) {
       const connection = new Connection(config);
 
@@ -311,6 +317,7 @@ describe('iObj Functional Tests', function () {
   });
 
   describe('addToLibraryList', function () {
+    this.slow(1339);
     it('appends lib to user\'s lib list', function (done) {
       const connection = new Connection(config);
 

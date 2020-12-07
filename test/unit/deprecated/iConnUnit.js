@@ -24,6 +24,7 @@ const { iConn, iSh } = require('../../../lib/itoolkit');
 describe('iConn Class Unit Tests', function () {
   describe('constructor', function () {
     it('creates and returns an instance of iConn with idb transport', function () {
+      this.slow(4);
       const database = process.env.TKDB || '*LOCAL';
       const username = process.env.TKUSER || '';
       const password = process.env.TKPASS || '';
@@ -42,6 +43,7 @@ describe('iConn Class Unit Tests', function () {
     });
 
     it('creates and returns an instance of iConn with rest transport', function () {
+      this.slow(1);
       const database = process.env.TKDB || '*LOCAL';
       const username = process.env.TKUSER || '';
       const password = process.env.TKPASS || '';
@@ -73,6 +75,7 @@ describe('iConn Class Unit Tests', function () {
   });
 
   describe('add', function () {
+    this.slow(1);
     it('appends to xml service request to the command list using iConn class', function () {
       const database = process.env.TKDB || '*LOCAL';
       const username = process.env.TKUSER || '';
@@ -87,6 +90,7 @@ describe('iConn Class Unit Tests', function () {
 
 
   describe('debug', function () {
+    this.slow(1);
     it('turns verbose mode on/off using iConn class', function () {
       const database = process.env.TKDB || '*LOCAL';
       const username = process.env.TKUSER || '';
@@ -102,6 +106,7 @@ describe('iConn Class Unit Tests', function () {
 
 
   describe('getTransportOptions', function () {
+    this.slow(1);
     it('returns conn (object) property from iConn instance', function () {
       const database = process.env.TKDB || '*LOCAL';
       const username = process.env.TKUSER || '';
@@ -121,6 +126,7 @@ describe('iConn Class Unit Tests', function () {
 
 
   describe('run', function () {
+    this.slow(2);
     it('(iConn) invokes transport to execute xml input and returns xml output in callback', function () {
       const database = process.env.TKDB || '*LOCAL';
       const username = process.env.TKUSER || '';

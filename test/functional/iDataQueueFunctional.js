@@ -40,6 +40,7 @@ describe('DataQueue Functional Tests', function () {
     });
   });
   describe('sendToDataQueue', function () {
+    this.slow(1396);
     it('sends data to specified DQ', function (done) {
       const connection = new Connection(config);
 
@@ -54,6 +55,7 @@ describe('DataQueue Functional Tests', function () {
   });
 
   describe('receiveFromDataQueue', function () {
+    this.slow(1388);
     it('receives data from specfied DQ', function (done) {
       const connection = new Connection(config);
 
@@ -68,6 +70,7 @@ describe('DataQueue Functional Tests', function () {
   });
 
   describe('clearDataQueue', function () {
+    this.slow(1415);
     it('clears the specifed DQ', function (done) {
       const connection = new Connection(config);
 

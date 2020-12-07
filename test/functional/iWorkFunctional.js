@@ -28,6 +28,7 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('getSysValue', function () {
+    this.slow(1401);
     it('returns the value of system variable', function (done) {
       const connection = new Connection(config);
 
@@ -53,6 +54,7 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('getSysStatus', function () {
+    this.slow(1752);
     it('returns basic system status information about the signed-on users and batch jobs', function (done) {
       const connection = new Connection(config);
       const work = new iWork(connection);
@@ -82,6 +84,7 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('getSysStatusExt', function () {
+    this.slow(2407);
     it('returns more detailed system status info', function (done) {
       const connection = new Connection(config);
 
@@ -127,6 +130,7 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('getJobStatus', function () {
+    this.slow(1329);
     it('returns status of specified job', function (done) {
       const connection = new Connection(config);
 
@@ -143,6 +147,7 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('getJobInfo', function () {
+    this.slow(1315);
     it('returns info on specfed job', function (done) {
       const connection = new Connection(config);
 
@@ -198,6 +203,7 @@ describe('iWork Functional Tests', function () {
         done();
       });
     });
+    this.slow(1327);
     it('returns contents of a data area', function (done) {
       const connection = new Connection(config);
 

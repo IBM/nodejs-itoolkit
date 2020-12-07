@@ -37,6 +37,7 @@ const errno = [
 
 describe('ProgramCall Class Unit Tests', function () {
   describe('constructor', function () {
+    this.slow(3);
     it('creates and returns an instance of ProgramCall with lib and function set', function () {
       const pgm = new ProgramCall('QTOCNETSTS');
       expect(pgm).to.be.instanceOf(ProgramCall);
@@ -44,6 +45,7 @@ describe('ProgramCall Class Unit Tests', function () {
   });
 
   describe('toXML', function () {
+    this.slow(1);
     it('returns pgm XML', function () {
       const pgm = new ProgramCall('QTOCNETSTS',
         {
@@ -60,6 +62,7 @@ describe('ProgramCall Class Unit Tests', function () {
 
   describe('addParam', function () {
     it('appends param to pgm xml', function () {
+      this.slow(1);
       const pgm = new ProgramCall('QTOCNETSTS',
         {
           lib: 'QSYS',
@@ -133,6 +136,7 @@ describe('ProgramCall Class Unit Tests', function () {
     });
 
     it('regular <parm> contains by=\'val\'', function () {
+      this.slow(1);
       const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
       pgm.addParam({ value: '', type: '1A', by: 'val' });
@@ -143,6 +147,8 @@ describe('ProgramCall Class Unit Tests', function () {
     });
 
     it('data structure <parm> contains by=\'val\'', function () {
+      this.slow(1);
+
       const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
       const params = [
@@ -160,6 +166,7 @@ describe('ProgramCall Class Unit Tests', function () {
     });
 
     it('regular <parm> contains by=\'val\', with io=\'both\'', function () {
+      this.slow(1);
       const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
       pgm.addParam({
@@ -173,6 +180,7 @@ describe('ProgramCall Class Unit Tests', function () {
     });
 
     it('data structure <parm> contains by=\'val\', with io=\'both\'', function () {
+      this.slow(1);
       const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
       const params = [
@@ -191,6 +199,7 @@ describe('ProgramCall Class Unit Tests', function () {
     });
 
     it('add nested data structure parameter', function () {
+      this.slow(1);
       const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB' });
 
       const nestedDs = {
@@ -238,6 +247,7 @@ describe('ProgramCall Class Unit Tests', function () {
 
   describe('addReturn', function () {
     it('appends return to pgm xml', function () {
+      this.slow(1);
       const pgm = new ProgramCall('QTOCNETSTS',
         {
           lib: 'QSYS',
@@ -254,6 +264,7 @@ describe('ProgramCall Class Unit Tests', function () {
     });
 
     it('appends return with ds to pgm xml', function () {
+      this.slow(1);
       const pgm = new ProgramCall('TEST');
 
       const ds = {
