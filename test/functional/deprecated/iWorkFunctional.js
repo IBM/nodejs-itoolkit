@@ -42,9 +42,25 @@ if (config.transport === 'rest') {
   };
 }
 
+let deprecation = null;
+function deprecationHandler(dep) {
+  deprecation = dep;
+}
+
+function getDeprecation() {
+  const temp = deprecation;
+  deprecation = null;
+  return temp;
+}
+
 describe('iWork Functional Tests', function () {
   before(function () {
     printConfig();
+    process.on('deprecation', deprecationHandler);
+  });
+
+  after(function () {
+    process.removeAllListeners('deprecation', deprecationHandler);
   });
 
   describe('constructor', function () {
@@ -54,6 +70,8 @@ describe('iWork Functional Tests', function () {
       const work = new iWork(connection);
 
       expect(work).to.be.instanceOf(iWork);
+      expect(getDeprecation().message).to
+        .equal("As of v1.0, class 'iWork' is deprecated and will be removed at a later time.");
     });
   });
 
@@ -64,6 +82,8 @@ describe('iWork Functional Tests', function () {
       const work = new iWork(connection);
 
       work.getSysValue('QCENTURY', (output) => {
+        expect(getDeprecation().message).to
+          .equal("As of v1.0, 'iWork.getSysValue()' is deprecated and will be removed at a later time.");
         expect(output).to.be.a('string').and.to.equal('1');
         done();
       });
@@ -78,6 +98,8 @@ describe('iWork Functional Tests', function () {
       const work = new iWork(connection);
 
       work.getSysStatus((output) => {
+        expect(getDeprecation().message).to
+          .equal("As of v1.0, 'iWork.getSysStatus()' is deprecated and will be removed at a later time.");
         expect(output).to.be.an('Object');
         expect(output).to.have.a.property('Current_date_and_time');
         expect(output).to.have.a.property('System_name');
@@ -108,6 +130,8 @@ describe('iWork Functional Tests', function () {
         const work = new iWork(connection);
 
         work.getSysStatusExt((output) => {
+          expect(getDeprecation().message).to
+            .equal("As of v1.0, 'iWork.getSysStatusExt()' is deprecated and will be removed at a later time.");
           expect(output).to.be.an('Object');
           expect(output).to.have.a.property('Current_date_and_time');
           expect(output).to.have.a.property('System_name');
@@ -153,6 +177,8 @@ describe('iWork Functional Tests', function () {
         const work = new iWork(connection);
 
         work.getJobStatus('000000', (output) => {
+          expect(getDeprecation().message).to
+            .equal("As of v1.0, 'iWork.getJobStatus()' is deprecated and will be removed at a later time.");
           expect(output).to.be.an('Object');
           expect(output).to.have.a.property('Job_status');
           expect(output).to.have.a.property('Fully_qualified_job_name');
@@ -168,6 +194,8 @@ describe('iWork Functional Tests', function () {
       const work = new iWork(connection);
 
       work.getJobInfo('SCPF', 'QSYS', '000000', (output) => {
+        expect(getDeprecation().message).to
+          .equal("As of v1.0, 'iWork.getJobInfo()' is deprecated and will be removed at a later time.");
         expect(output).to.be.an('Object');
         expect(output).to.have.a.property('Job_name');
         expect(output).to.have.a.property('User_name');
@@ -222,6 +250,8 @@ describe('iWork Functional Tests', function () {
       const work = new iWork(connection);
 
       work.getDataArea('NODETKTEST', 'TESTDA', 20, (output) => {
+        expect(getDeprecation().message).to
+          .equal("As of v1.0, 'iWork.getDataArea()' is deprecated and will be removed at a later time.");
         expect(output).to.be.an('Object');
         expect(output).to.have.a.property('Type_of_value_returned');
         expect(output).to.have.a.property('Library_name');

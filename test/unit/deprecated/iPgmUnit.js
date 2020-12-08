@@ -37,10 +37,33 @@ const errno = [
   ['', '1A'],
 ];
 
+let deprecation = null;
+function deprecationHandler(dep) {
+  deprecation = dep;
+}
+
+function getDeprecation() {
+  const temp = deprecation;
+  deprecation = null;
+  return temp;
+}
+
+const addParamDepMessage = "As of v1.0, 'iPgm.addParam()' is deprecated. Please use 'ProgramCall.addParam()' instead.";
+
 describe('iPgm Class Unit Tests', function () {
+  before(function () {
+    process.on('deprecation', deprecationHandler);
+  });
+
+  after(function () {
+    process.removeAllListeners('deprecation', deprecationHandler);
+  });
+
   describe('constructor', function () {
     it('creates and returns an instance of iPgm with lib and function set', function () {
       const pgm = new iPgm('QTOCNETSTS');
+      expect(getDeprecation().message).to
+        .equal("As of v1.0, class 'iPgm' is deprecated. Please use 'ProgramCall' instead.");
       expect(pgm).to.be.instanceOf(iPgm);
     });
   });
@@ -57,6 +80,8 @@ describe('iPgm Class Unit Tests', function () {
       const expectedXML = '<pgm name=\'QTOCNETSTS\' lib=\'QSYS\' func=\'QtoRtvTCPA\' error=\'on\'></pgm>';
 
       expect(pgm.toXML()).to.be.a('string').and.to.equal(expectedXML);
+      expect(getDeprecation().message).to
+        .equal("As of v1.0, 'iPgm.toXML()' is deprecated. Please use 'ProgramCall.toXML()' instead.");
     });
   });
 
@@ -70,6 +95,7 @@ describe('iPgm Class Unit Tests', function () {
         });
 
       pgm.addParam(outBuf, { io: 'out' });
+      expect(getDeprecation().message).to.equal(addParamDepMessage);
 
       let expectedXML = '<pgm name=\'QTOCNETSTS\' lib=\'QSYS\' func=\'QtoRtvTCPA\' error=\'fast\'>'
       + '<parm io=\'out\'><ds><data type=\'10i0\'>0</data><data type=\'10i0\'>'
@@ -136,6 +162,7 @@ describe('iPgm Class Unit Tests', function () {
       const pgm = new iPgm('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
       pgm.addParam('', '1A', { by: 'val' });
+      expect(getDeprecation().message).to.equal(addParamDepMessage);
       pgm.addReturn('', '2A', { name: 'output' });
 
       const lookAtXML = pgm.toXML();
@@ -151,6 +178,7 @@ describe('iPgm Class Unit Tests', function () {
       ];
 
       pgm.addParam(params, { name: 'inds', by: 'val' });
+      expect(getDeprecation().message).to.equal(addParamDepMessage);
       pgm.addReturn('', '2A', { name: 'output' });
 
       const lookAtXML = pgm.toXML();
@@ -161,6 +189,7 @@ describe('iPgm Class Unit Tests', function () {
       const pgm = new iPgm('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
       pgm.addParam('', '1A', { by: 'val', io: 'both' });
+      expect(getDeprecation().message).to.equal(addParamDepMessage);
       pgm.addReturn('', '2A', { name: 'output' });
 
       const lookAtXML = pgm.toXML();
@@ -177,6 +206,7 @@ describe('iPgm Class Unit Tests', function () {
       ];
 
       pgm.addParam(params, { name: 'inds', by: 'val', io: 'both' });
+      expect(getDeprecation().message).to.equal(addParamDepMessage);
       pgm.addReturn('', '2A', { name: 'output' });
 
       const lookAtXML = pgm.toXML();
@@ -196,6 +226,8 @@ describe('iPgm Class Unit Tests', function () {
         });
 
       pgm.addReturn('0', '20A');
+      expect(getDeprecation().message).to
+        .equal("As of v1.0, 'iPgm.addReturn()' is deprecated. Please use 'ProgramCall.addReturn()' instead.");
 
       const expectedXML = '<pgm name=\'QTOCNETSTS\' lib=\'QSYS\' func=\'QtoRtvTCPA\' '
       + 'error=\'fast\'><return><data type=\'20A\'>0</data></return></pgm>';

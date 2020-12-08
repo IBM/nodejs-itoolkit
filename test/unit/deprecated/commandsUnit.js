@@ -18,10 +18,35 @@
 const { expect } = require('chai');
 const { iSh, iQsh, iCmd } = require('../../../lib/itoolkit');
 
+let deprecation = null;
+function deprecationHandler(dep) {
+  deprecation = dep;
+}
+
+function getDeprecation() {
+  const temp = deprecation;
+  deprecation = null;
+  return temp;
+}
+
+const iShDepMessage = "As of v1.0, class 'iSh()' is deprecated. Please use 'CommandCall' instead.";
+const iCmdDepMessage = "As of v1.0, class 'iCmd()' is deprecated. Please use 'CommandCall' instead.";
+const iQshDepMessage = "As of v1.0, class 'iQsh()' is deprecated. Please use 'CommandCall' instead.";
+
 describe('iSh, iCmd, iQsh, Unit Tests', function () {
+  before(function () {
+    process.on('deprecation', deprecationHandler);
+  });
+
+  after(function () {
+    process.removeListener('deprecation', deprecationHandler);
+  });
+
   describe('iSh function', function () {
     it('accepts command input and returns <sh> XML output', function () {
       const sh = iSh('ls -lah');
+
+      expect(getDeprecation().message).to.equal(iShDepMessage);
 
       const expectedXML = '<sh error=\'fast\'>ls -lah</sh>';
 
@@ -34,6 +59,7 @@ describe('iSh, iCmd, iQsh, Unit Tests', function () {
       };
 
       const sh = iSh('ls -lah', options);
+      expect(getDeprecation().message).to.equal(iShDepMessage);
 
       const expectedXML = '<sh rows=\'on\' before=\'65535\' after=\'37\' error=\'on\'>ls -lah</sh>';
 
@@ -44,6 +70,8 @@ describe('iSh, iCmd, iQsh, Unit Tests', function () {
   describe('iCmd function', function () {
     it('accepts command input and returns <cmd> XML output', function () {
       const cmd = iCmd('RTVJOBA USRLIBL(?) SYSLIBL(?)');
+
+      expect(getDeprecation().message).to.equal(iCmdDepMessage);
 
       const expectedXML = '<cmd exec=\'rexx\' error=\'fast\'>RTVJOBA USRLIBL(?) SYSLIBL(?)</cmd>';
 
@@ -56,6 +84,7 @@ describe('iSh, iCmd, iQsh, Unit Tests', function () {
       };
 
       const cmd = iCmd('RTVJOBA USRLIBL(?) SYSLIBL(?)', options);
+      expect(getDeprecation().message).to.equal(iCmdDepMessage);
 
       const expectedXML = '<cmd exec=\'cmd\' hex=\'on\' before=\'65535\' after=\'37\' error=\'on\''
                           + '>RTVJOBA USRLIBL(?) SYSLIBL(?)</cmd>';
@@ -67,6 +96,7 @@ describe('iSh, iCmd, iQsh, Unit Tests', function () {
   describe('iQsh function', function () {
     it('accepts command input and returns <qsh> XML output', function () {
       const qsh = iQsh('RTVJOBA USRLIBL(?) SYSLIBL(?)');
+      expect(getDeprecation().message).to.equal(iQshDepMessage);
 
       const expectedXML = '<qsh error=\'fast\'>RTVJOBA USRLIBL(?) SYSLIBL(?)</qsh>';
 
@@ -78,6 +108,7 @@ describe('iSh, iCmd, iQsh, Unit Tests', function () {
         error: 'on', before: '65535', after: '37', rows: 'on',
       };
       const qsh = iQsh('ls -lah', options);
+      expect(getDeprecation().message).to.equal(iQshDepMessage);
 
       const expectedXML = '<qsh rows=\'on\' before=\'65535\' after=\'37\' error=\'on\'>ls -lah</qsh>';
 

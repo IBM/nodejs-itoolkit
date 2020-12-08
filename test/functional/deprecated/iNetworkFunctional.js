@@ -41,9 +41,25 @@ if (config.transport === 'rest') {
   };
 }
 
+let deprecation = null;
+function deprecationHandler(dep) {
+  deprecation = dep;
+}
+
+function getDeprecation() {
+  const temp = deprecation;
+  deprecation = null;
+  return temp;
+}
+
 describe('iNetwork Functional Tests', function () {
   before(function () {
     printConfig();
+    process.on('deprecation', deprecationHandler);
+  });
+
+  after(function () {
+    process.removeAllListeners('deprecation', deprecationHandler);
   });
 
   describe('constructor', function () {
@@ -53,6 +69,8 @@ describe('iNetwork Functional Tests', function () {
       const net = new iNetwork(connection);
 
       expect(net).to.be.instanceOf(iNetwork);
+      expect(getDeprecation().message).to
+        .equal("As of v1.0, class 'iNetwork' is deprecated and will be removed at a later time.");
     });
   });
 
@@ -63,6 +81,8 @@ describe('iNetwork Functional Tests', function () {
       const net = new iNetwork(connection);
 
       net.getTCPIPAttr((output) => {
+        expect(getDeprecation().message).to
+          .equal("As of v1.0, 'iNetwork.getTCPIPAttr()' is deprecated and will be removed at a later time.");
         expect(output).to.be.an('Object');
         expect(output).to.have.a.property('TCP/IPv4_stack_status');
         expect(output).to.have.a.property('How_long_active');
@@ -105,6 +125,8 @@ describe('iNetwork Functional Tests', function () {
       const net = new iNetwork(connection);
 
       net.getNetInterfaceData('127.0.0.1', (output) => {
+        expect(getDeprecation().message).to
+          .equal("As of v1.0, 'iNetwork.getNetInterfaceData()' is deprecated and will be removed at a later time.");
         expect(output).to.be.an('Object');
         expect(output).to.have.a.property('Internet_address');
         expect(output).to.have.a.property('Internet_address_binary');

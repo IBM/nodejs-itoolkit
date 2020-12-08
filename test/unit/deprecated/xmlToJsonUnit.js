@@ -18,7 +18,29 @@
 const { expect } = require('chai');
 const { xmlToJson } = require('../../../lib/itoolkit');
 
+let deprecation = null;
+function deprecationHandler(dep) {
+  deprecation = dep;
+}
+
+function getDeprecation() {
+  const temp = deprecation;
+  deprecation = null;
+  return temp;
+}
+
+const xmlToJsonDepMessage = "As of v1.0, 'xmlToJson' is deprecated. Use xml2js npm package instead.";
+
+
 describe('xmlToJson Tests', function () {
+  before(function () {
+    process.on('deprecation', deprecationHandler);
+  });
+
+  after(function () {
+    process.removeAllListeners('deprecation', deprecationHandler);
+  });
+
   it('converts CL command XML output to js object', function () {
     const xmlOut = '<?xml version=\'1.0\'?><myscript><cmd exec=\'rexx\' error=\'fast\'>'
       + '<success>+++ success RTVJOBA USRLIBL(?) SYSLIBL(?)</success>'
@@ -27,6 +49,7 @@ describe('xmlToJson Tests', function () {
       + '       QSYS2      QHLPSYS    QUSRSYS</data></row></cmd></myscript>';
 
     const result = xmlToJson(xmlOut);
+    expect(getDeprecation().message).to.equal(xmlToJsonDepMessage);
     expect(result).to.be.an('array');
     expect(result.length).to.equal(1);
     expect(result[0]).to.be.an('object');
@@ -60,6 +83,7 @@ describe('xmlToJson Tests', function () {
                    + '</myscript>';
 
     const result = xmlToJson(xmlOut);
+    expect(getDeprecation().message).to.equal(xmlToJsonDepMessage);
     expect(result).to.be.an('array');
     expect(result.length).to.equal(1);
     expect(result[0]).to.be.an('object');
@@ -87,6 +111,7 @@ describe('xmlToJson Tests', function () {
                    + '</myscript>';
 
     const result = xmlToJson(xmlOut);
+    expect(getDeprecation().message).to.equal(xmlToJsonDepMessage);
     expect(result).to.be.an('array');
     expect(result.length).to.equal(1);
     expect(result[0]).to.be.an('object');
@@ -131,6 +156,7 @@ describe('xmlToJson Tests', function () {
     </myscript>`;
 
     const result = xmlToJson(xmlOut);
+    expect(getDeprecation().message).to.equal(xmlToJsonDepMessage);
 
     expect(result).to.be.an('array');
     expect(result.length).to.equal(1);
@@ -176,6 +202,7 @@ describe('xmlToJson Tests', function () {
     </myscript>`;
 
     const result = xmlToJson(xmlOut);
+    expect(getDeprecation().message).to.equal(xmlToJsonDepMessage);
 
     expect(result).to.be.an('array');
     expect(result.length).to.equal(1);

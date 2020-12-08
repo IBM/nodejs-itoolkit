@@ -44,13 +44,29 @@ if (config.transport === 'rest') {
 
 const lib = 'NODETKTEST'; const dqName = 'TESTQ';
 
+let deprecation = null;
+function deprecationHandler(dep) {
+  deprecation = dep;
+}
+
+function getDeprecation() {
+  const temp = deprecation;
+  deprecation = null;
+  return temp;
+}
+
 describe('iDataQueue Functional Tests', function () {
   before('check if data queue exists for tests', function (done) {
     printConfig();
+    process.on('deprecation', deprecationHandler);
     checkObjectExists(config, dqName, '*DTAQ', (error) => {
       if (error) { throw error; }
       done();
     });
+  });
+
+  after(function () {
+    process.removeAllListeners('deprecation', deprecationHandler);
   });
 
   describe('constructor', function () {
@@ -59,6 +75,8 @@ describe('iDataQueue Functional Tests', function () {
 
       const dq = new iDataQueue(connection);
       expect(dq).to.be.instanceOf(iDataQueue);
+      expect(getDeprecation().message).to
+        .equal("As of v1.0, class 'iDataQueue' is deprecated and will be removed at a later time.");
     });
   });
 
@@ -70,6 +88,8 @@ describe('iDataQueue Functional Tests', function () {
 
       dq.sendToDataQueue(dqName, lib, 'Hello from DQ!', (output) => {
         expect(output).to.equal(true);
+        expect(getDeprecation().message).to
+          .equal("As of v1.0, 'iDataQueue.sendToDataQueue()' is deprecated and will be removed at a later time.");
         done();
       });
     });
@@ -83,6 +103,8 @@ describe('iDataQueue Functional Tests', function () {
 
       dq.receiveFromDataQueue(dqName, lib, 100, (output) => {
         expect(output).to.be.a('string').and.to.equal('Hello from DQ!');
+        expect(getDeprecation().message).to
+          .equal("As of v1.0, 'iDataQueue.receiveFromDataQueue()' is deprecated and will be removed at a later time.");
         done();
       });
     });
@@ -96,6 +118,8 @@ describe('iDataQueue Functional Tests', function () {
 
       dq.clearDataQueue(dqName, lib, (output) => {
         expect(output).to.equal(true);
+        expect(getDeprecation().message).to
+          .equal("As of v1.0, 'iDataQueue.clearDataQueue()' is deprecated and will be removed at a later time.");
         done();
       });
     });

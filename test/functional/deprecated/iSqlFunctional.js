@@ -45,6 +45,16 @@ if (config.transport === 'rest') {
 describe('iSql Functional Tests', function () {
   before(function () {
     printConfig();
+    process.on('deprecation', function () {
+      // capture depreacation warnings but no-op
+      // test/unit/iSqlUnit.js already ensures deprecations are emited
+    });
+  });
+
+  after(function () {
+    process.removeAllListeners('deprecation', function () {
+      // no-op
+    });
   });
 
   describe('prepare & execute', function () {

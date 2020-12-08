@@ -43,9 +43,25 @@ if (config.transport === 'rest') {
 
 const lib = 'NODETKTEST';
 
+let deprecation = null;
+function deprecationHandler(dep) {
+  deprecation = dep;
+}
+
+function getDeprecation() {
+  const temp = deprecation;
+  deprecation = null;
+  return temp;
+}
+
 describe('iUserSpace Functional Tests', function () {
   before(function () {
     printConfig();
+    process.on('deprecation', deprecationHandler);
+  });
+
+  after(function () {
+    process.removeAllListeners('deprecation', deprecationHandler);
   });
 
   describe('constructor', function () {
@@ -55,6 +71,8 @@ describe('iUserSpace Functional Tests', function () {
       const userSpace = new iUserSpace(connection);
 
       expect(userSpace).to.be.instanceOf(iUserSpace);
+      expect(getDeprecation().message).to
+        .equal("As of v1.0, class 'iUserSpace' is deprecated and will be removed at a later time.");
     });
   });
 
@@ -70,6 +88,8 @@ describe('iUserSpace Functional Tests', function () {
 
       userSpace.createUserSpace(userSpaceName, lib, 'LOG', 50, '*EXCLUDE',
         description, (output) => {
+          expect(getDeprecation().message).to
+            .equal("As of v1.0, 'iUserSpace.createUserSpace()' is deprecated and will be removed at a later time.");
           expect(output).to.be.a('boolean').and.to.equal(true);
           done();
         });
@@ -88,6 +108,8 @@ describe('iUserSpace Functional Tests', function () {
 
       userSpace.setUserSpaceData(userSpaceName, lib, msg.length, msg,
         (output) => {
+          expect(getDeprecation().message).to
+            .equal("As of v1.0, 'iUserSpace.setUserSpaceData()' is deprecated and will be removed at a later time.");
           expect(output).to.be.a('boolean').and.to.equal(true);
           done();
         });
@@ -103,6 +125,8 @@ describe('iUserSpace Functional Tests', function () {
       const userSpaceName = `USP${(config.transport).toUpperCase()}`;
 
       userSpace.getUserSpaceData(userSpaceName, lib, 21, (output) => {
+        expect(getDeprecation().message).to
+          .equal("As of v1.0, 'iUserSpace.getUserSpaceData()' is deprecated ad will be removed at a later time.");
         expect(output).to.be.a('string').and.to.equal('Hello from userspace!');
         done();
       });
@@ -118,6 +142,8 @@ describe('iUserSpace Functional Tests', function () {
       const userSpaceName = `USP${(config.transport).toUpperCase()}`;
 
       userSpace.deleteUserSpace(userSpaceName, lib, (output) => {
+        expect(getDeprecation().message).to
+          .equal("As of v1.0, 'iUserSpace.deleteUserSpace()' is deprecated and will be removed at a later time");
         expect(output).to.be.a('boolean').and.to.equal(true);
         done();
       });
