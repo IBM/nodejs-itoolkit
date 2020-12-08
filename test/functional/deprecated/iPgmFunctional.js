@@ -47,7 +47,7 @@ describe('iPgm Functional Tests', function () {
     printConfig();
   });
 
-  describe('Test iPgm()', function () {
+  describe('addParam', function () {
     it('calls QWCRSVAL program checks if it ran successfully', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -79,10 +79,10 @@ describe('iPgm Functional Tests', function () {
     });
   });
 
-  describe.skip('Test iPgm()', function () {
+  describe.skip('addReturn', function () {
     // ZZSRV6 program requires XMLSERVICE built with tests
     // Skip for now, we need to add before hook to check if ZZSRV6 is available
-    it.skip('Should be successful with addReturn arbitrary attribute specified using', function (done) {
+    it.skip('calls ZZVARY4 and checks the return value', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
       const program = new iPgm('ZZSRV6', { lib: 'XMLSERVICE', func: 'ZZVARY4' });
