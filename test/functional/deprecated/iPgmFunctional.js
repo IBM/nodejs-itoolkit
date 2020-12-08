@@ -21,6 +21,7 @@ const { expect } = require('chai');
 const { parseString } = require('xml2js');
 const { iPgm, iConn } = require('../../../lib/itoolkit');
 const { config, printConfig } = require('../config');
+const { checkObjectExists } = require('../checkObjectExists');
 
 // deprecated tests are in place to test compatability using deprecated classes and functions
 // these tests use deprecated iConn Class to create a connnection
@@ -79,24 +80,28 @@ describe('iPgm Functional Tests', function () {
     });
   });
 
-  describe.skip('addReturn', function () {
+  describe('addReturn', function () {
     // ZZSRV6 program requires XMLSERVICE built with tests
-    // Skip for now, we need to add before hook to check if ZZSRV6 is available
-    it.skip('calls ZZVARY4 and checks the return value', function (done) {
-      const connection = new iConn(database, username, password, restOptions);
+    // See https://github.com/IBM/xmlservice#building-from-source
+    it('calls ZZVARY4 and checks the return value', function (done) {
+      checkObjectExists(config, { name: 'ZZSRV6', type: '*SRVPGM', lib: 'XMLSERVICE' }, (error) => {
+        if (error) {
+          this.skip();
+        }
+        const connection = new iConn(database, username, password, restOptions);
 
-      const program = new iPgm('ZZSRV6', { lib: 'XMLSERVICE', func: 'ZZVARY4' });
+        const program = new iPgm('ZZSRV6', { lib: 'XMLSERVICE', func: 'ZZVARY4' });
 
-      program.addParam('Gill', '10A', { varying: '4' });
-      const testValue = 'NEW_NAME';
-      program.addReturn('0', '20A', { varying: '4', name: testValue });
-      connection.add(program);
-      connection.run((xmlOut) => {
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          expect(result.myscript.pgm[0].success[0]).to.include('+++ success');
-          expect(result.myscript.pgm[0].return[0].data[0]._).to.equal('my name is Gill');
-          done();
+        program.addParam('Gill', '10A', { varying: '4' });
+        program.addReturn('0', '20A', { varying: '4' });
+        connection.add(program);
+        connection.run((xmlOut) => {
+          parseString(xmlOut, (parseError, result) => {
+            expect(parseError).to.equal(null);
+            expect(result.myscript.pgm[0].success[0]).to.include('+++ success');
+            expect(result.myscript.pgm[0].return[0].data[0]._).to.equal('my name is Gill');
+            done();
+          });
         });
       });
     });

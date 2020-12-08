@@ -30,10 +30,10 @@ describe('DataQueue Functional Tests', function () {
 
   before('check if data queue exists for tests', function (done) {
     printConfig();
-    checkObjectExists(config, dqName, '*DTAQ', (error) => {
+    checkObjectExists(config, { name: dqName, type: '*DTAQ' }, (error) => {
       if (error) { throw error; }
 
-      checkObjectExists(config, dqName2, '*DTAQ', (error2) => {
+      checkObjectExists(config, { name: dqName2, type: '*DTAQ' }, (error2) => {
         if (error2) { throw error2; }
         done();
       });
