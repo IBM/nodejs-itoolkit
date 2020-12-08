@@ -48,6 +48,7 @@ describe('iPgm Functional Tests', function () {
   });
 
   describe('Test iPgm()', function () {
+    this.timeout(670);
     it('calls QWCRSVAL program checks if it ran successfully', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 

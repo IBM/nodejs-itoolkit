@@ -20,6 +20,7 @@ const { xmlToJson } = require('../../../lib/itoolkit');
 
 describe('xmlToJson Tests', function () {
   it('converts CL command XML output to js object', function () {
+    this.timeout(38);
     const xmlOut = '<?xml version=\'1.0\'?><myscript><cmd exec=\'rexx\' error=\'fast\'>'
       + '<success>+++ success RTVJOBA USRLIBL(?) SYSLIBL(?)</success>'
       + '<row><data desc=\'USRLIBL\'>QGPL       QTEMP      QDEVELOP   QBLDSYS'
@@ -44,6 +45,7 @@ describe('xmlToJson Tests', function () {
   });
 
   it('converts sh command XML output to js object', function () {
+    this.timeout(4);
     const xmlOut = '<?xml version=\'1.0\'?><myscript><sh error=\'fast\'>\n'
                    + 'bin\n'
                    + 'ccs\n'
@@ -71,6 +73,7 @@ describe('xmlToJson Tests', function () {
 
 
   it('converts qsh command XML output to js object', function () {
+    this.timeout(2);
     const xmlOut = '<?xml version=\'1.0\'?><myscript><qsh error=\'fast\'>\n'
                    + 'bin\n'
                    + 'ccs\n'
@@ -97,6 +100,7 @@ describe('xmlToJson Tests', function () {
   });
 
   it('converts pgm command XML output to js object', function () {
+    this.timeout(8);
     const xmlOut = `<?xml version='1.0'?><myscript><pgm name='QWCRSVAL' lib='QSYS' error='fast'>
     <parm io='out'>
     <ds len='rec1'>
@@ -151,6 +155,7 @@ describe('xmlToJson Tests', function () {
   });
 
   it('converts sql command XML output to js object', function () {
+    this.timeout(32);
     const xmlOut = `<?xml version='1.0'?><myscript><sql>
     <query error='fast' conn='conn1' stmt='stmt1'>
     <success><![CDATA[+++ success SELECT LSTNAM, STATE FROM QIWS.QCUSTCDT]]></success>

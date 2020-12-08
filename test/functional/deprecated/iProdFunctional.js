@@ -47,6 +47,7 @@ describe('iProd Functional Tests', function () {
   });
 
   describe('constructor', function () {
+    this.timeout(2);
     it('creates and returns an instance of iProd', function () {
       const connection = new iConn(database, config.user, password);
 
@@ -57,6 +58,7 @@ describe('iProd Functional Tests', function () {
   });
 
   describe('getPTFInfo', function () {
+    this.timeout(696);
     it('returns info for specified ptf', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -99,6 +101,7 @@ describe('iProd Functional Tests', function () {
   });
 
   describe('getProductInfo', function () {
+    this.timeout(636);
     it('returns info for specified product', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -130,6 +133,7 @@ describe('iProd Functional Tests', function () {
   // REST transport currently failing with 414 URI Too Long response code
   // The requested URL's length exceeds the capacity limit for this server
   describe('getInstalledProducts', function () {
+    this.timeout(3566);
     it('returns info for installed products', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 

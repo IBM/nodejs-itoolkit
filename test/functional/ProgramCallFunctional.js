@@ -27,6 +27,7 @@ describe('ProgramCall Functional Tests', function () {
   });
 
   describe('Test ProgramCall()', function () {
+    this.timeout(2800);
     it('calls QWCRSVAL program checks if it ran successfully', function (done) {
       const connection = new Connection(config);
 

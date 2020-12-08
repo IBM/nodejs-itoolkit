@@ -51,6 +51,7 @@ describe('iSh, iCmd, iQsh, Functional Tests', function () {
   });
 
   describe('iCmd()', function () {
+    this.timeout(1124);
     it('calls CL command', function (done) {
       const connection = new iConn(database, username, password, restOptions);
       connection.add(iCmd('RTVJOBA USRLIBL(?) SYSLIBL(?)'));
@@ -65,6 +66,7 @@ describe('iSh, iCmd, iQsh, Functional Tests', function () {
   });
 
   describe('iSh()', function () {
+    this.timeout(3450);
     it('calls PASE shell command', function (done) {
       const connection = new iConn(database, username, password, restOptions);
       connection.add(iSh('system -i wrksyssts'));
@@ -81,6 +83,7 @@ describe('iSh, iCmd, iQsh, Functional Tests', function () {
   });
 
   describe('iQsh()', function () {
+    this.timeout(6244);
     it('calls QSH command', function (done) {
       const connection = new iConn(database, username, password, restOptions);
       connection.add(new iPgm('MYPGMTOOLONG'));

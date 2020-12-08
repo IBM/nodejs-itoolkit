@@ -46,6 +46,7 @@ const lib = 'NODETKTEST'; const dqName = 'TESTQ';
 
 describe('iDataQueue Functional Tests', function () {
   before('check if data queue exists for tests', function (done) {
+    this.timeout(0);
     printConfig();
     checkObjectExists(config, dqName, '*DTAQ', (error) => {
       if (error) { throw error; }
@@ -54,6 +55,7 @@ describe('iDataQueue Functional Tests', function () {
   });
 
   describe('constructor', function () {
+    this.timeout(2);
     it('creates and returns an instance of iDataQueue', function () {
       const connection = new iConn(database, config.user, password);
 
@@ -63,6 +65,7 @@ describe('iDataQueue Functional Tests', function () {
   });
 
   describe('sendToDataQueue', function () {
+    this.timeout(693);
     it('sends data to specified DQ', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -76,6 +79,7 @@ describe('iDataQueue Functional Tests', function () {
   });
 
   describe('receiveFromDataQueue', function () {
+    this.timeout(712);
     it('receives data from specfied DQ', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -89,6 +93,7 @@ describe('iDataQueue Functional Tests', function () {
   });
 
   describe('clearDataQueue', function () {
+    this.timeout(720);
     it('clears the specifed DQ', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 

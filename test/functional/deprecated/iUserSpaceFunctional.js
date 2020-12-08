@@ -49,6 +49,7 @@ describe('iUserSpace Functional Tests', function () {
   });
 
   describe('constructor', function () {
+    this.timeout(2);
     it('returns an instance of iUserSpace', function () {
       const connection = new iConn(database, config.user, password);
 
@@ -59,6 +60,7 @@ describe('iUserSpace Functional Tests', function () {
   });
 
   describe('createUserSpace', function () {
+    this.timeout(702);
     it('creates a user space', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -77,6 +79,7 @@ describe('iUserSpace Functional Tests', function () {
   });
 
   describe('setUserSpaceData', function () {
+    this.timeout(632);
     it('sets data within the user space', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -95,6 +98,7 @@ describe('iUserSpace Functional Tests', function () {
   });
 
   describe('getUserSpaceData', function () {
+    this.timeout(632);
     it('returns specified length of data', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
@@ -110,6 +114,7 @@ describe('iUserSpace Functional Tests', function () {
   });
 
   describe('deleteUserSpace', function () {
+    this.timeout(628);
     it('removes a user space', function (done) {
       const connection = new iConn(database, username, password, restOptions);
 
