@@ -210,25 +210,22 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('getDataArea', function () {
-    before('init lib, data area, and add data', function (done) {
+    it('returns contents of a data area', function (done) {
       checkObjectExists(config, 'TESTDA', '*DTAARA', (error) => {
         if (error) { throw error; }
-        done();
-      });
-    });
-    it('returns contents of a data area', function (done) {
-      const connection = new iConn(database, username, password, restOptions);
+        const connection = new iConn(database, username, password, restOptions);
 
-      const work = new iWork(connection);
+        const work = new iWork(connection);
 
-      work.getDataArea('NODETKTEST', 'TESTDA', 20, (output) => {
-        expect(output).to.be.an('Object');
-        expect(output).to.have.a.property('Type_of_value_returned');
-        expect(output).to.have.a.property('Library_name');
-        expect(output).to.have.a.property('Length_of_value_returned');
-        expect(output).to.have.a.property('Number_of_decimal_positions');
-        expect(output).to.have.a.property('Value');
-        done();
+        work.getDataArea('NODETKTEST', 'TESTDA', 20, (output) => {
+          expect(output).to.be.an('Object');
+          expect(output).to.have.a.property('Type_of_value_returned');
+          expect(output).to.have.a.property('Library_name');
+          expect(output).to.have.a.property('Length_of_value_returned');
+          expect(output).to.have.a.property('Number_of_decimal_positions');
+          expect(output).to.have.a.property('Value');
+          done();
+        });
       });
     });
   });
