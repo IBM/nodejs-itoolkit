@@ -1,5 +1,4 @@
 // Copyright (c) International Business Machines Corp. 2019
-// All Rights Reserved
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
 // associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -16,16 +15,15 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-/* eslint-env mocha */
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
 const sinon = require('sinon');
 const { iConn, iSh } = require('../../../lib/itoolkit');
 
-describe('iConn Class Unit Tests', () => {
-  describe('constructor', () => {
-    it('creates and returns an instance of iConn with idb transport', () => {
+describe('iConn Class Unit Tests', function () {
+  describe('constructor', function () {
+    it('creates and returns an instance of iConn with idb transport', function () {
       const database = process.env.TKDB || '*LOCAL';
       const username = process.env.TKUSER || '';
       const password = process.env.TKPASS || '';
@@ -43,7 +41,7 @@ describe('iConn Class Unit Tests', () => {
       expect(connection.connection.verbose).to.equal(false);
     });
 
-    it('creates and returns an instance of iConn with rest transport', () => {
+    it('creates and returns an instance of iConn with rest transport', function () {
       const database = process.env.TKDB || '*LOCAL';
       const username = process.env.TKUSER || '';
       const password = process.env.TKPASS || '';
@@ -74,8 +72,8 @@ describe('iConn Class Unit Tests', () => {
     });
   });
 
-  describe('add', () => {
-    it('appends to xml service request to the command list using iConn class', () => {
+  describe('add', function () {
+    it('appends to xml service request to the command list using iConn class', function () {
       const database = process.env.TKDB || '*LOCAL';
       const username = process.env.TKUSER || '';
       const password = process.env.TKPASS || '';
@@ -88,8 +86,8 @@ describe('iConn Class Unit Tests', () => {
   });
 
 
-  describe('debug', () => {
-    it('turns verbose mode on/off using iConn class', () => {
+  describe('debug', function () {
+    it('turns verbose mode on/off using iConn class', function () {
       const database = process.env.TKDB || '*LOCAL';
       const username = process.env.TKUSER || '';
       const password = process.env.TKPASS || '';
@@ -103,8 +101,8 @@ describe('iConn Class Unit Tests', () => {
   });
 
 
-  describe('getTransportOptions', () => {
-    it('returns conn (object) property from iConn instance', () => {
+  describe('getTransportOptions', function () {
+    it('returns conn (object) property from iConn instance', function () {
       const database = process.env.TKDB || '*LOCAL';
       const username = process.env.TKUSER || '';
       const password = process.env.TKPASS || '';
@@ -122,8 +120,8 @@ describe('iConn Class Unit Tests', () => {
   });
 
 
-  describe('run', () => {
-    it('(iConn) invokes transport to execute xml input and returns xml output in callback', () => {
+  describe('run', function () {
+    it('(iConn) invokes transport to execute xml input and returns xml output in callback', function () {
       const database = process.env.TKDB || '*LOCAL';
       const username = process.env.TKUSER || '';
       const password = process.env.TKPASS || '';

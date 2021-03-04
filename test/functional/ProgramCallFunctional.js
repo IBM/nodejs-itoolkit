@@ -1,5 +1,4 @@
 // Copyright (c) International Business Machines Corp. 2019
-// All Rights Reserved
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
 // associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -16,144 +15,90 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-/* eslint-env mocha */
-/* eslint-disable new-cap */
-
 const { expect } = require('chai');
-const { readFileSync } = require('fs');
-const { ProgramCall } = require('../../lib/itoolkit');
-const { xmlToJson, returnTransports } = require('../../lib/utils');
+const { parseString } = require('xml2js');
+const { ProgramCall, Connection } = require('../../lib/itoolkit');
+const { config, printConfig } = require('./config');
 
-// Set Env variables or set values here.
-let privateKey;
-if (process.env.TKPK) {
-  privateKey = readFileSync(process.env.TKPK, 'utf-8');
-}
-const opt = {
-  database: process.env.TKDB || '*LOCAL',
-  username: process.env.TKUSER || '',
-  password: process.env.TKPASS || '',
-  host: process.env.TKHOST || 'localhost',
-  port: process.env.TKPORT,
-  path: process.env.TKPATH || '/cgi-bin/xmlcgi.pgm',
-  privateKey,
-  passphrase: process.env.TKPHRASE,
-  verbose: !!process.env.TKVERBOSE,
-  dsn: process.env.TKDSN,
-};
 
-const transports = returnTransports(opt);
+describe('ProgramCall Functional Tests', function () {
+  before(function () {
+    printConfig();
+  });
 
-describe('ProgramCall Functional Tests', () => {
-  describe('Test ProgramCall()', () => {
-    transports.forEach((transport) => {
-      it(`calls QWCRSVAL program checks if it ran successfully using ${transport.name} transport`, (done) => {
-        const connection = transport.me;
+  describe('addParam', function () {
+    it('calls QWCRSVAL program checks if it ran successfully', function (done) {
+      const connection = new Connection(config);
 
-        const program = new ProgramCall('QWCRSVAL', { lib: 'QSYS' });
+      const program = new ProgramCall('QWCRSVAL', { lib: 'QSYS' });
 
-        const outBuf = [
-          [0, '10i0'],
-          [0, '10i0'],
-          ['', '36h'],
-          ['', '10A'],
-          ['', '1A'],
-          ['', '1A'],
-          [0, '10i0'],
-          [0, '10i0'],
-        ];
+      const outBuf = {
+        type: 'ds',
+        io: 'out',
+        fields: [
+          { type: '10i0', value: 0 },
+          { type: '10i0', value: 0 },
+          { type: '36h', value: '' },
+          { type: '10A', value: '' },
+          { type: '1A', value: '' },
+          { type: '1A', value: '' },
+          { type: '10i0', value: 0 },
+          { type: '10i0', value: 0 },
+        ],
+      };
 
-        const errno = [
-          [0, '10i0'],
-          [0, '10i0', { setlen: 'rec2' }],
-          ['', '7A'],
-          ['', '1A'],
-        ];
+      const errno = {
+        type: 'ds',
+        io: 'both',
+        len: 'rec2',
+        fields: [
+          {
+            name: 'bytes_provided',
+            type: '10i0',
+            value: 0,
+            setlen: 'rec2',
+          },
+          { name: 'bytes_available', type: '10i0', value: 0 },
+          { name: 'msgid', type: '7A', value: '' },
+          { type: '1A', value: '' },
+        ],
+      };
 
-        program.addParam(outBuf, { io: 'out' });
-        program.addParam(66, '10i0');
-        program.addParam(1, '10i0');
-        program.addParam('QCCSID', '10A');
-        program.addParam(errno, { io: 'both', len: 'rec2' });
-        connection.add(program);
-        connection.run((error, xmlOut) => {
-          expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
-
-          results.forEach((result) => {
-            expect(result.success).to.equal(true);
-          });
+      program.addParam(outBuf);
+      program.addParam({ type: '10i0', value: 66 });
+      program.addParam({ type: '10i0', value: 1 });
+      program.addParam({ type: '10A', value: 'QCCSID' });
+      program.addParam(errno);
+      connection.add(program);
+      connection.run((error, xmlOut) => {
+        expect(error).to.equal(null);
+        parseString(xmlOut, (parseError, result) => {
+          expect(parseError).to.equal(null);
+          expect(result.myscript.pgm[0].success[0]).to.include('+++ success QSYS QWCRSVAL');
           done();
         });
       });
     });
   });
 
+  describe.skip('addReturn', function () {
+    // ZZSRV6 program requires XMLSERVICE built with tests
+    // Skip for now, we need to add before hook to check ZZSRV6 is available
+    it.skip('calls ZZVARY4 and checks the return value', function (done) {
+      const connection = new Connection(config);
 
-  describe('Test ProgramCall()', () => {
-    transports.forEach((transport) => {
-      it(`calls QWCRSVAL program and returns arbitrarily named parameter using ${transport.name} transport`, (done) => {
-        const connection = transport.me;
+      const program = new ProgramCall('ZZSRV6', { lib: 'XMLSERVICE', func: 'ZZVARY4' });
 
-        const program = new ProgramCall('QWCRSVAL', { lib: 'QSYS' });
-
-        const outBuf = [
-          [0, '10i0'],
-          [0, '10i0'],
-          ['', '36h'],
-          ['', '10A'],
-          ['', '1A'],
-          ['', '1A'],
-          [0, '10i0'],
-          [0, '10i0'],
-        ];
-
-        const errno = [
-          [0, '10i0'],
-          [0, '10i0', { setlen: 'rec2' }],
-          ['', '7A'],
-          ['', '1A'],
-        ];
-
-        program.addParam(outBuf, { io: 'out' });
-        program.addParam(66, '10i0');
-        program.addParam(1, '10i0');
-        program.addParam('QCCSID', '10A');
-        const paramValue = 'errno';
-
-        program.addParam(errno, { io: 'both', len: 'rec2', name: paramValue });
-        connection.add(program);
-        connection.run((error, xmlOut) => {
-          expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
-
-          results.forEach((result) => {
-            expect(result.success).to.equal(true);
-          });
-          done();
-        });
-      });
-    });
-  });
-
-  describe.skip('Test ProgramCall()', () => {
-    // Skip for now ZZSRV6 program requires XMLSERVICE built with tests
-    // Refer to test/rpg/zzsrv6.rpgle
-    transports.forEach((transport) => {
-      it.skip(`Should be successful with addReturn arbitrary attribute specified using using ${transport.name} transport`, (done) => {
-        const connection = transport.me;
-
-        const program = new ProgramCall('ZZSRV6', { lib: 'XMLSERVICE', func: 'ZZVARY4' });
-
-        program.addParam('Gill', '10A', { letying: '4' });
-        const testValue = 'NEW_NAME';
-        program.addReturn('0', '20A', { letying: '4', name: testValue });
-        connection.add(program);
-        connection.run((error, xmlOut) => {
-          expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
-
-          expect(results[0].data[1].name).to.equal(testValue);
+      program.addParam({ type: '10A', varying: '4', value: 'Gill' });
+      const testValue = 'NEW_NAME';
+      program.addReturn('0', '20A', { varying: '4', name: testValue });
+      connection.add(program);
+      connection.run((error, xmlOut) => {
+        expect(error).to.equal(null);
+        parseString(xmlOut, (parseError, result) => {
+          expect(parseError).to.equal(null);
+          expect(result.myscript.pgm[0].success[0]).to.include('+++ success');
+          expect(result.myscript.pgm[0].return[0].data[0]._).to.equal('my name is Gill');
           done();
         });
       });

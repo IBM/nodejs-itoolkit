@@ -1,5 +1,4 @@
 // Copyright (c) International Business Machines Corp. 2019
-// All Rights Reserved
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
 // associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -16,39 +15,36 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-/* eslint-env mocha */
-/* eslint-disable new-cap */
-
 const { expect } = require('chai');
 const { ProgramCall } = require('../../lib/itoolkit');
 
 const outBuf = [
-  [0, '10i0'],
-  [0, '10i0'],
-  ['', '36h'],
-  ['', '10A'],
-  ['', '1A'],
-  ['', '1A'],
-  [0, '10i0'],
-  [0, '10i0'],
+  { type: '10i0', value: 0 },
+  { type: '10i0', value: 0 },
+  { type: '36h', value: '' },
+  { type: '10A', value: '' },
+  { type: '1A', value: '' },
+  { type: '1A', value: '' },
+  { type: '10i0', value: 0 },
+  { type: '10i0', value: 0 },
 ];
 const errno = [
-  [0, '10i0'],
-  [0, '10i0', { setlen: 'rec2' }],
-  ['', '7A'],
-  ['', '1A'],
+  { type: '10i0', value: 0 },
+  { type: '10i0', value: 0, setlen: 'rec2' },
+  { type: '7A', value: '' },
+  { type: '1A', value: '' },
 ];
 
-describe('ProgramCall Class Unit Tests', () => {
-  describe('constructor', () => {
-    it('creates and returns an instance of ProgramCall with lib and function set', () => {
+describe('ProgramCall Class Unit Tests', function () {
+  describe('constructor', function () {
+    it('creates and returns an instance of ProgramCall with lib and function set', function () {
       const pgm = new ProgramCall('QTOCNETSTS');
       expect(pgm).to.be.instanceOf(ProgramCall);
     });
   });
 
-  describe('toXML', () => {
-    it('returns pgm XML', () => {
+  describe('toXML', function () {
+    it('returns pgm XML', function () {
       const pgm = new ProgramCall('QTOCNETSTS',
         {
           lib: 'QSYS',
@@ -62,8 +58,8 @@ describe('ProgramCall Class Unit Tests', () => {
     });
   });
 
-  describe('addParam', () => {
-    it('appends param to pgm xml', () => {
+  describe('addParam', function () {
+    it('appends param to pgm xml', function () {
       const pgm = new ProgramCall('QTOCNETSTS',
         {
           lib: 'QSYS',
@@ -71,7 +67,7 @@ describe('ProgramCall Class Unit Tests', () => {
           error: 'fast',
         });
 
-      pgm.addParam(outBuf, { io: 'out' });
+      pgm.addParam({ type: 'ds', io: 'out', fields: outBuf });
 
       let expectedXML = '<pgm name=\'QTOCNETSTS\' lib=\'QSYS\' func=\'QtoRtvTCPA\' error=\'fast\'>'
       + '<parm io=\'out\'><ds><data type=\'10i0\'>0</data><data type=\'10i0\'>'
@@ -81,7 +77,7 @@ describe('ProgramCall Class Unit Tests', () => {
 
       expect(pgm.toXML()).to.equal(expectedXML);
 
-      pgm.addParam(66, '10i0');
+      pgm.addParam({ value: 66, type: '10i0' });
 
       expectedXML = '<pgm name=\'QTOCNETSTS\' lib=\'QSYS\' func=\'QtoRtvTCPA\' error=\'fast\'>'
       + '<parm io=\'out\'><ds><data type=\'10i0\'>0</data><data type=\'10i0\'>'
@@ -92,7 +88,7 @@ describe('ProgramCall Class Unit Tests', () => {
 
       expect(pgm.toXML()).to.equal(expectedXML);
 
-      pgm.addParam(1, '10i0');
+      pgm.addParam({ value: 1, type: '10i0' });
 
       expectedXML = '<pgm name=\'QTOCNETSTS\' lib=\'QSYS\' func=\'QtoRtvTCPA\' error=\'fast\'>'
       + '<parm io=\'out\'><ds><data type=\'10i0\'>0</data><data type=\'10i0\'>'
@@ -104,7 +100,7 @@ describe('ProgramCall Class Unit Tests', () => {
 
       expect(pgm.toXML()).to.equal(expectedXML);
 
-      pgm.addParam('QCCSID', '10A');
+      pgm.addParam({ value: 'QCCSID', type: '10A' });
 
       expectedXML = '<pgm name=\'QTOCNETSTS\' lib=\'QSYS\' func=\'QtoRtvTCPA\' error=\'fast\'>'
       + '<parm io=\'out\'><ds><data type=\'10i0\'>0</data><data type=\'10i0\'>'
@@ -117,7 +113,9 @@ describe('ProgramCall Class Unit Tests', () => {
 
       expect(pgm.toXML()).to.equal(expectedXML);
 
-      pgm.addParam(errno, { io: 'both', len: 'rec2' });
+      pgm.addParam({
+        type: 'ds', io: 'both', len: 'rec2', fields: errno,
+      });
 
       expectedXML = '<pgm name=\'QTOCNETSTS\' lib=\'QSYS\' func=\'QtoRtvTCPA\' error=\'fast\'>'
       + '<parm io=\'out\'><ds><data type=\'10i0\'>0</data><data type=\'10i0\'>'
@@ -134,62 +132,112 @@ describe('ProgramCall Class Unit Tests', () => {
       expect(pgm.toXML()).to.equal(expectedXML);
     });
 
-    it('regular <parm> contains by=\'val\'', () => {
+    it('regular <parm> contains by=\'val\'', function () {
       const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
-      pgm.addParam('', '1A', { by: 'val' });
-      pgm.addReturn('', '2A', { name: 'output' });
+      pgm.addParam({ value: '', type: '1A', by: 'val' });
+      pgm.addReturn({ name: 'output', type: '2A', value: '' });
 
       const lookAtXML = pgm.toXML();
       expect(lookAtXML).to.match(/<parm .*by='val'.*>/);
     });
 
-    it('data structure <parm> contains by=\'val\'', () => {
+    it('data structure <parm> contains by=\'val\'', function () {
       const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
       const params = [
-        [0, '3s0'],
-        [0, '7s0', { name: 'ds_fld2' }],
+        { type: '3s0', value: 0 },
+        { type: '7s0', value: 0, name: 'ds_fld2' },
       ];
 
-      pgm.addParam(params, { name: 'inds', by: 'val' });
-      pgm.addReturn('', '2A', { name: 'output' });
+      pgm.addParam({
+        name: 'inds', type: 'ds', by: 'val', fields: params,
+      });
+      pgm.addReturn({ name: 'output', type: '2A', value: '' });
 
       const lookAtXML = pgm.toXML();
       expect(lookAtXML).to.match(/<parm .*by='val'.*>/);
     });
 
-    it('regular <parm> contains by=\'val\', with io=\'both\'', () => {
+    it('regular <parm> contains by=\'val\', with io=\'both\'', function () {
       const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
-      pgm.addParam('', '1A', { by: 'val', io: 'both' });
-      pgm.addReturn('', '2A', { name: 'output' });
+      pgm.addParam({
+        value: '', type: '1A', by: 'val', io: 'both',
+      });
+      pgm.addReturn({ name: 'output', type: '2A', value: '' });
 
       const lookAtXML = pgm.toXML();
       expect(lookAtXML).to.match(/<parm .*by='val'.*>/);
       expect(lookAtXML).to.match(/<parm .*io='both'.*>/);
     });
 
-    it('data structure <parm> contains by=\'val\', with io=\'both\'', () => {
+    it('data structure <parm> contains by=\'val\', with io=\'both\'', function () {
       const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB', func: 'MY_PROCEDURE' });
 
       const params = [
-        [0, '3s0'],
-        [0, '7s0', { name: 'ds_fld2' }],
+        { type: '3s0', value: 0 },
+        { type: '7s0', value: 0, name: 'ds_fld2' },
       ];
 
-      pgm.addParam(params, { name: 'inds', by: 'val', io: 'both' });
-      pgm.addReturn('', '2A', { name: 'output' });
+      pgm.addParam({
+        name: 'inds', type: 'ds', by: 'val', io: 'both', fields: params,
+      });
+      pgm.addReturn({ name: 'output', type: '2A', value: '' });
 
       const lookAtXML = pgm.toXML();
       expect(lookAtXML).to.match(/<parm .*by='val'.*>/);
       expect(lookAtXML).to.match(/<parm .*io='both'.*>/);
+    });
+
+    it('add nested data structure parameter', function () {
+      const pgm = new ProgramCall('MYPGM', { lib: 'MYLIB' });
+
+      const nestedDs = {
+        name: 'outer-ds',
+        type: 'ds',
+        fields: [
+          {
+            name: 'sub-ds1',
+            type: 'ds',
+            fields: [
+              { type: '10i0', value: 0 },
+              { type: '4A', value: 'test' },
+            ],
+          },
+          {
+            name: 'sub-ds2',
+            type: 'ds',
+            fields: [
+              { type: '20i0', value: 1 },
+              { type: '6A', value: 'test 2' },
+            ],
+          },
+        ],
+      };
+
+      pgm.addParam(nestedDs);
+      const expectedXML = '<pgm name=\'MYPGM\' lib=\'MYLIB\' error=\'fast\'>'
+                             + '<parm name=\'outer-ds\'>'
+                              + '<ds name=\'outer-ds\'>'
+                              + '<ds name=\'sub-ds1\'>'
+                              + '<data type=\'10i0\'>0</data>'
+                              + '<data type=\'4A\'>test</data>'
+                              + '</ds>'
+                              + '<ds name=\'sub-ds2\'>'
+                              + '<data type=\'20i0\'>1</data>'
+                              + '<data type=\'6A\'>test 2</data>'
+                              + '</ds>'
+                              + '</ds>'
+                             + '</parm>'
+                           + '</pgm>';
+      expect(pgm.toXML()).to.equal(expectedXML);
     });
   });
 
 
-  describe('addReturn', () => {
-    it('appends return to pgm xml', () => {
+  describe('addReturn', function () {
+    it('appends return to pgm xml', function () {
       const pgm = new ProgramCall('QTOCNETSTS',
         {
           lib: 'QSYS',
@@ -197,10 +245,30 @@ describe('ProgramCall Class Unit Tests', () => {
           error: 'fast',
         });
 
-      pgm.addReturn('0', '20A');
+      pgm.addReturn({ type: '20A', value: '0' });
 
       const expectedXML = '<pgm name=\'QTOCNETSTS\' lib=\'QSYS\' func=\'QtoRtvTCPA\' '
       + 'error=\'fast\'><return><data type=\'20A\'>0</data></return></pgm>';
+
+      expect(pgm.toXML()).to.equal(expectedXML);
+    });
+
+    it('appends return with ds to pgm xml', function () {
+      const pgm = new ProgramCall('TEST');
+
+      const ds = {
+        name: 'test_ds',
+        type: 'ds',
+        io: 'out',
+        fields: [
+          { type: '10i0', value: 0 },
+          { type: '10A', value: '' },
+        ],
+      };
+      pgm.addReturn(ds);
+
+      const expectedXML = "<pgm name='TEST' error='fast'><return><ds name='test_ds'>"
+      + "<data type='10i0'>0</data><data type='10A'></data></ds></return></pgm>";
 
       expect(pgm.toXML()).to.equal(expectedXML);
     });

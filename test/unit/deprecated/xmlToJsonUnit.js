@@ -1,5 +1,4 @@
 // Copyright (c) International Business Machines Corp. 2019
-// All Rights Reserved
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
 // associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -16,13 +15,11 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-/* eslint-env mocha */
-
 const { expect } = require('chai');
-const { xmlToJson } = require('../../lib/itoolkit');
+const { xmlToJson } = require('../../../lib/itoolkit');
 
-describe('xmlToJson Tests', () => {
-  it('converts CL command XML output to js object', () => {
+describe('xmlToJson Tests', function () {
+  it('converts CL command XML output to js object', function () {
     const xmlOut = '<?xml version=\'1.0\'?><myscript><cmd exec=\'rexx\' error=\'fast\'>'
       + '<success>+++ success RTVJOBA USRLIBL(?) SYSLIBL(?)</success>'
       + '<row><data desc=\'USRLIBL\'>QGPL       QTEMP      QDEVELOP   QBLDSYS'
@@ -46,7 +43,7 @@ describe('xmlToJson Tests', () => {
     expect(result[0].data[0]).to.haveOwnProperty('value').and.to.equal(value);
   });
 
-  it('converts sh command XML output to js object', () => {
+  it('converts sh command XML output to js object', function () {
     const xmlOut = '<?xml version=\'1.0\'?><myscript><sh error=\'fast\'>\n'
                    + 'bin\n'
                    + 'ccs\n'
@@ -73,7 +70,7 @@ describe('xmlToJson Tests', () => {
   });
 
 
-  it('converts qsh command XML output to js object', () => {
+  it('converts qsh command XML output to js object', function () {
     const xmlOut = '<?xml version=\'1.0\'?><myscript><qsh error=\'fast\'>\n'
                    + 'bin\n'
                    + 'ccs\n'
@@ -99,7 +96,7 @@ describe('xmlToJson Tests', () => {
     expect(result[0]).to.haveOwnProperty('data').and.to.equal(data);
   });
 
-  it('converts pgm command XML output to js object', () => {
+  it('converts pgm command XML output to js object', function () {
     const xmlOut = `<?xml version='1.0'?><myscript><pgm name='QWCRSVAL' lib='QSYS' error='fast'>
     <parm io='out'>
     <ds len='rec1'>
@@ -153,7 +150,7 @@ describe('xmlToJson Tests', () => {
     });
   });
 
-  it('converts sql command XML output to js object', () => {
+  it('converts sql command XML output to js object', function () {
     const xmlOut = `<?xml version='1.0'?><myscript><sql>
     <query error='fast' conn='conn1' stmt='stmt1'>
     <success><![CDATA[+++ success SELECT LSTNAM, STATE FROM QIWS.QCUSTCDT]]></success>

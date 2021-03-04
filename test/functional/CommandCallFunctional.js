@@ -1,5 +1,4 @@
 // Copyright (c) International Business Machines Corp. 2019
-// All Rights Reserved
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
 // associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -16,87 +15,71 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-/* eslint-env mocha */
-
 const { expect } = require('chai');
-const { readFileSync } = require('fs');
-const { CommandCall } = require('../../lib/itoolkit');
-const { xmlToJson, returnTransports } = require('../../lib/utils');
+const { parseString } = require('xml2js');
+const { CommandCall, Connection, ProgramCall } = require('../../lib/itoolkit');
+const { config, printConfig } = require('./config');
+const { isQSHSupported } = require('./checkVersion');
 
-// Set Env variables or set values here.
-let privateKey;
-if (process.env.TKPK) {
-  privateKey = readFileSync(process.env.TKPK, 'utf-8');
-}
-const opt = {
-  database: process.env.TKDB || '*LOCAL',
-  username: process.env.TKUSER || '',
-  password: process.env.TKPASS || '',
-  host: process.env.TKHOST || 'localhost',
-  port: process.env.TKPORT,
-  path: process.env.TKPATH || '/cgi-bin/xmlcgi.pgm',
-  privateKey,
-  passphrase: process.env.TKPHRASE,
-  verbose: !!process.env.TKVERBOSE,
-  dsn: process.env.TKDSN,
-};
 
-const transports = returnTransports(opt);
+describe('CommandCall Functional Tests', function () {
+  before(function () {
+    printConfig();
+  });
 
-describe('CommandCall Functional Tests', () => {
-  describe('CL command tests', () => {
-    transports.forEach((transport) => {
-      it(`calls CL command using ${transport.name} transport`, (done) => {
-        const connection = transport.me;
-        connection.add(new CommandCall({ command: 'RTVJOBA USRLIBL(?) SYSLIBL(?)', type: 'cl' }));
-        connection.run((error, xmlOut) => {
-          expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
-          results.forEach((result) => {
-            expect(result.success).to.equal(true);
-          });
+  describe('CL command tests', function () {
+    it('calls CL command', function (done) {
+      const connection = new Connection(config);
+      connection.add(new CommandCall({ command: 'RTVJOBA USRLIBL(?) SYSLIBL(?)', type: 'cl' }));
+      connection.run((error, xmlOut) => {
+        expect(error).to.equal(null);
+        parseString(xmlOut, (parseError, result) => {
+          expect(parseError).to.equal(null);
+          expect(result.myscript.cmd[0].success[0]).to.include('+++ success RTVJOBA USRLIBL(?) SYSLIBL(?)');
           done();
         });
       });
     });
   });
 
-  describe('SH command tests', () => {
-    transports.forEach((transport) => {
-      it(`calls PASE shell command using ${transport.name} transport`, (done) => {
-        const connection = transport.me;
-        connection.add(new CommandCall({ command: 'system -i wrksyssts', type: 'sh' }));
-        connection.run((error, xmlOut) => {
-          expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
-          // xs does not return success property for iSh or iQsh
-          // but on error data property = '\n'
-          // so lets base success on contents of data.
-          results.forEach((result) => {
-            expect(result.data).not.to.equal('\n');
-            expect(result.data).to.match(/(System\sStatus\sInformation)/);
-          });
+  describe('SH command tests', function () {
+    it('calls PASE shell command', function (done) {
+      const connection = new Connection(config);
+      connection.add(new CommandCall({ command: 'system -i wrksyssts', type: 'sh' }));
+      connection.run((error, xmlOut) => {
+        expect(error).to.equal(null);
+        // xs does not return success property for sh or qsh command calls
+        // but on error sh or qsh node will not have any inner data
+        parseString(xmlOut, (parseError, result) => {
+          expect(parseError).to.equal(null);
+          expect(result.myscript.sh[0]._).to.match(/(System\sStatus\sInformation)/);
           done();
         });
       });
     });
   });
 
-  describe('QSH command tests', () => {
-    transports.forEach((transport) => {
-      it(`calls QSH command using ${transport.name} transport`, (done) => {
-        const connection = transport.me;
-        connection.add(new CommandCall({ command: 'system wrksyssts', type: 'qsh' }));
-        connection.run((error, xmlOut) => {
-          expect(error).to.equal(null);
-          const results = xmlToJson(xmlOut);
-          // xs does not return success property for iSh or iQsh
-          // but on error data property = '\n'
-          // so lets base success on contents of data.
-          results.forEach((result) => {
-            expect(result.data).not.to.equal('\n');
-            expect(result.data).to.match(/(System\sStatus\sInformation)/);
-          });
+  describe('QSH command tests', function () {
+    it('calls QSH command', function (done) {
+      const connection = new Connection(config);
+      connection.add(new ProgramCall('MYPGMTOOLONG'));
+      connection.add(new CommandCall({ command: 'system wrksyssts', type: 'qsh' }));
+      connection.run((error, xmlOut) => {
+        expect(error).to.equal(null);
+        // xs does not return success property for sh or qsh command calls
+        // but on error sh or qsh node will not have any inner data
+        parseString(xmlOut, (parseError, result) => {
+          expect(parseError).to.equal(null);
+          const match = result.myscript.pgm[0].version[0].match(/\d\.\d\.\d/);
+          if (!match) {
+            throw Error('Unable to determine XMLSERVICE version');
+          }
+          if (!isQSHSupported(match[0])) {
+            // skip if QSH is unsupported
+            console.log(`XMLSERVICE version ${match[0]} does not support QSH`);
+            this.skip();
+          }
+          expect(result.myscript.qsh[0]._).to.match(/(System\sStatus\sInformation)/);
           done();
         });
       });
