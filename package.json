@@ -56,7 +56,7 @@
   "optionalDependencies": {
     "idb-connector": "^1.2.2",
     "idb-pconnector": "^1.0.7",
-    "ssh2": "^0.8.2",
+    "ssh2": "^1.4.0",
     "odbc": "^2.1.3"
   },
   "engines": {
