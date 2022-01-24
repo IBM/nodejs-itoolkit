@@ -127,7 +127,7 @@ Creating a ``Connection`` using the ``REST`` tranport.
      transportOptions: {
         database: '*LOCAL',
         username: 'myuser',
-        password: 'mypass'
+        password: 'mypass',
         url: 'http://myhost.example.com/cgi-bin/xmlcgi.pgm',
       }
    });
