@@ -12,7 +12,9 @@ module.exports = {
     'no-console': 'off',
     // airbnb config forbids optionalDependencies
     // https://github.com/airbnb/javascript/blob/c5bee75b1b358a3749f1a6d38ee6fad73de28e29/packages/eslint-config-airbnb-base/rules/imports.js#L95
-    "import/no-extraneous-dependencies": [ "error", { "optionalDependencies": true }]
+    "import/no-extraneous-dependencies": [ "error", { "optionalDependencies": true }],
+    // Project uses opt deps like odbc and idb-connector which may not exist
+    "import/no-unresolved": 'off',
   },
   overrides: [
     {
