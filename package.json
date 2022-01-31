@@ -51,7 +51,7 @@
     "eslint-plugin-mocha": "^7.0.1",
     "mocha": "^6.2.3",
     "sinon": "^7.4.1",
-    "standard-version": "^9.0.0"
+    "standard-version": "^9.3.2"
   },
   "optionalDependencies": {
     "idb-connector": "^1.2.2",
