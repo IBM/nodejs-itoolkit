@@ -185,7 +185,6 @@ describe('iPgm Class Unit Tests', function () {
     });
   });
 
-
   describe('addReturn', function () {
     it('appends return to pgm xml', function () {
       const pgm = new iPgm('QTOCNETSTS',

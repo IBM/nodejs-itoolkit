@@ -20,7 +20,6 @@ const { parseString } = require('xml2js');
 const { ProgramCall, Connection } = require('../../lib/itoolkit');
 const { config, printConfig } = require('./config');
 
-
 describe('ProgramCall Functional Tests', function () {
   before(function () {
     printConfig();

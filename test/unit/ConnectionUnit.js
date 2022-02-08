@@ -94,7 +94,6 @@ describe('Connection Class Unit Tests', function () {
     });
   });
 
-
   describe('debug', function () {
     it('turns verbose mode on/off using Connection class', function () {
       const options = {
@@ -113,7 +112,6 @@ describe('Connection Class Unit Tests', function () {
       expect(connection.debug()).to.equal(false);
     });
   });
-
 
   describe('getTransportOptions', function () {
     it('returns conn (object) property from Connection instance', function () {
@@ -135,7 +133,6 @@ describe('Connection Class Unit Tests', function () {
 
       const transportOptions = connection.getTransportOptions();
 
-
       expect(transportOptions).to.be.an('Object');
       expect(transportOptions.database).to.equal(options.transportOptions.database);
       expect(transportOptions.username).to.equal(options.transportOptions.username);
@@ -145,7 +142,6 @@ describe('Connection Class Unit Tests', function () {
       expect(transportOptions.xslib).to.equal('QXMLSERV');
     });
   });
-
 
   describe('run', function () {
     it('(Connection) invokes transport to execute xml input and returns xml output in callback', function () {

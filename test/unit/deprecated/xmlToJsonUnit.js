@@ -69,7 +69,6 @@ describe('xmlToJson Tests', function () {
     expect(result[0]).to.haveOwnProperty('data').and.to.equal(data);
   });
 
-
   it('converts qsh command XML output to js object', function () {
     const xmlOut = '<?xml version=\'1.0\'?><myscript><qsh error=\'fast\'>\n'
                    + 'bin\n'
