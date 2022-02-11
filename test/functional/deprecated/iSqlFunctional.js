@@ -401,53 +401,56 @@ describe('iSql Functional Tests', function () {
     });
   });
 
-  describe.skip('special', function () {
-    // TODO: find passing case
-    // Below test fails with error code 9- argument value not valid
-    it.skip('returns meta data for special columns', function (done) {
-      // [catalog, schema, table, row | transaction |session, no | nullable]
-      const connection = new iConn(database, username, password, restOptions);
+  // TODO: Create test cases for the following
 
-      const sql = new iSql();
+  // describe.skip('special', function () {
+  //   // Below test fails with error code 9- argument value not valid
+  //   it.skip('returns meta data for special columns', function (done) {
+  //     // [catalog, schema, table, row | transaction |session, no | nullable]
+  //     const connection = new iConn(database, username, password, restOptions);
 
-      sql.special(['', 'QUSRSYS', 'QASZRAIRX', 'row', 'no'], { error: 'on' });
-      connection.add(sql.toXML());
-      connection.debug(true);
-      connection.run((xmlOut) => {
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          // TODO add more assertions
-          expect(result).to.be.an('object');
-          done();
-        });
-      });
-    });
-  });
+  //     const sql = new iSql();
 
-  describe.skip('rowCount', function () {
-    // Skip for now need to create a table for this test  to insert to.
-    it.skip('returns the number of rows affected by statement', function (done) {
-      const connection = new iConn(database, username, password, restOptions);
+  //     sql.special(['', 'QUSRSYS', 'QASZRAIRX', 'row', 'no'], { error: 'on' });
+  //     connection.add(sql.toXML());
+  //     connection.debug(true);
+  //     connection.run((xmlOut) => {
+  //       parseString(xmlOut, (parseError, result) => {
+  //         expect(parseError).to.equal(null);
+  //         // TODO add more assertions
+  //         expect(result).to.be.an('object');
+  //         done();
+  //       });
+  //     });
+  //   });
+  // });
 
-      const sql = new iSql();
+  // describe.skip('rowCount', function () {
+  //   // Skip for now need to create a table for this test  to insert to.
+  //   it.skip('returns the number of rows affected by statement', function (done) {
+  //     const connection = new iConn(database, username, password, restOptions);
 
-      const insert = 'INSERT INTO QIWS.QCUSTCDT (CUSNUM,LSTNAM,INIT,STREET,CITY,STATE,ZIPCOD,CDTLMT,CHGCOD,BALDUE,CDTDUE) '
-                       + 'VALUES (8798,\'TURNER\',\'TT\',\'MAIN\',\'NYC\',\'NY\',10001, 500, 3, 40.00, 0.00) with NONE';
+  //     const sql = new iSql();
 
-      sql.addQuery(insert);
-      sql.rowCount();
-      sql.free();
-      connection.add(sql.toXML());
-      connection.run((xmlOut) => {
-        parseString(xmlOut, (parseError, result) => {
-          const sqlNode = result.myscript.sql[0];
-          expect(parseError).to.equal(null);
-          expect(sqlNode.query[0].success[0]).to.include('+++ success');
-          expect(sqlNode.free[0].success[0]).to.include('+++ success');
-          expect(sqlNode.rowcount[0]._).to.equal('1');
-          done();
-        });
-      });
-    });
-  });
+  //     const insert = 'INSERT INTO QIWS.QCUSTCDT
+  //       + (CUSNUM,LSTNAM,INIT,STREET,CITY,STATE,ZIPCOD,CDTLMT,CHGCOD,BALDUE,CDTDUE) '
+  //       + 'VALUES (8798,\'TURNER\',\'TT\',\'MAIN\',\'NYC\',\'NY\',10001, 500, 3, 40.00, 0.00)
+  //       + with NONE';
+
+  //     sql.addQuery(insert);
+  //     sql.rowCount();
+  //     sql.free();
+  //     connection.add(sql.toXML());
+  //     connection.run((xmlOut) => {
+  //       parseString(xmlOut, (parseError, result) => {
+  //         const sqlNode = result.myscript.sql[0];
+  //         expect(parseError).to.equal(null);
+  //         expect(sqlNode.query[0].success[0]).to.include('+++ success');
+  //         expect(sqlNode.free[0].success[0]).to.include('+++ success');
+  //         expect(sqlNode.rowcount[0]._).to.equal('1');
+  //         done();
+  //       });
+  //     });
+  //   });
+  // });
 });

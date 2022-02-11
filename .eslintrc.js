@@ -30,9 +30,6 @@ module.exports = {
         // and https://github.com/airbnb/javascript/issues/433
         'func-names': 'off',
         'prefer-arrow-callback': 'off',
-
-        // The following rules cause problems for our existing tests, so they are disabled for now:
-        'mocha/no-skipped-tests': 'off',
       },
     },
   ],

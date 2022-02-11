@@ -47,7 +47,7 @@ const lib = 'NODETKTEST'; const dqName = 'TESTQ';
 describe('iDataQueue Functional Tests', function () {
   before('check if data queue exists for tests', function (done) {
     printConfig();
-    checkObjectExists(config, dqName, '*DTAQ', (error) => {
+    checkObjectExists(config, { name: dqName, type: '*DTAQ' }, (error) => {
       if (error) { throw error; }
       done();
     });

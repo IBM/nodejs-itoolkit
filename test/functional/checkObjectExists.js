@@ -1,7 +1,3 @@
-const lib = 'NODETKTEST';
-const createLib = `CRTLIB LIB(${lib}) TYPE(*TEST) TEXT('Used to test Node.js toolkit')`;
-const findLib = `SELECT SCHEMA_NAME FROM qsys2.sysschemas WHERE SCHEMA_NAME = '${lib}'`;
-
 function checkObjectExistsSSH(config, object = {}, callback) {
   // ssh2 is an optional dependency, since users may not use this transport
   // thus we can't globally require it
@@ -9,8 +5,8 @@ function checkObjectExistsSSH(config, object = {}, callback) {
   const { Client } = require('ssh2');
 
   const client = new Client();
-  const checkLibCommand = `system 'CHKOBJ OBJ(QSYS/${lib}) OBJTYPE(*LIB)'`;
-  const checkObjectCommand = `system 'CHKOBJ OBJ(${lib}/${object.name}) OBJTYPE(${object.type})'`;
+  const checkLibCommand = `system 'CHKOBJ OBJ(QSYS/${object.lib}) OBJTYPE(*LIB)'`;
+  const checkObjectCommand = `system 'CHKOBJ OBJ(${object.lib}/${object.name}) OBJTYPE(${object.type})'`;
 
   // if client.connect has an error it will be handled here
   client.on('error', (error) => {
@@ -20,7 +16,7 @@ function checkObjectExistsSSH(config, object = {}, callback) {
   client.on('ready', () => {
     client.exec(checkLibCommand, (checkLibError, checkLibStream) => {
       /* eslint-disable no-console */
-      console.log(`executing ${checkLibCommand}`);
+      if (config.verbose) { console.log(`executing ${checkLibCommand}`); }
       if (checkLibError) {
         callback(checkLibError, false);
         return;
@@ -31,7 +27,7 @@ function checkObjectExistsSSH(config, object = {}, callback) {
       checkLibStream.on('exit', (checkLibCode) => {
         if (checkLibCode !== 0) {
           if (config.verbose) { console.log(`Command exited abnormally with code: ${checkLibCode}`); }
-          const libError = new Error(`${lib} lib was not found!\nCreate it by running: ${createLib}`);
+          const libError = new Error(`${object.lib} lib was not found!\nCreate it by running: ${object.createLib}`);
           client.end();
           client.destroy();
           callback(libError, false);
@@ -82,7 +78,7 @@ function checkObjectExistsODBC(config, object = {}, callback) {
       callback(connectError, false);
       return;
     }
-    connection.query(findLib, (findLibError, libResult) => {
+    connection.query(object.findLib, (findLibError, libResult) => {
       if (findLibError) {
         callback(findLibError, false);
         return;
@@ -91,7 +87,7 @@ function checkObjectExistsODBC(config, object = {}, callback) {
         console.log('find lib result set: ', libResult);
       }
       if (!libResult.length) {
-        const libError = new Error(`${lib} lib was not found!\nCreate it by running:${createLib}`);
+        const libError = new Error(`${object.lib} lib was not found!\nCreate it by running:${object.createLib}`);
         callback(libError, false);
         return;
       }
@@ -126,7 +122,7 @@ function checkObjectExistsIDB(config, object = {}, callback) {
   connection.conn('*LOCAL');
   const statement = new dbstmt(connection);
 
-  statement.exec(findLib, (libResult, error) => {
+  statement.exec(object.findLib, (libResult, error) => {
     if (error) {
       callback(error, null);
       return;
@@ -135,7 +131,7 @@ function checkObjectExistsIDB(config, object = {}, callback) {
       console.log('find lib result set: ', libResult);
     }
     if (!libResult.length) {
-      const libError = new Error(`${lib} lib was not found! Create it by running: ${createLib}`);
+      const libError = new Error(`${object.lib} lib was not found! Create it by running: ${object.createLib}`);
       callback(libError, null);
       return;
     }
@@ -161,18 +157,30 @@ function checkObjectExistsIDB(config, object = {}, callback) {
   });
 }
 
-function checkObjectExists(config, name, type, callback) {
-  const object = { type };
+function checkObjectExists(config, obj = {}, callback) {
+  const object = obj;
 
-  if (type === '*DTAARA') {
-    object.name = name;
-    object.createObject = `CRTDTAARA DTAARA(${lib}/${name}) TYPE(*CHAR) TEXT('TEST DATA AREA FOR NODE TOOLKIT') VALUE('Hello From Test Data Area!')`;
-  } else if (type === '*DTAQ') {
-    object.name = name;
-    object.createObject = `CRTDTAQ DTAQ(${lib}/${name}) MAXLEN(100) AUT(*EXCLUDE) TEXT('TEST DQ FOR NODE TOOLKIT TESTS')`;
+  if (!object.type) {
+    callback(Error('Object type must be defined'), null);
+    return;
   }
 
-  object.findObject = `SELECT OBJNAME FROM TABLE (QSYS2.OBJECT_STATISTICS('${lib}', '${type}')) AS X WHERE OBJNAME = '${name}'`;
+  if (!object.name) {
+    callback(Error('Object name must be defined'), null);
+    return;
+  }
+
+  object.lib = object.lib || 'NODETKTEST';
+
+  if (object.type === '*DTAARA') {
+    object.createObject = `CRTDTAARA DTAARA(${object.lib}/${object.name}) TYPE(*CHAR) TEXT('TEST DATA AREA FOR NODE TOOLKIT') VALUE('Hello From Test Data Area!')`;
+  } else if (object.type === '*DTAQ') {
+    object.createObject = `CRTDTAQ DTAQ(${object.lib}/${object.name}) MAXLEN(100) AUT(*EXCLUDE) TEXT('TEST DQ FOR NODE TOOLKIT TESTS')`;
+  }
+
+  object.findObject = `SELECT OBJNAME FROM TABLE (QSYS2.OBJECT_STATISTICS('${object.lib}', '${object.type}')) AS X WHERE OBJNAME = '${object.name}'`;
+  object.createLib = `CRTLIB LIB(${object.lib}) TYPE(*TEST) TEXT('Used to test Node.js toolkit')`;
+  object.findlib = `SELECT SCHEMA_NAME FROM qsys2.sysschemas WHERE SCHEMA_NAME = '${object.lib}'`;
   // eslint-disable-next-line no-param-reassign
   config.transportOptions.verbose = config.verbose;
 
