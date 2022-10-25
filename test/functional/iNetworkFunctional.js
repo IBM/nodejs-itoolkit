@@ -21,7 +21,6 @@ const { expect } = require('chai');
 const { Connection, iNetwork } = require('../../lib/itoolkit');
 const { config, printConfig } = require('./config');
 
-
 describe('iNetwork Functional Tests', function () {
   before(function () {
     printConfig();

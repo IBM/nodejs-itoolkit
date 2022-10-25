@@ -8,8 +8,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha --recursive test/unit",
-    "test-integration": "./node_modules/mocha/bin/mocha --timeout 5s test/functional/*.js",
+    "test": "./node_modules/mocha/bin/mocha.js --recursive test/unit",
+    "test-integration": "./node_modules/mocha/bin/mocha.js --timeout 5s test/functional/*.js",
     "lint": "./node_modules/eslint/bin/eslint.js lib/ test/",
     "release": "standard-version"
   },
@@ -44,20 +44,19 @@
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "eslint": "^6.2.0",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-mocha": "^7.0.1",
-    "mocha": "^6.2.3",
-    "sinon": "^7.4.1",
-    "standard-version": "^9.0.0"
+    "chai": "^4.3.6",
+    "eslint": "^8.26.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-mocha": "^10.1.0",
+    "mocha": "^10.1.0",
+    "sinon": "^14.0.1"
   },
   "optionalDependencies": {
-    "idb-connector": "^1.2.2",
-    "idb-pconnector": "^1.0.7",
-    "ssh2": "^0.8.2",
-    "odbc": "^2.1.3"
+    "idb-connector": "^1.2.16",
+    "idb-pconnector": "^1.1.0",
+    "odbc": "^2.4.6",
+    "ssh2": "^0.8.2"
   },
   "engines": {
     "node": ">= 8.0"

@@ -21,7 +21,6 @@ const { CommandCall, Connection, ProgramCall } = require('../../lib/itoolkit');
 const { config, printConfig } = require('./config');
 const { isQSHSupported } = require('./checkVersion');
 
-
 describe('CommandCall Functional Tests', function () {
   before(function () {
     printConfig();
