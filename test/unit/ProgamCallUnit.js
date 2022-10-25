@@ -45,12 +45,14 @@ describe('ProgramCall Class Unit Tests', function () {
 
   describe('toXML', function () {
     it('returns pgm XML', function () {
-      const pgm = new ProgramCall('QTOCNETSTS',
+      const pgm = new ProgramCall(
+        'QTOCNETSTS',
         {
           lib: 'QSYS',
           func: 'QtoRtvTCPA',
           error: 'on',
-        });
+        },
+      );
 
       const expectedXML = '<pgm name=\'QTOCNETSTS\' lib=\'QSYS\' func=\'QtoRtvTCPA\' error=\'on\'></pgm>';
 
@@ -60,12 +62,14 @@ describe('ProgramCall Class Unit Tests', function () {
 
   describe('addParam', function () {
     it('appends param to pgm xml', function () {
-      const pgm = new ProgramCall('QTOCNETSTS',
+      const pgm = new ProgramCall(
+        'QTOCNETSTS',
         {
           lib: 'QSYS',
           func: 'QtoRtvTCPA',
           error: 'fast',
-        });
+        },
+      );
 
       pgm.addParam({ type: 'ds', io: 'out', fields: outBuf });
 
@@ -235,15 +239,16 @@ describe('ProgramCall Class Unit Tests', function () {
     });
   });
 
-
   describe('addReturn', function () {
     it('appends return to pgm xml', function () {
-      const pgm = new ProgramCall('QTOCNETSTS',
+      const pgm = new ProgramCall(
+        'QTOCNETSTS',
         {
           lib: 'QSYS',
           func: 'QtoRtvTCPA',
           error: 'fast',
-        });
+        },
+      );
 
       pgm.addReturn({ type: '20A', value: '0' });
 

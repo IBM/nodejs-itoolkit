@@ -71,37 +71,40 @@ describe('iWork Functional Tests', function () {
   });
 
   describe('getSysStatus', function () {
-    it('returns basic system status information about the signed-on users '
+    it(
+      'returns basic system status information about the signed-on users '
            + 'and batch jobs',
-    function (done) {
-      const connection = new iConn(database, username, password, restOptions);
-      const work = new iWork(connection);
+      function (done) {
+        const connection = new iConn(database, username, password, restOptions);
+        const work = new iWork(connection);
 
-      work.getSysStatus((output) => {
-        expect(output).to.be.an('Object');
-        expect(output).to.have.a.property('Current_date_and_time');
-        expect(output).to.have.a.property('System_name');
-        expect(output).to.have.a.property('Users_currently_signed_on');
-        expect(output).to.have.a.property('Users_temporarily_signed_off_(disconnected)');
-        expect(output).to.have.a.property('Users_suspended_by_system_request');
-        expect(output).to.have.a.property('Users_suspended_by_group_jobs');
-        expect(output).to.have.a.property('Users_signed_off_with_printer_output_waiting_to_print');
-        expect(output).to.have.a.property('Batch_jobs_waiting_for_messages');
-        expect(output).to.have.a.property('Batch_jobs_running');
-        expect(output).to.have.a.property('Batch_jobs_held_while_running');
-        expect(output).to.have.a.property('Batch_jobs_ending');
-        expect(output).to.have.a.property('Batch_jobs_waiting_to_run_or_already_scheduled');
-        expect(output).to.have.a.property('Batch_jobs_held_on_a_job_queue');
-        expect(output).to.have.a.property('Batch_jobs_on_a_held_job_queue');
-        expect(output).to.have.a.property('Batch_jobs_on_an_unassigned_job_queue');
-        expect(output).to.have.a.property('Batch_jobs_ended_with_printer_output_waiting_to_print');
-        done();
-      });
-    });
+        work.getSysStatus((output) => {
+          expect(output).to.be.an('Object');
+          expect(output).to.have.a.property('Current_date_and_time');
+          expect(output).to.have.a.property('System_name');
+          expect(output).to.have.a.property('Users_currently_signed_on');
+          expect(output).to.have.a.property('Users_temporarily_signed_off_(disconnected)');
+          expect(output).to.have.a.property('Users_suspended_by_system_request');
+          expect(output).to.have.a.property('Users_suspended_by_group_jobs');
+          expect(output).to.have.a.property('Users_signed_off_with_printer_output_waiting_to_print');
+          expect(output).to.have.a.property('Batch_jobs_waiting_for_messages');
+          expect(output).to.have.a.property('Batch_jobs_running');
+          expect(output).to.have.a.property('Batch_jobs_held_while_running');
+          expect(output).to.have.a.property('Batch_jobs_ending');
+          expect(output).to.have.a.property('Batch_jobs_waiting_to_run_or_already_scheduled');
+          expect(output).to.have.a.property('Batch_jobs_held_on_a_job_queue');
+          expect(output).to.have.a.property('Batch_jobs_on_a_held_job_queue');
+          expect(output).to.have.a.property('Batch_jobs_on_an_unassigned_job_queue');
+          expect(output).to.have.a.property('Batch_jobs_ended_with_printer_output_waiting_to_print');
+          done();
+        });
+      },
+    );
   });
 
   describe('getSysStatusExt', function () {
-    it('returns more detailed system status info',
+    it(
+      'returns more detailed system status info',
       function (done) {
         const connection = new iConn(database, username, password, restOptions);
 
@@ -142,11 +145,13 @@ describe('iWork Functional Tests', function () {
           expect(output).to.have.a.property('Main_storage_size_(long)');
           done();
         });
-      });
+      },
+    );
   });
 
   describe('getJobStatus', function () {
-    it('returns status of specified job',
+    it(
+      'returns status of specified job',
       function (done) {
         const connection = new iConn(database, username, password, restOptions);
 
@@ -158,7 +163,8 @@ describe('iWork Functional Tests', function () {
           expect(output).to.have.a.property('Fully_qualified_job_name');
           done();
         });
-      });
+      },
+    );
   });
 
   describe('getJobInfo', function () {

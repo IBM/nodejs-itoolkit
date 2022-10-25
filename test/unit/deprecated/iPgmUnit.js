@@ -47,12 +47,14 @@ describe('iPgm Class Unit Tests', function () {
 
   describe('toXML', function () {
     it('returns pgm XML', function () {
-      const pgm = new iPgm('QTOCNETSTS',
+      const pgm = new iPgm(
+        'QTOCNETSTS',
         {
           lib: 'QSYS',
           func: 'QtoRtvTCPA',
           error: 'on',
-        });
+        },
+      );
 
       const expectedXML = '<pgm name=\'QTOCNETSTS\' lib=\'QSYS\' func=\'QtoRtvTCPA\' error=\'on\'></pgm>';
 
@@ -62,12 +64,14 @@ describe('iPgm Class Unit Tests', function () {
 
   describe('addParam', function () {
     it('appends param to pgm xml', function () {
-      const pgm = new iPgm('QTOCNETSTS',
+      const pgm = new iPgm(
+        'QTOCNETSTS',
         {
           lib: 'QSYS',
           func: 'QtoRtvTCPA',
           error: 'fast',
-        });
+        },
+      );
 
       pgm.addParam(outBuf, { io: 'out' });
 
@@ -185,15 +189,16 @@ describe('iPgm Class Unit Tests', function () {
     });
   });
 
-
   describe('addReturn', function () {
     it('appends return to pgm xml', function () {
-      const pgm = new iPgm('QTOCNETSTS',
+      const pgm = new iPgm(
+        'QTOCNETSTS',
         {
           lib: 'QSYS',
           func: 'QtoRtvTCPA',
           error: 'fast',
-        });
+        },
+      );
 
       pgm.addReturn('0', '20A');
 

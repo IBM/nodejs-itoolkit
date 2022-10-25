@@ -1,3 +1,5 @@
+/* eslint-disable default-param-last */
+
 const lib = 'NODETKTEST';
 const createLib = `CRTLIB LIB(${lib}) TYPE(*TEST) TEXT('Used to test Node.js toolkit')`;
 const findLib = `SELECT SCHEMA_NAME FROM qsys2.sysschemas WHERE SCHEMA_NAME = '${lib}'`;

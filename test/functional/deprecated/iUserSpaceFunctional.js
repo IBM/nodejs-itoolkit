@@ -68,11 +68,18 @@ describe('iUserSpace Functional Tests', function () {
 
       const userSpaceName = `USP${(config.transport).toUpperCase()}`;
 
-      userSpace.createUserSpace(userSpaceName, lib, 'LOG', 50, '*EXCLUDE',
-        description, (output) => {
+      userSpace.createUserSpace(
+        userSpaceName,
+        lib,
+        'LOG',
+        50,
+        '*EXCLUDE',
+        description,
+        (output) => {
           expect(output).to.be.a('boolean').and.to.equal(true);
           done();
-        });
+        },
+      );
     });
   });
 
@@ -86,11 +93,16 @@ describe('iUserSpace Functional Tests', function () {
 
       const userSpaceName = `USP${(config.transport).toUpperCase()}`;
 
-      userSpace.setUserSpaceData(userSpaceName, lib, msg.length, msg,
+      userSpace.setUserSpaceData(
+        userSpaceName,
+        lib,
+        msg.length,
+        msg,
         (output) => {
           expect(output).to.be.a('boolean').and.to.equal(true);
           done();
-        });
+        },
+      );
     });
   });
 

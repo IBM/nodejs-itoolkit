@@ -54,13 +54,20 @@ describe('UserSpace Functional Tests', function () {
 
       const name = generateRandomName();
 
-      userSpace.createUserSpace(name, lib, 'LOG', 50, '*EXCLUDE',
-        description, (error, output) => {
+      userSpace.createUserSpace(
+        name,
+        lib,
+        'LOG',
+        50,
+        '*EXCLUDE',
+        description,
+        (error, output) => {
           expect(error).to.equal(null);
           expect(output).to.be.a('boolean').and.to.equal(true);
           userSpaceName = name;
           done();
-        });
+        },
+      );
     });
   });
 
@@ -76,12 +83,17 @@ describe('UserSpace Functional Tests', function () {
 
       const msg = 'Hello from userspace!';
 
-      userSpace.setUserSpaceData(userSpaceName, lib, msg.length, msg,
+      userSpace.setUserSpaceData(
+        userSpaceName,
+        lib,
+        msg.length,
+        msg,
         (error, output) => {
           expect(error).to.equal(null);
           expect(output).to.be.a('boolean').and.to.equal(true);
           done();
-        });
+        },
+      );
     });
   });
 

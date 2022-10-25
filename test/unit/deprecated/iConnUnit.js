@@ -85,7 +85,6 @@ describe('iConn Class Unit Tests', function () {
     });
   });
 
-
   describe('debug', function () {
     it('turns verbose mode on/off using iConn class', function () {
       const database = process.env.TKDB || '*LOCAL';
@@ -99,7 +98,6 @@ describe('iConn Class Unit Tests', function () {
       expect(connection.debug()).to.equal(false);
     });
   });
-
 
   describe('getTransportOptions', function () {
     it('returns conn (object) property from iConn instance', function () {
@@ -118,7 +116,6 @@ describe('iConn Class Unit Tests', function () {
       expect(options.password).to.equal(password);
     });
   });
-
 
   describe('run', function () {
     it('(iConn) invokes transport to execute xml input and returns xml output in callback', function () {
