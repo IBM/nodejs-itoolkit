@@ -1,5 +1,5 @@
 const { Connection, CommandCall } = require('itoolkit');
-const { parseString } = require('xml2js');
+const { XMLParser } = require('fast-xml-parser');
 
 
 const connection = new Connection({
@@ -15,10 +15,9 @@ connection.run((error, xmlOutput) => {
   if (error) {
     throw error;
   }
-  parseString(xmlOutput, (parseError, result) => {
-    if (parseError) {
-      throw parseError;
-    }
-    console.log(JSON.stringify(result));
-  });
+
+  const Parser = new XMLParser();
+  const result = Parser.parse(xmlOutput);
+
+  console.log(JSON.stringify(result));
 });

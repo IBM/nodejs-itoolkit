@@ -20,13 +20,13 @@ Sync Mode Operations
 ``iConn.run()`` no longer supports sync mode. Sync mode is not reccommended and since it did not work properly it was removed.
 See (`#32 <https://github.com/IBM/nodejs-itoolkit/issues/32>`__) for more details.
 
-``iConn.setTimeout()`` is removed. This function was used to set the timeout for ``iConn.run`` 
+``iConn.setTimeout()`` is removed. This function was used to set the timeout for ``iConn.run``
 sync mode.
 
 iSql Authentication
 -------------------
 
-``iSql.connect()`` and ``iSql.setOptions()`` are removed. These functions were used in conjunction 
+``iSql.connect()`` and ``iSql.setOptions()`` are removed. These functions were used in conjunction
 for XMLSERVICE user
 authentication. The transports already handle user authentication.
 
@@ -81,8 +81,8 @@ Migrating from ``iConn`` to ``Connection``
    passed to their run methods. You cannot simply replace iConn with Connection without adjusting
    your callbacks. See the :ref:`iconn-to-connection-run` section.
 
-When connecting using idb-connector, ``iConn`` takes 3 arguments: ``database``, ``username``, 
-and ``password``. These can be passed as attributes on the ``transportOptions`` attribute of the 
+When connecting using idb-connector, ``iConn`` takes 3 arguments: ``database``, ``username``,
+and ``password``. These can be passed as attributes on the ``transportOptions`` attribute of the
 object passed to ``Connection`` and specify the transport is ``idb``. eg.
 
 .. code:: js
@@ -95,9 +95,9 @@ object passed to ``Connection`` and specify the transport is ``idb``. eg.
    });
 
 When connecting using rest, ``iConn`` takes 4 arguments: ``database``, ``username``, ``password``,
-and ``options``. The options object included ``host``, ``port``, and ``path`` to 
-generate the url string. Instead specify ``database``, ``username``, ``password``, and ``url`` 
-on the ``transportOptions`` attribute of the object passed to ``Connection`` and specify the 
+and ``options``. The options object included ``host``, ``port``, and ``path`` to
+generate the url string. Instead specify ``database``, ``username``, ``password``, and ``url``
+on the ``transportOptions`` attribute of the object passed to ``Connection`` and specify the
 transport is ``rest``. eg.
 
 .. code:: js
@@ -292,7 +292,7 @@ xmlToJson
 ---------
 
 ``xmlToJson`` is deprecated and will be removed in ``v2.x``. Use
-`xml2js <https://www.npmjs.com/package/xml2js>`__ instead.
+an external XML parser such as `fast-xml-parser <https://www.npmjs.com/package/fast-xml-parser>`__.
 
 iDataQueue
 ----------
