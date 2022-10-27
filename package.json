@@ -56,7 +56,7 @@
     "idb-connector": "^1.2.16",
     "idb-pconnector": "^1.1.0",
     "odbc": "^2.4.6",
-    "ssh2": "^0.8.2",
+    "ssh2": "^1.11.0",
     "fast-xml-parser": "^4.0.11"
   },
   "engines": {
