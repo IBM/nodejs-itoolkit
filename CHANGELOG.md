@@ -33,7 +33,7 @@
 - build(deps): Upgrade ssh2 to latest version (#355)
 - fix: Better optional deps handling (#353)
 - ci: Add npm publish action (#358)
-
+- docs: Update cosine example to pass by value (#359)
 
 ## [1.0.0](https://github.com/IBM/nodejs-itoolkit/compare/1.0.0-alpha.1...1.0.0) (2020-05-08)
 
