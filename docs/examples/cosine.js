@@ -8,7 +8,7 @@ const conn = new Connection({
 
 const program = new ProgramCall('QC2UTIL2', { lib: 'QSYS', func: 'cos' });
 
-program.addParam({ type: '8f', value: '0' });
+program.addParam({ type: '8f', value: '0', by: 'val' });
 program.addReturn({ type: '8f', value: '' });
 
 conn.add(program);
