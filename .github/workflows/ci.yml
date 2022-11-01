@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        # yargs for mochajs 10 uses min node 14
+        # mochajs 10.x.x uses min node 14
         node-version: [14.x, 16.x, 18.x]
 
     steps:
