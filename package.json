@@ -1,6 +1,6 @@
 {
   "name": "itoolkit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "XMLSERVICE wrapper to access to all things IBM i",
   "main": "lib/itoolkit.js",
   "directories": {
@@ -53,7 +53,7 @@
     "sinon": "^14.0.1"
   },
   "optionalDependencies": {
-    "idb-connector": "^1.2.16",
+    "idb-connector": "^1.2.18",
     "idb-pconnector": "^1.1.0",
     "odbc": "^2.4.6",
     "ssh2": "^1.11.0",

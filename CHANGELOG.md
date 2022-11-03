@@ -1,6 +1,39 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+## [1.0.1](https://github.com/IBM/nodejs-itoolkit/compare/v1.0.0...v1.0.1) (2022-10-31)
+
+- fix: Missing braces in README Example (#286)
+- fix: Typo in ssh transport error message (#287)
+- test: Remove redundant ProgramCall test (#284)
+- test: Constrain eslint rules
+- test: Fix eslint errors issues in eslintrc
+- test: Configure tests to use Mocha env in eslintrc
+- test: Adjust AirBnB rules for Mocha tests
+- test: Use eslint-plugin-mocha for tests
+- test: Remove arrow functions from mocha functions (#283)
+- ci: Add eslint action (#244)
+- docs: Update setup transport interface links (#292)
+- fix: Emit deprecation warning for iPgm.addReturn (#295)
+- build(deps-dev): bump standard-version from 7.1.0 to 8.0.1 (#299)
+- build(deps): bump lodash from 4.17.15 to 4.17.19 (#302)
+- chore: Unmark as stale if issue has been updated (#311)
+- fix: Make exempt labels plural for stale action (#312)
+- test: Check the XMLSERVICE version for QSH support (#303)
+- fix: Update standard-version to resolve CVE-2020-8116 (#310)
+- refactor: Handle optional dependencies better (#306)
+- test: Fix mocha/no-identical-title eslint issue (#296)
+- test: Fix mocha/no-hooks-for-single-case eslint issue (#297)
+- fix: eslint GH action failure (#336)
+- docs: Add comma to separate password and url key
+- build(deps): Update deps to the latest version (#347)
+- docs: Add omit as valid value for io (#346)
+- docs: Reference alternate XML parser (#345)
+- build: readthedocs build error (#349)
+- build(deps): Add fast-xml-parser (#351)
+- build(deps): Upgrade ssh2 to latest version (#355)
+- fix: Better optional deps handling (#353)
+- ci: Add npm publish action (#358)
+- docs: Update cosine example to pass by value (#359)
 
 ## [1.0.0](https://github.com/IBM/nodejs-itoolkit/compare/1.0.0-alpha.1...1.0.0) (2020-05-08)
 
