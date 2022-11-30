@@ -11,7 +11,10 @@
     "test": "./node_modules/mocha/bin/mocha.js --recursive test/unit",
     "test-integration": "./node_modules/mocha/bin/mocha.js --timeout 5s test/functional/*.js",
     "lint": "./node_modules/eslint/bin/eslint.js lib/ test/",
-    "lint-fix": "./node_modules/eslint/bin/eslint.js lib/ test/ --fix"
+    "lint-fix": "./node_modules/eslint/bin/eslint.js lib/ test/ --fix",
+    "release": "./node_modules/release-it/bin/release-it.js patch --ci --no-npm.publish --no-github.release --dry-run",
+    "release-minor": "./node_modules/release-it/bin/release-it.js minor --ci --no-npm.publish --no-github.release",
+    "release-major": "./node_modules/release-it/bin/release-it.js major --ci --no-npm.publish --no-github.release"
   },
   "repository": {
     "type": "git",
@@ -50,14 +53,15 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-mocha": "^10.1.0",
     "mocha": "^10.1.0",
+    "release-it": "^15.5.0",
     "sinon": "^14.0.1"
   },
   "optionalDependencies": {
+    "fast-xml-parser": "^4.0.11",
     "idb-connector": "^1.2.18",
     "idb-pconnector": "^1.1.0",
     "odbc": "^2.4.6",
-    "ssh2": "^1.11.0",
-    "fast-xml-parser": "^4.0.11"
+    "ssh2": "^1.11.0"
   },
   "engines": {
     "node": ">= 8.0"

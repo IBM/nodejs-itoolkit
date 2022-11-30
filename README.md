@@ -16,6 +16,7 @@
 - [Tests](#tests)
 - [Contributing](#contributing)
 - [License](#license)
+- [Release](#release)
 
 # Introduction
 
@@ -97,3 +98,18 @@ Please read the [contribution guidelines](https://github.com/IBM/nodejs-itoolkit
 
 # License
 [MIT](https://github.com/IBM/nodejs-itoolkit/blob/master/LICENSE)
+
+
+# Release
+
+To generate a release use one of the npm scripts:
+
+- patch release `npm run release`
+- minor version release `npm run release-minor`
+- major version release `npm run release-major`
+
+These scripts will bump the version number, make a release commit, and tag the release.
+
+Once the tag is created, create a github release manually using the appropriate tag.
+
+After the release is published the [publish action](https://github.com/IBM/nodejs-itoolkit/blob/3874e6c06dee893a42f4a7ff2e6cfbf312322143/.github/workflows/publish.yml#L1) will publish to npm.
