@@ -105,8 +105,8 @@ Please read the [contribution guidelines](https://github.com/IBM/nodejs-itoolkit
 To generate a release use one of the npm scripts:
 
 - patch release `npm run release`
-- minor version release `npm run release-minor`
-- major version release `npm run release-major`
+- for other release types run `npm run release-interactive` which will prompt you 
+  for the release type.
 
 These scripts will bump the version number, make a release commit, and tag the release.
 
