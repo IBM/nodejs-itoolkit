@@ -13,7 +13,7 @@
     "lint": "./node_modules/eslint/bin/eslint.js lib/ test/",
     "lint-fix": "./node_modules/eslint/bin/eslint.js lib/ test/ --fix",
     "release": "./node_modules/release-it/bin/release-it.js patch --ci",
-    "release-interactive": "./node_modules/release-it/bin/release-it.js"
+    "release-it": "./node_modules/release-it/bin/release-it.js"
   },
   "repository": {
     "type": "git",

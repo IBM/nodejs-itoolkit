@@ -105,11 +105,11 @@ Please read the [contribution guidelines](https://github.com/IBM/nodejs-itoolkit
 To generate a release use one of the npm scripts:
 
 - patch release `npm run release`
-- for other release types run `npm run release-interactive` which will prompt you 
-  for the release type.
+- for other release types run `npm run release-it` which will prompt
+  you for the release type.
 
-These scripts will bump the version number, make a release commit, and tag the release.
+These scripts will bump the version number, make a release commit, tag the release, and finally create a github release if the user has `GITHUB_TOKEN` set.
 
-Once the tag is created, create a github release manually using the appropriate tag.
+Otherwise release-it will output a URL with all the fields pre-populated see the [release-it docs](https://github.com/release-it/release-it/blob/HEAD/docs/github-releases.md#manual).
 
-After the release is published the [publish action](https://github.com/IBM/nodejs-itoolkit/blob/3874e6c06dee893a42f4a7ff2e6cfbf312322143/.github/workflows/publish.yml#L1) will publish to npm.
+After the release is published the [publish action](https://github.com/IBM/nodejs-idb-pconnector/blob/a4154bacf8e327e242c2d44e312079aea0690d8f/.github/workflows/publish.yml#L1) will publish to npm. 
