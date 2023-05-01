@@ -11,7 +11,7 @@ Some transports require prerequisite setup. Learn morre about each transport bel
 
 ODBC
 ^^^^
-.. _guide: https://github.com/IBM/ibmi-oss-examples/blob/master/odbc/odbc.md#table-of-contents
+.. _guide: https://ibmi-oss-docs.readthedocs.io/en/latest/odbc/README.html
 
 The ODBC transport establishes a database connection and calls XMLSERVICE stored procedure.
 Refer to the odbc guide_ for setup instructions.
