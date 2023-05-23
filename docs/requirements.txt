@@ -23,7 +23,7 @@ parsimonious==0.7.0
 Pygments==2.13.0
 pyparsing==3.0.9
 pytz==2022.5
-requests==2.28.1
+requests==2.31.0
 six==1.16.0
 snowballstemmer==2.2.0
 # Use same sphinx version required by sphinx-js 3.1.2
