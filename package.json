@@ -3,6 +3,7 @@
   "version": "1.0.1",
   "description": "XMLSERVICE wrapper to access to all things IBM i",
   "main": "lib/itoolkit.js",
+  "files": ["lib/"],
   "directories": {
     "lib": "lib",
     "test": "test"
@@ -11,7 +12,8 @@
     "test": "./node_modules/mocha/bin/mocha.js --recursive test/unit",
     "test-integration": "./node_modules/mocha/bin/mocha.js --timeout 5s test/functional/*.js",
     "lint": "./node_modules/eslint/bin/eslint.js lib/ test/",
-    "lint-fix": "./node_modules/eslint/bin/eslint.js lib/ test/ --fix"
+    "lint-fix": "./node_modules/eslint/bin/eslint.js lib/ test/ --fix",
+    "release": "./node_modules/release-it/bin/release-it.js"
   },
   "repository": {
     "type": "git",
@@ -44,20 +46,22 @@
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
+    "@release-it/conventional-changelog": "^7.0.0",
     "chai": "^4.3.6",
     "eslint": "^8.26.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-mocha": "^10.1.0",
     "mocha": "^10.1.0",
+    "release-it": "^16.1.0",
     "sinon": "^14.0.1"
   },
   "optionalDependencies": {
+    "fast-xml-parser": "^4.0.11",
     "idb-connector": "^1.2.18",
     "idb-pconnector": "^1.1.0",
     "odbc": "^2.4.6",
-    "ssh2": "^1.11.0",
-    "fast-xml-parser": "^4.0.11"
+    "ssh2": "^1.11.0"
   },
   "engines": {
     "node": ">= 8.0"

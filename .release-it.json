@@ -1,0 +1,19 @@
+{
+   "npm": {
+     "publish": false
+   },
+   "git": {
+     "commitMessage": "chore: release v${version}",
+     "push": false
+   },
+   "github":{
+     "release": false
+   },
+   "plugins": {
+     "@release-it/conventional-changelog": {
+       "preset": "conventionalcommits",
+       "infile": "CHANGELOG.md",
+       "ignoreRecommendedBump": true
+     }
+   }
+}

@@ -16,6 +16,7 @@
 - [Tests](#tests)
 - [Contributing](#contributing)
 - [License](#license)
+- [Release](#release)
 
 # Introduction
 
@@ -97,3 +98,7 @@ Please read the [contribution guidelines](https://github.com/IBM/nodejs-itoolkit
 
 # License
 [MIT](https://github.com/IBM/nodejs-itoolkit/blob/master/LICENSE)
+
+# Release
+
+For information on making a release, read [RELEASE.md](docs/RELEASE.md).
