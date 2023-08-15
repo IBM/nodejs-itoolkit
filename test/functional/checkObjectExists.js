@@ -1,3 +1,6 @@
+// Copyright contributors to the nodejs-itoolkit project
+// SPDX-License-Identifier: MIT
+
 /* eslint-disable default-param-last */
 
 const lib = 'NODETKTEST';

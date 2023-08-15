@@ -1,3 +1,6 @@
+// Copyright contributors to the nodejs-itoolkit project
+// SPDX-License-Identifier: MIT
+
 const { readFileSync } = require('fs');
 
 let privateKey;
