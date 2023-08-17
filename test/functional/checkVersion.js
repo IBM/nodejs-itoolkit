@@ -1,3 +1,6 @@
+// Copyright contributors to the nodejs-itoolkit project
+// SPDX-License-Identifier: MIT
+
 /**
  * Checks if XMLSERVICE version supports QSH.
  * XMLSERVICE >= 1.9.8 supports QSH
