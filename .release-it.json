@@ -11,7 +11,10 @@
    },
    "plugins": {
      "@release-it/conventional-changelog": {
-       "preset": "conventionalcommits",
+      "header": "# Changelog",
+      "preset": {
+        "name": "angular"
+      },
        "infile": "CHANGELOG.md",
        "ignoreRecommendedBump": true
      }
