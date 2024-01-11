@@ -26,8 +26,8 @@ pytz==2022.5
 requests==2.31.0
 six==1.16.0
 snowballstemmer==2.2.0
-# Use same sphinx version required by sphinx-js 3.1.2
-Sphinx==3.5.4
+# Use same sphinx version required by sphinx-js 3.2.1
+Sphinx<6.0.0 and >=4.1.0
 sphinx-js==3.2.1
 sphinx-rtd-theme==1.0.0
 sphinxcontrib-applehelp==1.0.2
