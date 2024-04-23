@@ -12,7 +12,7 @@ Babel==2.10.3
 certifi>=2023.7.22
 charset-normalizer==2.1.1
 docutils==0.16
-idna==3.4
+idna==3.7
 imagesize==1.4.1
 # Pin Jinja2 and markupsafe versions
 # https://github.com/mozilla/sphinx-js/issues/190
