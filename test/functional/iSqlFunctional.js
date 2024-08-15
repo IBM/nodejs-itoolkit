@@ -4,7 +4,7 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
-const { parseString } = require('xml2js');
+const { XMLParser } = require('fast-xml-parser');
 const { iSql, Connection } = require('../../lib/itoolkit');
 const { config, printConfig } = require('./config');
 
@@ -27,22 +27,31 @@ describe('iSql Functional Tests', function () {
       connection.run((error, xmlOut) => {
         expect(error).to.equal(null);
 
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          const sqlNode = result.myscript.sql[0];
-          expect(sqlNode.prepare[0].success[0]).to.include('+++ success');
-          expect(sqlNode.execute[0].success[0]).to.include('+++ success');
-          expect(sqlNode.fetch[0].success[0]).to.include('+++ success');
-          expect(sqlNode.free[0].success[0]).to.include('+++ success');
-          const { data } = result.myscript.sql[0].fetch[0].row[0];
-          expect(data[0].$.desc).to.equal('HOSTNAME');
-          expect(data[1].$.desc).to.equal('VRM');
-          expect(data[2].$.desc).to.equal('DBGROUP');
-          expect(data[3].$.desc).to.equal('IPTYPE');
-          expect(data[4].$.desc).to.equal('IPADDR');
-          expect(data[5].$.desc).to.equal('PORT');
-          done();
+        const parser = new XMLParser({
+          ignoreAttributes: false,
+          attributeNamePrefix: '',
         });
+        let result;
+        try {
+          result = parser.parse(xmlOut);
+        } catch (parseError) {
+          done(parseError);
+          return;
+        }
+        const sqlNode = result.myscript.sql;
+        expect(sqlNode.prepare.success).to.include('+++ success');
+        expect(sqlNode.execute.success).to.include('+++ success');
+        expect(sqlNode.fetch.success).to.include('+++ success');
+        expect(sqlNode.free.success).to.include('+++ success');
+        const { data } = result.myscript.sql.fetch.row;
+
+        expect(data[0].desc).to.equal('HOSTNAME');
+        expect(data[1].desc).to.equal('VRM');
+        expect(data[2].desc).to.equal('DBGROUP');
+        expect(data[3].desc).to.equal('IPTYPE');
+        expect(data[4].desc).to.equal('IPADDR');
+        expect(data[5].desc).to.equal('PORT');
+        done();
       });
     });
   });
@@ -59,16 +68,25 @@ describe('iSql Functional Tests', function () {
       connection.add(sql);
       connection.run((error, xmlOut) => {
         expect(error).to.equal(null);
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          const sqlNode = result.myscript.sql[0];
-          expect(sqlNode.query[0].success[0]).to.include('+++ success');
-          expect(sqlNode.fetch[0].success[0]).to.include('+++ success');
-          expect(sqlNode.free[0].success[0]).to.include('+++ success');
-          expect(sqlNode.fetch[0].row[0].data[0].$.desc).to.equal('LSTNAM');
-          expect(sqlNode.fetch[0].row[0].data[1].$.desc).to.equal('STATE');
-          done();
+
+        const parser = new XMLParser({
+          ignoreAttributes: false,
+          attributeNamePrefix: '',
         });
+        let result;
+        try {
+          result = parser.parse(xmlOut);
+        } catch (parseError) {
+          done(parseError);
+          return;
+        }
+        const sqlNode = result.myscript.sql;
+        expect(sqlNode.query.success).to.include('+++ success');
+        expect(sqlNode.fetch.success).to.include('+++ success');
+        expect(sqlNode.free.success).to.include('+++ success');
+        expect(sqlNode.fetch.row[0].data[0].desc).to.equal('LSTNAM');
+        expect(sqlNode.fetch.row[0].data[1].desc).to.equal('STATE');
+        done();
       });
     });
   });
@@ -85,17 +103,26 @@ describe('iSql Functional Tests', function () {
       connection.add(sql);
       connection.run((error, xmlOut) => {
         expect(error).to.equal(null);
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          const sqlNode = result.myscript.sql[0];
-          expect(sqlNode.query[0].success[0]).to.include('+++ success');
-          expect(sqlNode.fetch[0].success[0]).to.include('+++ success');
-          expect(sqlNode.free[0].success[0]).to.include('+++ success');
-          expect(sqlNode.fetch[0].row[0].data[0].$.desc).to.equal('BLANK');
-          // xml2js no inner data gets parsed as undefined.
-          expect(sqlNode.fetch[0].row[0].data[0]._).to.equal(undefined);
-          done();
+
+        const parser = new XMLParser({
+          ignoreAttributes: false,
+          attributeNamePrefix: '',
         });
+        let result;
+        try {
+          result = parser.parse(xmlOut);
+        } catch (parseError) {
+          done(parseError);
+          return;
+        }
+        const sqlNode = result.myscript.sql;
+        expect(sqlNode.query.success).to.include('+++ success');
+        expect(sqlNode.fetch.success).to.include('+++ success');
+        expect(sqlNode.free.success).to.include('+++ success');
+        expect(sqlNode.fetch.row[0].data[0].desc).to.equal('BLANK');
+        // xml2js no inner data gets parsed as undefined.
+        expect(sqlNode.fetch.row[0].data[0]._).to.equal(undefined);
+        done();
       });
     });
   });
@@ -110,17 +137,26 @@ describe('iSql Functional Tests', function () {
       connection.add(sql.toXML());
       connection.run((error, xmlOut) => {
         expect(error).to.equal(null);
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          expect(result.myscript.sql[0].tables[0].success[0]).to.include('+++ success');
-          const { data } = result.myscript.sql[0].tables[0].row[0];
-          expect(data[0].$.desc).to.equal('TABLE_CAT');
-          expect(data[1].$.desc).to.equal('TABLE_SCHEM');
-          expect(data[2].$.desc).to.equal('TABLE_NAME');
-          expect(data[3].$.desc).to.equal('TABLE_TYPE');
-          expect(data[4].$.desc).to.equal('REMARKS');
-          done();
+
+        const parser = new XMLParser({
+          ignoreAttributes: false,
+          attributeNamePrefix: '',
         });
+        let result;
+        try {
+          result = parser.parse(xmlOut);
+        } catch (parseError) {
+          done(parseError);
+          return;
+        }
+        expect(result.myscript.sql.tables.success).to.include('+++ success');
+        const { data } = result.myscript.sql.tables.row;
+        expect(data[0].desc).to.equal('TABLE_CAT');
+        expect(data[1].desc).to.equal('TABLE_SCHEM');
+        expect(data[2].desc).to.equal('TABLE_NAME');
+        expect(data[3].desc).to.equal('TABLE_TYPE');
+        expect(data[4].desc).to.equal('REMARKS');
+        done();
       });
     });
   });
@@ -135,19 +171,28 @@ describe('iSql Functional Tests', function () {
       connection.add(sql.toXML());
       connection.run((error, xmlOut) => {
         expect(error).to.equal(null);
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          expect(result.myscript.sql[0].tablepriv[0].success[0]).to.include('+++ success');
-          const { data } = result.myscript.sql[0].tablepriv[0].row[0];
-          expect(data[0].$.desc).to.equal('TABLE_CAT');
-          expect(data[1].$.desc).to.equal('TABLE_SCHEM');
-          expect(data[2].$.desc).to.equal('TABLE_NAME');
-          expect(data[3].$.desc).to.equal('GRANTOR');
-          expect(data[4].$.desc).to.equal('GRANTEE');
-          expect(data[5].$.desc).to.equal('PRIVILEGE');
-          expect(data[6].$.desc).to.equal('IS_GRANTABLE');
-          done();
+
+        const parser = new XMLParser({
+          ignoreAttributes: false,
+          attributeNamePrefix: '',
         });
+        let result;
+        try {
+          result = parser.parse(xmlOut);
+        } catch (parseError) {
+          done(parseError);
+          return;
+        }
+        expect(result.myscript.sql.tablepriv.success).to.include('+++ success');
+        const { data } = result.myscript.sql.tablepriv.row[0];
+        expect(data[0].desc).to.equal('TABLE_CAT');
+        expect(data[1].desc).to.equal('TABLE_SCHEM');
+        expect(data[2].desc).to.equal('TABLE_NAME');
+        expect(data[3].desc).to.equal('GRANTOR');
+        expect(data[4].desc).to.equal('GRANTEE');
+        expect(data[5].desc).to.equal('PRIVILEGE');
+        expect(data[6].desc).to.equal('IS_GRANTABLE');
+        done();
       });
     });
   });
@@ -162,30 +207,39 @@ describe('iSql Functional Tests', function () {
       connection.add(sql.toXML());
       connection.run((error, xmlOut) => {
         expect(error).to.equal(null);
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          expect(result.myscript.sql[0].columns[0].success[0]).to.include('+++ success');
-          const { data } = result.myscript.sql[0].columns[0].row[0];
-          expect(data[0].$.desc).to.equal('TABLE_CAT');
-          expect(data[1].$.desc).to.equal('TABLE_SCHEM');
-          expect(data[2].$.desc).to.equal('TABLE_NAME');
-          expect(data[3].$.desc).to.equal('COLUMN_NAME');
-          expect(data[4].$.desc).to.equal('DATA_TYPE');
-          expect(data[5].$.desc).to.equal('TYPE_NAME');
-          expect(data[6].$.desc).to.equal('COLUMN_SIZE');
-          expect(data[7].$.desc).to.equal('BUFFER_LENGTH');
-          expect(data[8].$.desc).to.equal('DECIMAL_DIGITS');
-          expect(data[9].$.desc).to.equal('NUM_PREC_RADIX');
-          expect(data[10].$.desc).to.equal('NULLABLE');
-          expect(data[11].$.desc).to.equal('REMARKS');
-          expect(data[12].$.desc).to.equal('COLUMN_DEF');
-          expect(data[13].$.desc).to.equal('SQL_DATA_TYPE');
-          expect(data[14].$.desc).to.equal('SQL_DATETIME_SUB');
-          expect(data[15].$.desc).to.equal('CHAR_OCTET_LENGTH');
-          expect(data[16].$.desc).to.equal('ORDINAL_POSITION');
-          expect(data[17].$.desc).to.equal('IS_NULLABLE');
-          done();
+
+        const parser = new XMLParser({
+          ignoreAttributes: false,
+          attributeNamePrefix: '',
         });
+        let result;
+        try {
+          result = parser.parse(xmlOut);
+        } catch (parseError) {
+          done(parseError);
+          return;
+        }
+        expect(result.myscript.sql.columns.success).to.include('+++ success');
+        const { data } = result.myscript.sql.columns.row;
+        expect(data[0].desc).to.equal('TABLE_CAT');
+        expect(data[1].desc).to.equal('TABLE_SCHEM');
+        expect(data[2].desc).to.equal('TABLE_NAME');
+        expect(data[3].desc).to.equal('COLUMN_NAME');
+        expect(data[4].desc).to.equal('DATA_TYPE');
+        expect(data[5].desc).to.equal('TYPE_NAME');
+        expect(data[6].desc).to.equal('COLUMN_SIZE');
+        expect(data[7].desc).to.equal('BUFFER_LENGTH');
+        expect(data[8].desc).to.equal('DECIMAL_DIGITS');
+        expect(data[9].desc).to.equal('NUM_PREC_RADIX');
+        expect(data[10].desc).to.equal('NULLABLE');
+        expect(data[11].desc).to.equal('REMARKS');
+        expect(data[12].desc).to.equal('COLUMN_DEF');
+        expect(data[13].desc).to.equal('SQL_DATA_TYPE');
+        expect(data[14].desc).to.equal('SQL_DATETIME_SUB');
+        expect(data[15].desc).to.equal('CHAR_OCTET_LENGTH');
+        expect(data[16].desc).to.equal('ORDINAL_POSITION');
+        expect(data[17].desc).to.equal('IS_NULLABLE');
+        done();
       });
     });
   });
@@ -201,20 +255,29 @@ describe('iSql Functional Tests', function () {
       connection.add(sql.toXML());
       connection.run((error, xmlOut) => {
         expect(error).to.equal(null);
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          expect(result.myscript.sql[0].columnpriv[0].success[0]).to.include('+++ success');
-          const { data } = result.myscript.sql[0].columnpriv[0].row[0];
-          expect(data[0].$.desc).to.equal('TABLE_CAT');
-          expect(data[1].$.desc).to.equal('TABLE_SCHEM');
-          expect(data[2].$.desc).to.equal('TABLE_NAME');
-          expect(data[3].$.desc).to.equal('COLUMN_NAME');
-          expect(data[4].$.desc).to.equal('GRANTOR');
-          expect(data[5].$.desc).to.equal('GRANTEE');
-          expect(data[6].$.desc).to.equal('PRIVILEGE');
-          expect(data[7].$.desc).to.equal('IS_GRANTABLE');
-          done();
+
+        const parser = new XMLParser({
+          ignoreAttributes: false,
+          attributeNamePrefix: '',
         });
+        let result;
+        try {
+          result = parser.parse(xmlOut);
+        } catch (parseError) {
+          done(parseError);
+          return;
+        }
+        expect(result.myscript.sql.columnpriv.success).to.include('+++ success');
+        const { data } = result.myscript.sql.columnpriv.row[0];
+        expect(data[0].desc).to.equal('TABLE_CAT');
+        expect(data[1].desc).to.equal('TABLE_SCHEM');
+        expect(data[2].desc).to.equal('TABLE_NAME');
+        expect(data[3].desc).to.equal('COLUMN_NAME');
+        expect(data[4].desc).to.equal('GRANTOR');
+        expect(data[5].desc).to.equal('GRANTEE');
+        expect(data[6].desc).to.equal('PRIVILEGE');
+        expect(data[7].desc).to.equal('IS_GRANTABLE');
+        done();
       });
     });
   });
@@ -229,20 +292,30 @@ describe('iSql Functional Tests', function () {
       connection.add(sql.toXML());
       connection.run((error, xmlOut) => {
         expect(error).to.equal(null);
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          expect(result.myscript.sql[0].procedures[0].success[0]).to.include('+++ success');
-          const { data } = result.myscript.sql[0].procedures[0].row[0];
-          expect(data[0].$.desc).to.equal('PROCEDURE_CAT');
-          expect(data[1].$.desc).to.equal('PROCEDURE_SCHEM');
-          expect(data[2].$.desc).to.equal('PROCEDURE_NAME');
-          expect(data[3].$.desc).to.equal('NUM_INPUT_PARAMS');
-          expect(data[4].$.desc).to.equal('NUM_OUTPUT_PARAMS');
-          expect(data[5].$.desc).to.equal('NUM_RESULT_SETS');
-          expect(data[6].$.desc).to.equal('REMARKS');
-          expect(data[7].$.desc).to.equal('PROCEDURE_TYPE');
-          done();
+
+        const parser = new XMLParser({
+          ignoreAttributes: false,
+          attributeNamePrefix: '',
         });
+        let result;
+        try {
+          result = parser.parse(xmlOut);
+        } catch (parseError) {
+          done(parseError);
+          return;
+        }
+
+        expect(result.myscript.sql.procedures.success).to.include('+++ success');
+        const { data } = result.myscript.sql.procedures.row;
+        expect(data[0].desc).to.equal('PROCEDURE_CAT');
+        expect(data[1].desc).to.equal('PROCEDURE_SCHEM');
+        expect(data[2].desc).to.equal('PROCEDURE_NAME');
+        expect(data[3].desc).to.equal('NUM_INPUT_PARAMS');
+        expect(data[4].desc).to.equal('NUM_OUTPUT_PARAMS');
+        expect(data[5].desc).to.equal('NUM_RESULT_SETS');
+        expect(data[6].desc).to.equal('REMARKS');
+        expect(data[7].desc).to.equal('PROCEDURE_TYPE');
+        done();
       });
     });
   });
@@ -257,31 +330,40 @@ describe('iSql Functional Tests', function () {
       connection.add(sql.toXML());
       connection.run((error, xmlOut) => {
         expect(error).to.equal(null);
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          expect(result.myscript.sql[0].pcolumns[0].success[0]).to.include('+++ success');
-          const { data } = result.myscript.sql[0].pcolumns[0].row[0];
-          expect(data[0].$.desc).to.equal('PROCEDURE_CAT');
-          expect(data[1].$.desc).to.equal('PROCEDURE_SCHEM');
-          expect(data[2].$.desc).to.equal('PROCEDURE_NAME');
-          expect(data[3].$.desc).to.equal('COLUMN_NAME');
-          expect(data[4].$.desc).to.equal('COLUMN_TYPE');
-          expect(data[5].$.desc).to.equal('DATA_TYPE');
-          expect(data[6].$.desc).to.equal('TYPE_NAME');
-          expect(data[7].$.desc).to.equal('COLUMN_SIZE');
-          expect(data[8].$.desc).to.equal('BUFFER_LENGTH');
-          expect(data[9].$.desc).to.equal('DECIMAL_DIGITS');
-          expect(data[10].$.desc).to.equal('NUM_PREC_RADIX');
-          expect(data[11].$.desc).to.equal('NULLABLE');
-          expect(data[12].$.desc).to.equal('REMARKS');
-          expect(data[13].$.desc).to.equal('COLUMN_DEF');
-          expect(data[14].$.desc).to.equal('SQL_DATA_TYPE');
-          expect(data[15].$.desc).to.equal('SQL_DATETIME_SUB');
-          expect(data[16].$.desc).to.equal('CHAR_OCTET_LENGTH');
-          expect(data[17].$.desc).to.equal('ORDINAL_POSITION');
-          expect(data[18].$.desc).to.equal('IS_NULLABLE');
-          done();
+
+        const parser = new XMLParser({
+          ignoreAttributes: false,
+          attributeNamePrefix: '',
         });
+        let result;
+        try {
+          result = parser.parse(xmlOut);
+        } catch (parseError) {
+          done(parseError);
+          return;
+        }
+        expect(result.myscript.sql.pcolumns.success).to.include('+++ success');
+        const { data } = result.myscript.sql.pcolumns.row;
+        expect(data[0].desc).to.equal('PROCEDURE_CAT');
+        expect(data[1].desc).to.equal('PROCEDURE_SCHEM');
+        expect(data[2].desc).to.equal('PROCEDURE_NAME');
+        expect(data[3].desc).to.equal('COLUMN_NAME');
+        expect(data[4].desc).to.equal('COLUMN_TYPE');
+        expect(data[5].desc).to.equal('DATA_TYPE');
+        expect(data[6].desc).to.equal('TYPE_NAME');
+        expect(data[7].desc).to.equal('COLUMN_SIZE');
+        expect(data[8].desc).to.equal('BUFFER_LENGTH');
+        expect(data[9].desc).to.equal('DECIMAL_DIGITS');
+        expect(data[10].desc).to.equal('NUM_PREC_RADIX');
+        expect(data[11].desc).to.equal('NULLABLE');
+        expect(data[12].desc).to.equal('REMARKS');
+        expect(data[13].desc).to.equal('COLUMN_DEF');
+        expect(data[14].desc).to.equal('SQL_DATA_TYPE');
+        expect(data[15].desc).to.equal('SQL_DATETIME_SUB');
+        expect(data[16].desc).to.equal('CHAR_OCTET_LENGTH');
+        expect(data[17].desc).to.equal('ORDINAL_POSITION');
+        expect(data[18].desc).to.equal('IS_NULLABLE');
+        done();
       });
     });
   });
@@ -296,18 +378,27 @@ describe('iSql Functional Tests', function () {
       connection.add(sql.toXML());
       connection.run((error, xmlOut) => {
         expect(error).to.equal(null);
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          expect(result.myscript.sql[0].primarykeys[0].success[0]).to.include('+++ success');
-          const { data } = result.myscript.sql[0].primarykeys[0].row[0];
-          expect(data[0].$.desc).to.equal('TABLE_CAT');
-          expect(data[1].$.desc).to.equal('TABLE_SCHEM');
-          expect(data[2].$.desc).to.equal('TABLE_NAME');
-          expect(data[3].$.desc).to.equal('COLUMN_NAME');
-          expect(data[4].$.desc).to.equal('KEY_SEQ');
-          expect(data[5].$.desc).to.equal('PK_NAME');
-          done();
+
+        const parser = new XMLParser({
+          ignoreAttributes: false,
+          attributeNamePrefix: '',
         });
+        let result;
+        try {
+          result = parser.parse(xmlOut);
+        } catch (parseError) {
+          done(parseError);
+          return;
+        }
+        expect(result.myscript.sql.primarykeys.success).to.include('+++ success');
+        const { data } = result.myscript.sql.primarykeys.row[0];
+        expect(data[0].desc).to.equal('TABLE_CAT');
+        expect(data[1].desc).to.equal('TABLE_SCHEM');
+        expect(data[2].desc).to.equal('TABLE_NAME');
+        expect(data[3].desc).to.equal('COLUMN_NAME');
+        expect(data[4].desc).to.equal('KEY_SEQ');
+        expect(data[5].desc).to.equal('PK_NAME');
+        done();
       });
     });
   });
@@ -323,26 +414,35 @@ describe('iSql Functional Tests', function () {
       connection.add(sql.toXML());
       connection.run((error, xmlOut) => {
         expect(error).to.equal(null);
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          expect(result.myscript.sql[0].foreignkeys[0].success[0]).to.include('+++ success');
-          const { data } = result.myscript.sql[0].foreignkeys[0].row[0];
-          expect(data[0].$.desc).to.equal('PKTABLE_CAT');
-          expect(data[1].$.desc).to.equal('PKTABLE_SCHEM');
-          expect(data[2].$.desc).to.equal('PKTABLE_NAME');
-          expect(data[3].$.desc).to.equal('PKCOLUMN_NAME');
-          expect(data[4].$.desc).to.equal('FKTABLE_CAT');
-          expect(data[5].$.desc).to.equal('FKTABLE_SCHEM');
-          expect(data[6].$.desc).to.equal('FKTABLE_NAME');
-          expect(data[7].$.desc).to.equal('FKCOLUMN_NAME');
-          expect(data[8].$.desc).to.equal('KEY_SEQ');
-          expect(data[9].$.desc).to.equal('UPDATE_RULE');
-          expect(data[10].$.desc).to.equal('DELETE_RULE');
-          expect(data[11].$.desc).to.equal('FK_NAME');
-          expect(data[12].$.desc).to.equal('PK_NAME');
-          expect(data[13].$.desc).to.equal('DEFERRABILITY');
-          done();
+
+        const parser = new XMLParser({
+          ignoreAttributes: false,
+          attributeNamePrefix: '',
         });
+        let result;
+        try {
+          result = parser.parse(xmlOut);
+        } catch (parseError) {
+          done(parseError);
+          return;
+        }
+        expect(result.myscript.sql.foreignkeys.success).to.include('+++ success');
+        const { data } = result.myscript.sql.foreignkeys.row;
+        expect(data[0].desc).to.equal('PKTABLE_CAT');
+        expect(data[1].desc).to.equal('PKTABLE_SCHEM');
+        expect(data[2].desc).to.equal('PKTABLE_NAME');
+        expect(data[3].desc).to.equal('PKCOLUMN_NAME');
+        expect(data[4].desc).to.equal('FKTABLE_CAT');
+        expect(data[5].desc).to.equal('FKTABLE_SCHEM');
+        expect(data[6].desc).to.equal('FKTABLE_NAME');
+        expect(data[7].desc).to.equal('FKCOLUMN_NAME');
+        expect(data[8].desc).to.equal('KEY_SEQ');
+        expect(data[9].desc).to.equal('UPDATE_RULE');
+        expect(data[10].desc).to.equal('DELETE_RULE');
+        expect(data[11].desc).to.equal('FK_NAME');
+        expect(data[12].desc).to.equal('PK_NAME');
+        expect(data[13].desc).to.equal('DEFERRABILITY');
+        done();
       });
     });
   });
@@ -357,25 +457,35 @@ describe('iSql Functional Tests', function () {
       connection.add(sql.toXML());
       connection.run((error, xmlOut) => {
         expect(error).to.equal(null);
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          expect(result.myscript.sql[0].statistics[0].success[0]).to.include('+++ success');
-          const { data } = result.myscript.sql[0].statistics[0].row[0];
-          expect(data[0].$.desc).to.equal('TABLE_CAT');
-          expect(data[1].$.desc).to.equal('TABLE_SCHEM');
-          expect(data[2].$.desc).to.equal('TABLE_NAME');
-          expect(data[3].$.desc).to.equal('NON_UNIQUE');
-          expect(data[4].$.desc).to.equal('INDEX_QUALIFIER');
-          expect(data[5].$.desc).to.equal('INDEX_NAME');
-          expect(data[6].$.desc).to.equal('TYPE');
-          expect(data[7].$.desc).to.equal('ORDINAL_POSITION');
-          expect(data[8].$.desc).to.equal('COLUMN_NAME');
-          expect(data[9].$.desc).to.equal('ASC_OR_DESC');
-          expect(data[10].$.desc).to.equal('CARDINALITY');
-          expect(data[11].$.desc).to.equal('PAGES');
-          expect(data[12].$.desc).to.equal('FILTER_CONDITION');
-          done();
+
+        const parser = new XMLParser({
+          ignoreAttributes: false,
+          attributeNamePrefix: '',
         });
+        let result;
+        try {
+          result = parser.parse(xmlOut);
+        } catch (parseError) {
+          done(parseError);
+          return;
+        }
+
+        expect(result.myscript.sql.statistics.success).to.include('+++ success');
+        const { data } = result.myscript.sql.statistics.row;
+        expect(data[0].desc).to.equal('TABLE_CAT');
+        expect(data[1].desc).to.equal('TABLE_SCHEM');
+        expect(data[2].desc).to.equal('TABLE_NAME');
+        expect(data[3].desc).to.equal('NON_UNIQUE');
+        expect(data[4].desc).to.equal('INDEX_QUALIFIER');
+        expect(data[5].desc).to.equal('INDEX_NAME');
+        expect(data[6].desc).to.equal('TYPE');
+        expect(data[7].desc).to.equal('ORDINAL_POSITION');
+        expect(data[8].desc).to.equal('COLUMN_NAME');
+        expect(data[9].desc).to.equal('ASC_OR_DESC');
+        expect(data[10].desc).to.equal('CARDINALITY');
+        expect(data[11].desc).to.equal('PAGES');
+        expect(data[12].desc).to.equal('FILTER_CONDITION');
+        done();
       });
     });
   });
@@ -394,12 +504,20 @@ describe('iSql Functional Tests', function () {
       connection.debug(true);
       connection.run((error, xmlOut) => {
         expect(error).to.equal(null);
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          // TODO add more assertions
-          expect(result).to.be.an('object');
-          done();
+
+        const parser = new XMLParser({
+          ignoreAttributes: false,
+          attributeNamePrefix: '',
         });
+        let result;
+        try {
+          result = parser.parse(xmlOut);
+        } catch (parseError) {
+          done(parseError);
+          return;
+        }
+        expect(result).to.be.an('object');
+        done();
       });
     });
   });
@@ -420,14 +538,23 @@ describe('iSql Functional Tests', function () {
       connection.add(sql.toXML());
       connection.run((error, xmlOut) => {
         expect(error).to.equal(null);
-        parseString(xmlOut, (parseError, result) => {
-          const sqlNode = result.myscript.sql[0];
-          expect(parseError).to.equal(null);
-          expect(sqlNode.query[0].success[0]).to.include('+++ success');
-          expect(sqlNode.free[0].success[0]).to.include('+++ success');
-          expect(sqlNode.rowcount[0]._).to.equal('1');
-          done();
+
+        const parser = new XMLParser({
+          ignoreAttributes: false,
+          attributeNamePrefix: '',
         });
+        let result;
+        try {
+          result = parser.parse(xmlOut);
+        } catch (parseError) {
+          done(parseError);
+          return;
+        }
+        const sqlNode = result.myscript.sql;
+        expect(sqlNode.query.success).to.include('+++ success');
+        expect(sqlNode.free.success).to.include('+++ success');
+        expect(sqlNode.rowcount['#text']).to.equal(1);
+        done();
       });
     });
   });

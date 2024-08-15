@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 const { expect } = require('chai');
-const { parseString } = require('xml2js');
+const { XMLParser } = require('fast-xml-parser');
 const { ProgramCall, Connection } = require('../../lib/itoolkit');
 const { config, printConfig } = require('./config');
 
@@ -57,11 +57,17 @@ describe('ProgramCall Functional Tests', function () {
       connection.add(program);
       connection.run((error, xmlOut) => {
         expect(error).to.equal(null);
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          expect(result.myscript.pgm[0].success[0]).to.include('+++ success QSYS QWCRSVAL');
-          done();
-        });
+
+        const parser = new XMLParser();
+        let result;
+        try {
+          result = parser.parse(xmlOut);
+        } catch (parseError) {
+          done(parseError);
+          return;
+        }
+        expect(result.myscript.pgm.success).to.include('+++ success QSYS QWCRSVAL');
+        done();
       });
     });
   });
@@ -76,16 +82,25 @@ describe('ProgramCall Functional Tests', function () {
 
       program.addParam({ type: '10A', varying: '4', value: 'Gill' });
       const testValue = 'NEW_NAME';
-      program.addReturn('0', '20A', { varying: '4', name: testValue });
+      // program.addReturn('0', '20A', { varying: '4', name: testValue });
+      program.addReturn({
+        varying: '4', name: testValue, value: '0', type: '20A',
+      });
       connection.add(program);
       connection.run((error, xmlOut) => {
         expect(error).to.equal(null);
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          expect(result.myscript.pgm[0].success[0]).to.include('+++ success');
-          expect(result.myscript.pgm[0].return[0].data[0]._).to.equal('my name is Gill');
-          done();
-        });
+        const parser = new XMLParser();
+        let result;
+        try {
+          result = parser.parse(xmlOut);
+        } catch (parseError) {
+          done(parseError);
+          return;
+        }
+
+        expect(result.myscript.pgm.success).to.include('+++ success');
+        expect(result.myscript.pgm.return.data).to.equal('my name is Gill');
+        done();
       });
     });
   });
