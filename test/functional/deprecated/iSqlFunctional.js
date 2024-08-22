@@ -26,7 +26,7 @@ if (config.transport === 'rest') {
     port,
     path,
   };
-}
+} 
 
 describe('iSql Functional Tests', function () {
   before(function () {

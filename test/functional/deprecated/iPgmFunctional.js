@@ -31,7 +31,7 @@ if (config.transport === 'rest') {
 describe('iPgm Functional Tests', function () {
   before(function () {
     printConfig();
-  });
+  }); 
 
   describe('addParam', function () {
     it('calls QWCRSVAL program checks if it ran successfully', function (done) {

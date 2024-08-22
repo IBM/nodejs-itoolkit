@@ -91,7 +91,7 @@ describe('iSh, iCmd, iQsh, Functional Tests', function () {
         } catch (parseError) {
           done(parseError);
           return;
-        }
+        } 
         const { version } = result.myscript.pgm;
         const match = version.match(/\d\.\d\.\d/);
 
