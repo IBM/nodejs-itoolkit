@@ -4,7 +4,7 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
-const { parseString } = require('xml2js');
+const { XMLParser } = require('fast-xml-parser');
 const { iPgm, iConn } = require('../../../lib/itoolkit');
 const { config, printConfig } = require('../config');
 
@@ -56,11 +56,16 @@ describe('iPgm Functional Tests', function () {
       program.addParam(this.errno, { io: 'both', len: 'rec2' });
       connection.add(program);
       connection.run((xmlOut) => {
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          expect(result.myscript.pgm[0].success[0]).to.include('+++ success QSYS QWCRSVAL');
-          done();
-        });
+        const parser = new XMLParser();
+        let result;
+        try {
+          result = parser.parse(xmlOut);
+        } catch (parseError) {
+          done(parseError);
+          return;
+        }
+        expect(result.myscript.pgm.success).to.include('+++ success QSYS QWCRSVAL');
+        done();
       });
     });
   });
@@ -78,12 +83,17 @@ describe('iPgm Functional Tests', function () {
       program.addReturn('0', '20A', { varying: '4', name: testValue });
       connection.add(program);
       connection.run((xmlOut) => {
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          expect(result.myscript.pgm[0].success[0]).to.include('+++ success');
-          expect(result.myscript.pgm[0].return[0].data[0]._).to.equal('my name is Gill');
-          done();
-        });
+        const parser = new XMLParser();
+        let result;
+        try {
+          result = parser.parse(xmlOut);
+        } catch (parseError) {
+          done(parseError);
+          return;
+        }
+        expect(result.myscript.pgm.success).to.include('+++ success');
+        expect(result.myscript.pgm.return.data).to.equal('my name is Gill');
+        done();
       });
     });
   });
