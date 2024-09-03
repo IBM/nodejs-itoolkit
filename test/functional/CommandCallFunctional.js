@@ -21,12 +21,8 @@ describe('CommandCall Functional Tests', function () {
 
         const parser = new XMLParser();
         let result;
-        try {
-          result = parser.parse(xmlOut);
-        } catch (parseError) {
-          done(parseError);
-          return;
-        }
+        result = parser.parse(xmlOut);
+        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.cmd.success).to.include('+++ success RTVJOBA USRLIBL(?) SYSLIBL(?)');
         done();
       });
@@ -44,13 +40,8 @@ describe('CommandCall Functional Tests', function () {
 
         const parser = new XMLParser();
         let result;
-        try {
-          result = parser.parse(xmlOut);
-        } catch (parseError) {
-          done(parseError);
-          return;
-        }
-
+        result = parser.parse(xmlOut);
+        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sh).to.match(/(System\sStatus\sInformation)/);
         done();
       });
@@ -69,13 +60,8 @@ describe('CommandCall Functional Tests', function () {
 
         const parser = new XMLParser();
         let result;
-        try {
-          result = parser.parse(xmlOut);
-        } catch (parseError) {
-          done(parseError);
-          return;
-        }
-
+        result = parser.parse(xmlOut);
+        expect(Object.keys(result).length).gt(0);
         const { version } = result.myscript.pgm;
         const match = version.match(/\d\.\d\.\d/);
 

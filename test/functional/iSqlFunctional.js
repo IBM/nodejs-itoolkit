@@ -32,12 +32,8 @@ describe('iSql Functional Tests', function () {
           attributeNamePrefix: '',
         });
         let result;
-        try {
-          result = parser.parse(xmlOut);
-        } catch (parseError) {
-          done(parseError);
-          return;
-        }
+        result = parser.parse(xmlOut);
+        expect(Object.keys(result).length).gt(0);
         const sqlNode = result.myscript.sql;
         expect(sqlNode.prepare.success).to.include('+++ success');
         expect(sqlNode.execute.success).to.include('+++ success');
@@ -74,12 +70,8 @@ describe('iSql Functional Tests', function () {
           attributeNamePrefix: '',
         });
         let result;
-        try {
-          result = parser.parse(xmlOut);
-        } catch (parseError) {
-          done(parseError);
-          return;
-        }
+        result = parser.parse(xmlOut);
+        expect(Object.keys(result).length).gt(0);
         const sqlNode = result.myscript.sql;
         expect(sqlNode.query.success).to.include('+++ success');
         expect(sqlNode.fetch.success).to.include('+++ success');
@@ -109,12 +101,8 @@ describe('iSql Functional Tests', function () {
           attributeNamePrefix: '',
         });
         let result;
-        try {
-          result = parser.parse(xmlOut);
-        } catch (parseError) {
-          done(parseError);
-          return;
-        }
+        result = parser.parse(xmlOut);
+        expect(Object.keys(result).length).gt(0);
         const sqlNode = result.myscript.sql;
         expect(sqlNode.query.success).to.include('+++ success');
         expect(sqlNode.fetch.success).to.include('+++ success');
@@ -143,12 +131,8 @@ describe('iSql Functional Tests', function () {
           attributeNamePrefix: '',
         });
         let result;
-        try {
-          result = parser.parse(xmlOut);
-        } catch (parseError) {
-          done(parseError);
-          return;
-        }
+        result = parser.parse(xmlOut);
+        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.tables.success).to.include('+++ success');
         const { data } = result.myscript.sql.tables.row;
         expect(data[0].desc).to.equal('TABLE_CAT');
@@ -177,12 +161,8 @@ describe('iSql Functional Tests', function () {
           attributeNamePrefix: '',
         });
         let result;
-        try {
-          result = parser.parse(xmlOut);
-        } catch (parseError) {
-          done(parseError);
-          return;
-        }
+        result = parser.parse(xmlOut);
+        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.tablepriv.success).to.include('+++ success');
         const { data } = result.myscript.sql.tablepriv.row[0];
         expect(data[0].desc).to.equal('TABLE_CAT');
@@ -213,12 +193,8 @@ describe('iSql Functional Tests', function () {
           attributeNamePrefix: '',
         });
         let result;
-        try {
-          result = parser.parse(xmlOut);
-        } catch (parseError) {
-          done(parseError);
-          return;
-        }
+        result = parser.parse(xmlOut);
+        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.columns.success).to.include('+++ success');
         const { data } = result.myscript.sql.columns.row;
         expect(data[0].desc).to.equal('TABLE_CAT');
@@ -261,12 +237,8 @@ describe('iSql Functional Tests', function () {
           attributeNamePrefix: '',
         });
         let result;
-        try {
-          result = parser.parse(xmlOut);
-        } catch (parseError) {
-          done(parseError);
-          return;
-        }
+        result = parser.parse(xmlOut);
+        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.columnpriv.success).to.include('+++ success');
         const { data } = result.myscript.sql.columnpriv.row[0];
         expect(data[0].desc).to.equal('TABLE_CAT');
@@ -298,13 +270,8 @@ describe('iSql Functional Tests', function () {
           attributeNamePrefix: '',
         });
         let result;
-        try {
-          result = parser.parse(xmlOut);
-        } catch (parseError) {
-          done(parseError);
-          return;
-        }
-
+        result = parser.parse(xmlOut);
+        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.procedures.success).to.include('+++ success');
         const { data } = result.myscript.sql.procedures.row;
         expect(data[0].desc).to.equal('PROCEDURE_CAT');
@@ -336,12 +303,8 @@ describe('iSql Functional Tests', function () {
           attributeNamePrefix: '',
         });
         let result;
-        try {
-          result = parser.parse(xmlOut);
-        } catch (parseError) {
-          done(parseError);
-          return;
-        }
+        result = parser.parse(xmlOut);
+        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.pcolumns.success).to.include('+++ success');
         const { data } = result.myscript.sql.pcolumns.row;
         expect(data[0].desc).to.equal('PROCEDURE_CAT');
@@ -384,12 +347,8 @@ describe('iSql Functional Tests', function () {
           attributeNamePrefix: '',
         });
         let result;
-        try {
-          result = parser.parse(xmlOut);
-        } catch (parseError) {
-          done(parseError);
-          return;
-        }
+        result = parser.parse(xmlOut);
+        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.primarykeys.success).to.include('+++ success');
         const { data } = result.myscript.sql.primarykeys.row[0];
         expect(data[0].desc).to.equal('TABLE_CAT');
@@ -420,12 +379,8 @@ describe('iSql Functional Tests', function () {
           attributeNamePrefix: '',
         });
         let result;
-        try {
-          result = parser.parse(xmlOut);
-        } catch (parseError) {
-          done(parseError);
-          return;
-        }
+        result = parser.parse(xmlOut);
+        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.foreignkeys.success).to.include('+++ success');
         const { data } = result.myscript.sql.foreignkeys.row;
         expect(data[0].desc).to.equal('PKTABLE_CAT');
@@ -463,13 +418,8 @@ describe('iSql Functional Tests', function () {
           attributeNamePrefix: '',
         });
         let result;
-        try {
-          result = parser.parse(xmlOut);
-        } catch (parseError) {
-          done(parseError);
-          return;
-        }
-
+        result = parser.parse(xmlOut);
+        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.statistics.success).to.include('+++ success');
         const { data } = result.myscript.sql.statistics.row;
         expect(data[0].desc).to.equal('TABLE_CAT');
@@ -510,12 +460,8 @@ describe('iSql Functional Tests', function () {
           attributeNamePrefix: '',
         });
         let result;
-        try {
-          result = parser.parse(xmlOut);
-        } catch (parseError) {
-          done(parseError);
-          return;
-        }
+        result = parser.parse(xmlOut);
+        expect(Object.keys(result).length).gt(0);
         expect(result).to.be.an('object');
         done();
       });
@@ -544,12 +490,8 @@ describe('iSql Functional Tests', function () {
           attributeNamePrefix: '',
         });
         let result;
-        try {
-          result = parser.parse(xmlOut);
-        } catch (parseError) {
-          done(parseError);
-          return;
-        }
+        result = parser.parse(xmlOut);
+        expect(Object.keys(result).length).gt(0);
         const sqlNode = result.myscript.sql;
         expect(sqlNode.query.success).to.include('+++ success');
         expect(sqlNode.free.success).to.include('+++ success');
