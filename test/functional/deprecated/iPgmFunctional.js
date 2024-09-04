@@ -4,7 +4,7 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
-const { parseString } = require('xml2js');
+const { XMLParser } = require('fast-xml-parser');
 const { iPgm, iConn } = require('../../../lib/itoolkit');
 const { config, printConfig } = require('../config');
 
@@ -31,7 +31,7 @@ if (config.transport === 'rest') {
 describe('iPgm Functional Tests', function () {
   before(function () {
     printConfig();
-  });
+  }); 
 
   describe('addParam', function () {
     it('calls QWCRSVAL program checks if it ran successfully', function (done) {
@@ -56,11 +56,11 @@ describe('iPgm Functional Tests', function () {
       program.addParam(this.errno, { io: 'both', len: 'rec2' });
       connection.add(program);
       connection.run((xmlOut) => {
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          expect(result.myscript.pgm[0].success[0]).to.include('+++ success QSYS QWCRSVAL');
-          done();
-        });
+        const parser = new XMLParser();
+        let result = parser.parse(xmlOut);
+        expect(Object.keys(result).length).gt(0);
+        expect(result.myscript.pgm.success).to.include('+++ success QSYS QWCRSVAL');
+        done();
       });
     });
   });
@@ -78,12 +78,12 @@ describe('iPgm Functional Tests', function () {
       program.addReturn('0', '20A', { varying: '4', name: testValue });
       connection.add(program);
       connection.run((xmlOut) => {
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          expect(result.myscript.pgm[0].success[0]).to.include('+++ success');
-          expect(result.myscript.pgm[0].return[0].data[0]._).to.equal('my name is Gill');
-          done();
-        });
+        const parser = new XMLParser();
+        let result = parser.parse(xmlOut);
+        expect(Object.keys(result).length).gt(0);
+        expect(result.myscript.pgm.success).to.include('+++ success');
+        expect(result.myscript.pgm.return.data).to.equal('my name is Gill');
+        done();
       });
     });
   });

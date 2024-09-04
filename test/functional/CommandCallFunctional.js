@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 const { expect } = require('chai');
-const { parseString } = require('xml2js');
+const { XMLParser } = require('fast-xml-parser');
 const { CommandCall, Connection, ProgramCall } = require('../../lib/itoolkit');
 const { config, printConfig } = require('./config');
 const { isQSHSupported } = require('./checkVersion');
@@ -18,11 +18,11 @@ describe('CommandCall Functional Tests', function () {
       connection.add(new CommandCall({ command: 'RTVJOBA USRLIBL(?) SYSLIBL(?)', type: 'cl' }));
       connection.run((error, xmlOut) => {
         expect(error).to.equal(null);
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          expect(result.myscript.cmd[0].success[0]).to.include('+++ success RTVJOBA USRLIBL(?) SYSLIBL(?)');
-          done();
-        });
+        const parser = new XMLParser();
+        let result = parser.parse(xmlOut);
+        expect(Object.keys(result).length).gt(0);
+        expect(result.myscript.cmd.success).to.include('+++ success RTVJOBA USRLIBL(?) SYSLIBL(?)');
+        done();
       });
     });
   });
@@ -35,11 +35,12 @@ describe('CommandCall Functional Tests', function () {
         expect(error).to.equal(null);
         // xs does not return success property for sh or qsh command calls
         // but on error sh or qsh node will not have any inner data
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          expect(result.myscript.sh[0]._).to.match(/(System\sStatus\sInformation)/);
-          done();
-        });
+
+        const parser = new XMLParser();
+        let result = parser.parse(xmlOut);
+        expect(Object.keys(result).length).gt(0);
+        expect(result.myscript.sh).to.match(/(System\sStatus\sInformation)/);
+        done();
       });
     });
   });
@@ -53,20 +54,28 @@ describe('CommandCall Functional Tests', function () {
         expect(error).to.equal(null);
         // xs does not return success property for sh or qsh command calls
         // but on error sh or qsh node will not have any inner data
-        parseString(xmlOut, (parseError, result) => {
-          expect(parseError).to.equal(null);
-          const match = result.myscript.pgm[0].version[0].match(/\d\.\d\.\d/);
-          if (!match) {
-            throw Error('Unable to determine XMLSERVICE version');
-          }
-          if (!isQSHSupported(match[0])) {
-            // skip if QSH is unsupported
-            console.log(`XMLSERVICE version ${match[0]} does not support QSH`);
-            this.skip();
-          }
-          expect(result.myscript.qsh[0]._).to.match(/(System\sStatus\sInformation)/);
+
+        const parser = new XMLParser();
+        let result = parser.parse(xmlOut);
+        expect(Object.keys(result).length).gt(0);
+        const { version } = result.myscript.pgm;
+        const match = version.match(/\d\.\d\.\d/);
+
+        if (!match) {
+          done(new Error('Unable to determine XMLSERVICE version'));
+          return;
+        }
+
+        if (!isQSHSupported(match[0])) {
+          console.log(`XMLSERVICE version ${match[0]} does not support QSH`);
+          this.skip();
           done();
-        });
+          return;
+        }
+        const qshContent = result.myscript.qsh;
+        expect(qshContent).to.match(/(System\sStatus\sInformation)/);
+
+        done();
       });
     });
   });
