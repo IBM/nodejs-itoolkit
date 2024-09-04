@@ -19,7 +19,7 @@ describe('CommandCall Functional Tests', function () {
       connection.run((error, xmlOut) => {
         expect(error).to.equal(null);
         const parser = new XMLParser();
-        let result = parser.parse(xmlOut);
+        const result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         expect(result.myscript.cmd.success).to.include('+++ success RTVJOBA USRLIBL(?) SYSLIBL(?)');
         done();
@@ -37,7 +37,7 @@ describe('CommandCall Functional Tests', function () {
         // but on error sh or qsh node will not have any inner data
 
         const parser = new XMLParser();
-        let result = parser.parse(xmlOut);
+        const result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sh).to.match(/(System\sStatus\sInformation)/);
         done();
@@ -56,7 +56,7 @@ describe('CommandCall Functional Tests', function () {
         // but on error sh or qsh node will not have any inner data
 
         const parser = new XMLParser();
-        let result = parser.parse(xmlOut);
+        const result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         const { version } = result.myscript.pgm;
         const match = version.match(/\d\.\d\.\d/);

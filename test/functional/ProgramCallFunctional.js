@@ -59,7 +59,7 @@ describe('ProgramCall Functional Tests', function () {
         expect(error).to.equal(null);
 
         const parser = new XMLParser();
-        let result = parser.parse(xmlOut);
+        const result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         expect(result.myscript.pgm.success).to.include('+++ success QSYS QWCRSVAL');
         done();
@@ -85,7 +85,7 @@ describe('ProgramCall Functional Tests', function () {
       connection.run((error, xmlOut) => {
         expect(error).to.equal(null);
         const parser = new XMLParser();
-        let result = parser.parse(xmlOut);
+        const result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         expect(result.myscript.pgm.success).to.include('+++ success');
         expect(result.myscript.pgm.return.data).to.equal('my name is Gill');
