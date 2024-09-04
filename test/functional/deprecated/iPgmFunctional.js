@@ -57,8 +57,7 @@ describe('iPgm Functional Tests', function () {
       connection.add(program);
       connection.run((xmlOut) => {
         const parser = new XMLParser();
-        let result;
-        result = parser.parse(xmlOut);
+        let result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         expect(result.myscript.pgm.success).to.include('+++ success QSYS QWCRSVAL');
         done();
@@ -80,8 +79,7 @@ describe('iPgm Functional Tests', function () {
       connection.add(program);
       connection.run((xmlOut) => {
         const parser = new XMLParser();
-        let result;
-        result = parser.parse(xmlOut);
+        let result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         expect(result.myscript.pgm.success).to.include('+++ success');
         expect(result.myscript.pgm.return.data).to.equal('my name is Gill');

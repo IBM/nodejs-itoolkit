@@ -28,11 +28,10 @@ describe('iSql Functional Tests', function () {
         expect(error).to.equal(null);
 
         const parser = new XMLParser({
-          ignoreAttributes: false,
+          ignoreAttributes: false, // Added ignoreAttributes to allow fast-xml-parser to return description.
           attributeNamePrefix: '',
         });
-        let result;
-        result = parser.parse(xmlOut);
+        let result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         const sqlNode = result.myscript.sql;
         expect(sqlNode.prepare.success).to.include('+++ success');
@@ -66,11 +65,10 @@ describe('iSql Functional Tests', function () {
         expect(error).to.equal(null);
 
         const parser = new XMLParser({
-          ignoreAttributes: false,
+          ignoreAttributes: false, // Added ignoreAttributes to allow fast-xml-parser to return description.
           attributeNamePrefix: '',
         });
-        let result;
-        result = parser.parse(xmlOut);
+        let result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         const sqlNode = result.myscript.sql;
         expect(sqlNode.query.success).to.include('+++ success');
@@ -97,18 +95,16 @@ describe('iSql Functional Tests', function () {
         expect(error).to.equal(null);
 
         const parser = new XMLParser({
-          ignoreAttributes: false,
+          ignoreAttributes: false, // Added ignoreAttributes to allow fast-xml-parser to return description.
           attributeNamePrefix: '',
         });
-        let result;
-        result = parser.parse(xmlOut);
+        let result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         const sqlNode = result.myscript.sql;
         expect(sqlNode.query.success).to.include('+++ success');
         expect(sqlNode.fetch.success).to.include('+++ success');
         expect(sqlNode.free.success).to.include('+++ success');
         expect(sqlNode.fetch.row[0].data[0].desc).to.equal('BLANK');
-        // xml2js no inner data gets parsed as undefined.
         expect(sqlNode.fetch.row[0].data[0]._).to.equal(undefined);
         done();
       });
@@ -127,11 +123,10 @@ describe('iSql Functional Tests', function () {
         expect(error).to.equal(null);
 
         const parser = new XMLParser({
-          ignoreAttributes: false,
+          ignoreAttributes: false, // Added ignoreAttributes to allow fast-xml-parser to return description.
           attributeNamePrefix: '',
         });
-        let result;
-        result = parser.parse(xmlOut);
+        let result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.tables.success).to.include('+++ success');
         const { data } = result.myscript.sql.tables.row;
@@ -157,11 +152,10 @@ describe('iSql Functional Tests', function () {
         expect(error).to.equal(null);
 
         const parser = new XMLParser({
-          ignoreAttributes: false,
+          ignoreAttributes: false, // Added ignoreAttributes to allow fast-xml-parser to return description.
           attributeNamePrefix: '',
         });
-        let result;
-        result = parser.parse(xmlOut);
+        let result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.tablepriv.success).to.include('+++ success');
         const { data } = result.myscript.sql.tablepriv.row[0];
@@ -189,11 +183,10 @@ describe('iSql Functional Tests', function () {
         expect(error).to.equal(null);
 
         const parser = new XMLParser({
-          ignoreAttributes: false,
+          ignoreAttributes: false, // Added ignoreAttributes to allow fast-xml-parser to return description.
           attributeNamePrefix: '',
         });
-        let result;
-        result = parser.parse(xmlOut);
+        let result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.columns.success).to.include('+++ success');
         const { data } = result.myscript.sql.columns.row;
@@ -233,11 +226,10 @@ describe('iSql Functional Tests', function () {
         expect(error).to.equal(null);
 
         const parser = new XMLParser({
-          ignoreAttributes: false,
+          ignoreAttributes: false, // Added ignoreAttributes to allow fast-xml-parser to return description.
           attributeNamePrefix: '',
         });
-        let result;
-        result = parser.parse(xmlOut);
+        let result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.columnpriv.success).to.include('+++ success');
         const { data } = result.myscript.sql.columnpriv.row[0];
@@ -266,11 +258,10 @@ describe('iSql Functional Tests', function () {
         expect(error).to.equal(null);
 
         const parser = new XMLParser({
-          ignoreAttributes: false,
+          ignoreAttributes: false, // Added ignoreAttributes to allow fast-xml-parser to return description.
           attributeNamePrefix: '',
         });
-        let result;
-        result = parser.parse(xmlOut);
+        let result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.procedures.success).to.include('+++ success');
         const { data } = result.myscript.sql.procedures.row;
@@ -299,11 +290,10 @@ describe('iSql Functional Tests', function () {
         expect(error).to.equal(null);
 
         const parser = new XMLParser({
-          ignoreAttributes: false,
+          ignoreAttributes: false, // Added ignoreAttributes to allow fast-xml-parser to return description.
           attributeNamePrefix: '',
         });
-        let result;
-        result = parser.parse(xmlOut);
+        let result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.pcolumns.success).to.include('+++ success');
         const { data } = result.myscript.sql.pcolumns.row;
@@ -343,11 +333,10 @@ describe('iSql Functional Tests', function () {
         expect(error).to.equal(null);
 
         const parser = new XMLParser({
-          ignoreAttributes: false,
+          ignoreAttributes: false, // Added ignoreAttributes to allow fast-xml-parser to return description.
           attributeNamePrefix: '',
         });
-        let result;
-        result = parser.parse(xmlOut);
+        let result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.primarykeys.success).to.include('+++ success');
         const { data } = result.myscript.sql.primarykeys.row[0];
@@ -375,11 +364,10 @@ describe('iSql Functional Tests', function () {
         expect(error).to.equal(null);
 
         const parser = new XMLParser({
-          ignoreAttributes: false,
+          ignoreAttributes: false, // Added ignoreAttributes to allow fast-xml-parser to return description.
           attributeNamePrefix: '',
         });
-        let result;
-        result = parser.parse(xmlOut);
+        let result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.foreignkeys.success).to.include('+++ success');
         const { data } = result.myscript.sql.foreignkeys.row;
@@ -414,11 +402,10 @@ describe('iSql Functional Tests', function () {
         expect(error).to.equal(null);
 
         const parser = new XMLParser({
-          ignoreAttributes: false,
+          ignoreAttributes: false, // Added ignoreAttributes to allow fast-xml-parser to return description.
           attributeNamePrefix: '',
         });
-        let result;
-        result = parser.parse(xmlOut);
+        let result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.statistics.success).to.include('+++ success');
         const { data } = result.myscript.sql.statistics.row;
@@ -456,11 +443,10 @@ describe('iSql Functional Tests', function () {
         expect(error).to.equal(null);
 
         const parser = new XMLParser({
-          ignoreAttributes: false,
+          ignoreAttributes: false, // Added ignoreAttributes to allow fast-xml-parser to return description.
           attributeNamePrefix: '',
         });
-        let result;
-        result = parser.parse(xmlOut);
+        let result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         expect(result).to.be.an('object');
         done();
@@ -486,11 +472,10 @@ describe('iSql Functional Tests', function () {
         expect(error).to.equal(null);
 
         const parser = new XMLParser({
-          ignoreAttributes: false,
+          ignoreAttributes: false, // Added ignoreAttributes to allow fast-xml-parser to return description.
           attributeNamePrefix: '',
         });
-        let result;
-        result = parser.parse(xmlOut);
+        let result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         const sqlNode = result.myscript.sql;
         expect(sqlNode.query.success).to.include('+++ success');

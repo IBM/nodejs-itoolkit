@@ -42,8 +42,7 @@ describe('iSh, iCmd, iQsh, Functional Tests', function () {
       connection.add(iCmd('RTVJOBA USRLIBL(?) SYSLIBL(?)'));
       connection.run((xmlOut) => {
         const parser = new XMLParser();
-        let result;
-        result = parser.parse(xmlOut);
+        let result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         expect(result.myscript.cmd.success).to.include('+++ success RTVJOBA USRLIBL(?) SYSLIBL(?)');
         done();
@@ -59,8 +58,7 @@ describe('iSh, iCmd, iQsh, Functional Tests', function () {
         // xs does not return success property for sh or qsh command calls
         // but on error sh or qsh node will not have any inner data
         const parser = new XMLParser();
-        let result;
-        result = parser.parse(xmlOut);
+        let result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sh).to.match(/(System\sStatus\sInformation)/);
         done();
@@ -77,8 +75,7 @@ describe('iSh, iCmd, iQsh, Functional Tests', function () {
         // xs does not return success property for sh or qsh command calls
         // but on error sh or qsh node will not have any inner data
         const parser = new XMLParser();
-        let result;
-        result = parser.parse(xmlOut);
+        let result = parser.parse(xmlOut);
         expect(Object.keys(result).length).gt(0);
         const { version } = result.myscript.pgm;
         const match = version.match(/\d\.\d\.\d/);
