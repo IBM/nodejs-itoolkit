@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 const { expect } = require('chai');
-const { XMLParser } = require('fast-xml-parser');
+const { XMLParser, XMLValidator } = require('fast-xml-parser');
 const { CommandCall, Connection, ProgramCall } = require('../../lib/itoolkit');
 const { config, printConfig } = require('./config');
 const { isQSHSupported } = require('./checkVersion');
@@ -18,9 +18,12 @@ describe('CommandCall Functional Tests', function () {
       connection.add(new CommandCall({ command: 'RTVJOBA USRLIBL(?) SYSLIBL(?)', type: 'cl' }));
       connection.run((error, xmlOut) => {
         expect(error).to.equal(null);
+        const validate = XMLValidator.validate(xmlOut, {
+          allowBooleanAttributes: true,
+        });
+        expect(validate).to.equal(true);
         const parser = new XMLParser();
         const result = parser.parse(xmlOut);
-        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.cmd.success).to.include('+++ success RTVJOBA USRLIBL(?) SYSLIBL(?)');
         done();
       });
@@ -35,10 +38,12 @@ describe('CommandCall Functional Tests', function () {
         expect(error).to.equal(null);
         // xs does not return success property for sh or qsh command calls
         // but on error sh or qsh node will not have any inner data
-
+        const validate = XMLValidator.validate(xmlOut, {
+          allowBooleanAttributes: true,
+        });
+        expect(validate).to.equal(true);
         const parser = new XMLParser();
         const result = parser.parse(xmlOut);
-        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sh).to.match(/(System\sStatus\sInformation)/);
         done();
       });
@@ -55,9 +60,12 @@ describe('CommandCall Functional Tests', function () {
         // xs does not return success property for sh or qsh command calls
         // but on error sh or qsh node will not have any inner data
 
+        const validate = XMLValidator.validate(xmlOut, {
+          allowBooleanAttributes: true,
+        });
+        expect(validate).to.equal(true);
         const parser = new XMLParser();
         const result = parser.parse(xmlOut);
-        expect(Object.keys(result).length).gt(0);
         const { version } = result.myscript.pgm;
         const match = version.match(/\d\.\d\.\d/);
 
