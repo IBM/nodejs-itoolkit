@@ -16,7 +16,7 @@ idna==3.7
 imagesize==1.4.1
 # Pin Jinja2 and markupsafe versions
 # https://github.com/mozilla/sphinx-js/issues/190
-Jinja2==3.1.4
+Jinja2==3.1.6
 MarkupSafe==2.0.1
 packaging==21.3
 parsimonious>=0.10.0,<0.11.0
