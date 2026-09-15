@@ -1,0 +1,17 @@
+[project]
+name = "nodejs-itoolkit-docs"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "sphinx-js >= 2.8",
+    "Sphinx",
+
+    # Pin Jinja2 and markupsafe versions
+    # https://github.com/mozilla/sphinx-js/issues/190
+    # markupsafe==2.0.1
+    # Jinja2>2.0,<3.0
+
+    "sphinx_rtd_theme",
+]
