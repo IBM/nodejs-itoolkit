@@ -4,7 +4,7 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
-const { XMLParser } = require('fast-xml-parser');
+const { XMLParser, XMLValidator } = require('fast-xml-parser');
 const {
   iCmd, iSh, iQsh, iConn, iPgm,
 } = require('../../../lib/itoolkit');
@@ -41,9 +41,12 @@ describe('iSh, iCmd, iQsh, Functional Tests', function () {
       const connection = new iConn(database, username, password, restOptions);
       connection.add(iCmd('RTVJOBA USRLIBL(?) SYSLIBL(?)'));
       connection.run((xmlOut) => {
+        const validate = XMLValidator.validate(xmlOut, {
+          allowBooleanAttributes: true,
+        });
+        expect(validate).to.equal(true);
         const parser = new XMLParser();
         const result = parser.parse(xmlOut);
-        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.cmd.success).to.include('+++ success RTVJOBA USRLIBL(?) SYSLIBL(?)');
         done();
       });
@@ -57,9 +60,12 @@ describe('iSh, iCmd, iQsh, Functional Tests', function () {
       connection.run((xmlOut) => {
         // xs does not return success property for sh or qsh command calls
         // but on error sh or qsh node will not have any inner data
+        const validate = XMLValidator.validate(xmlOut, {
+          allowBooleanAttributes: true,
+        });
+        expect(validate).to.equal(true);
         const parser = new XMLParser();
         const result = parser.parse(xmlOut);
-        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sh).to.match(/(System\sStatus\sInformation)/);
         done();
       });
@@ -74,9 +80,12 @@ describe('iSh, iCmd, iQsh, Functional Tests', function () {
       connection.run((xmlOut) => {
         // xs does not return success property for sh or qsh command calls
         // but on error sh or qsh node will not have any inner data
+        const validate = XMLValidator.validate(xmlOut, {
+          allowBooleanAttributes: true,
+        });
+        expect(validate).to.equal(true);
         const parser = new XMLParser();
         const result = parser.parse(xmlOut);
-        expect(Object.keys(result).length).gt(0);
         const { version } = result.myscript.pgm;
         const match = version.match(/\d\.\d\.\d/);
 

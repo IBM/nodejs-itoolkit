@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 const { expect } = require('chai');
-const { XMLParser } = require('fast-xml-parser');
+const { XMLParser, XMLValidator } = require('fast-xml-parser');
 const { ProgramCall, Connection } = require('../../lib/itoolkit');
 const { config, printConfig } = require('./config');
 
@@ -58,9 +58,12 @@ describe('ProgramCall Functional Tests', function () {
       connection.run((error, xmlOut) => {
         expect(error).to.equal(null);
 
+        const validate = XMLValidator.validate(xmlOut, {
+          allowBooleanAttributes: true,
+        });
+        expect(validate).to.equal(true);
         const parser = new XMLParser();
         const result = parser.parse(xmlOut);
-        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.pgm.success).to.include('+++ success QSYS QWCRSVAL');
         done();
       });
@@ -84,9 +87,12 @@ describe('ProgramCall Functional Tests', function () {
       connection.add(program);
       connection.run((error, xmlOut) => {
         expect(error).to.equal(null);
+        const validate = XMLValidator.validate(xmlOut, {
+          allowBooleanAttributes: true,
+        });
+        expect(validate).to.equal(true);
         const parser = new XMLParser();
         const result = parser.parse(xmlOut);
-        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.pgm.success).to.include('+++ success');
         expect(result.myscript.pgm.return.data).to.equal('my name is Gill');
         done();

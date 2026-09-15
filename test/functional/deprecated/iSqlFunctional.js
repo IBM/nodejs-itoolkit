@@ -4,7 +4,7 @@
 /* eslint-disable new-cap */
 
 const { expect } = require('chai');
-const { XMLParser } = require('fast-xml-parser');
+const { XMLParser, XMLValidator } = require('fast-xml-parser');
 const { iSql, iConn } = require('../../../lib/itoolkit');
 const { config, printConfig } = require('../config');
 
@@ -45,13 +45,16 @@ describe('iSql Functional Tests', function () {
       sql.free();
       connection.add(sql);
       connection.run((xmlOut) => {
+        const validate = XMLValidator.validate(xmlOut, {
+          allowBooleanAttributes: true,
+        });
+        expect(validate).to.equal(true);
         const parser = new XMLParser({
           // Added ignoreAttributes to allow fast-xml-parser to return description.
           ignoreAttributes: false,
           attributeNamePrefix: '',
         });
         const result = parser.parse(xmlOut);
-        expect(Object.keys(result).length).gt(0);
         const sqlNode = result.myscript.sql;
         expect(sqlNode.prepare.success).to.include('+++ success');
         expect(sqlNode.execute.success).to.include('+++ success');
@@ -80,13 +83,16 @@ describe('iSql Functional Tests', function () {
       sql.free();
       connection.add(sql);
       connection.run((xmlOut) => {
+        const validate = XMLValidator.validate(xmlOut, {
+          allowBooleanAttributes: true,
+        });
+        expect(validate).to.equal(true);
         const parser = new XMLParser({
           // Added ignoreAttributes to allow fast-xml-parser to return description.
           ignoreAttributes: false,
           attributeNamePrefix: '',
         });
         const result = parser.parse(xmlOut);
-        expect(Object.keys(result).length).gt(0);
         const sqlNode = result.myscript.sql;
         expect(sqlNode.query.success).to.include('+++ success');
         expect(sqlNode.fetch.success).to.include('+++ success');
@@ -109,13 +115,16 @@ describe('iSql Functional Tests', function () {
       sql.free();
       connection.add(sql);
       connection.run((xmlOut) => {
+        const validate = XMLValidator.validate(xmlOut, {
+          allowBooleanAttributes: true,
+        });
+        expect(validate).to.equal(true);
         const parser = new XMLParser({
           // Added ignoreAttributes to allow fast-xml-parser to return description.
           ignoreAttributes: false,
           attributeNamePrefix: '',
         });
         const result = parser.parse(xmlOut);
-        expect(Object.keys(result).length).gt(0);
         const sqlNode = result.myscript.sql;
         expect(sqlNode.query.success).to.include('+++ success');
         expect(sqlNode.fetch.success).to.include('+++ success');
@@ -136,13 +145,16 @@ describe('iSql Functional Tests', function () {
       sql.tables(['', 'QIWS', 'QCUSTCDT', '']);
       connection.add(sql.toXML());
       connection.run((xmlOut) => {
+        const validate = XMLValidator.validate(xmlOut, {
+          allowBooleanAttributes: true,
+        });
+        expect(validate).to.equal(true);
         const parser = new XMLParser({
           // Added ignoreAttributes to allow fast-xml-parser to return description.
           ignoreAttributes: false,
           attributeNamePrefix: '',
         });
         const result = parser.parse(xmlOut);
-        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.tables.success).to.include('+++ success');
         const { data } = result.myscript.sql.tables.row;
         expect(data[0].desc).to.equal('TABLE_CAT');
@@ -164,13 +176,16 @@ describe('iSql Functional Tests', function () {
       sql.tablePriv(['', 'QIWS', 'QCUSTCDT']);
       connection.add(sql.toXML());
       connection.run((xmlOut) => {
+        const validate = XMLValidator.validate(xmlOut, {
+          allowBooleanAttributes: true,
+        });
+        expect(validate).to.equal(true);
         const parser = new XMLParser({
           // Added ignoreAttributes to allow fast-xml-parser to return description.
           ignoreAttributes: false,
           attributeNamePrefix: '',
         });
         const result = parser.parse(xmlOut);
-        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.tablepriv.success).to.include('+++ success');
         const { data } = result.myscript.sql.tablepriv.row[0];
         expect(data[0].desc).to.equal('TABLE_CAT');
@@ -194,13 +209,16 @@ describe('iSql Functional Tests', function () {
       sql.columns(['', 'QIWS', 'QCUSTCDT', 'CUSNUM']);
       connection.add(sql.toXML());
       connection.run((xmlOut) => {
+        const validate = XMLValidator.validate(xmlOut, {
+          allowBooleanAttributes: true,
+        });
+        expect(validate).to.equal(true);
         const parser = new XMLParser({
           // Added ignoreAttributes to allow fast-xml-parser to return description.
           ignoreAttributes: false,
           attributeNamePrefix: '',
         });
         const result = parser.parse(xmlOut);
-        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.columns.success).to.include('+++ success');
         const { data } = result.myscript.sql.columns.row;
         expect(data[0].desc).to.equal('TABLE_CAT');
@@ -236,13 +254,16 @@ describe('iSql Functional Tests', function () {
 
       connection.add(sql.toXML());
       connection.run((xmlOut) => {
+        const validate = XMLValidator.validate(xmlOut, {
+          allowBooleanAttributes: true,
+        });
+        expect(validate).to.equal(true);
         const parser = new XMLParser({
           // Added ignoreAttributes to allow fast-xml-parser to return description.
           ignoreAttributes: false,
           attributeNamePrefix: '',
         });
         const result = parser.parse(xmlOut);
-        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.columnpriv.success).to.include('+++ success');
         const { data } = result.myscript.sql.columnpriv.row[0];
         expect(data[0].desc).to.equal('TABLE_CAT');
@@ -267,13 +288,16 @@ describe('iSql Functional Tests', function () {
       sql.procedures(['', 'QSYS2', 'TCPIP_INFO']);
       connection.add(sql.toXML());
       connection.run((xmlOut) => {
+        const validate = XMLValidator.validate(xmlOut, {
+          allowBooleanAttributes: true,
+        });
+        expect(validate).to.equal(true);
         const parser = new XMLParser({
           // Added ignoreAttributes to allow fast-xml-parser to return description.
           ignoreAttributes: false,
           attributeNamePrefix: '',
         });
         const result = parser.parse(xmlOut);
-        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.procedures.success).to.include('+++ success');
         const { data } = result.myscript.sql.procedures.row;
         expect(data[0].desc).to.equal('PROCEDURE_CAT');
@@ -298,13 +322,16 @@ describe('iSql Functional Tests', function () {
       sql.pColumns(['', 'QSYS2', 'QCMDEXC', 'COMMAND']);
       connection.add(sql.toXML());
       connection.run((xmlOut) => {
+        const validate = XMLValidator.validate(xmlOut, {
+          allowBooleanAttributes: true,
+        });
+        expect(validate).to.equal(true);
         const parser = new XMLParser({
           // Added ignoreAttributes to allow fast-xml-parser to return description.
           ignoreAttributes: false,
           attributeNamePrefix: '',
         });
         const result = parser.parse(xmlOut);
-        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.pcolumns.success).to.include('+++ success');
         const { data } = result.myscript.sql.pcolumns.row;
         expect(data[0].desc).to.equal('PROCEDURE_CAT');
@@ -340,13 +367,16 @@ describe('iSql Functional Tests', function () {
       sql.primaryKeys(['', 'QUSRSYS', 'QASZRAIRX']);
       connection.add(sql.toXML());
       connection.run((xmlOut) => {
+        const validate = XMLValidator.validate(xmlOut, {
+          allowBooleanAttributes: true,
+        });
+        expect(validate).to.equal(true);
         const parser = new XMLParser({
           // Added ignoreAttributes to allow fast-xml-parser to return description.
           ignoreAttributes: false,
           attributeNamePrefix: '',
         });
         const result = parser.parse(xmlOut);
-        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.primarykeys.success).to.include('+++ success');
         const { data } = result.myscript.sql.primarykeys.row[0];
         expect(data[0].desc).to.equal('TABLE_CAT');
@@ -370,13 +400,16 @@ describe('iSql Functional Tests', function () {
       sql.foreignKeys(['', 'QUSRSYS', 'QASZRAIRC', '', 'QUSRSYS', 'QASZRAIRX']);
       connection.add(sql.toXML());
       connection.run((xmlOut) => {
+        const validate = XMLValidator.validate(xmlOut, {
+          allowBooleanAttributes: true,
+        });
+        expect(validate).to.equal(true);
         const parser = new XMLParser({
           // Added ignoreAttributes to allow fast-xml-parser to return description.
           ignoreAttributes: false,
           attributeNamePrefix: '',
         });
         const result = parser.parse(xmlOut);
-        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.foreignkeys.success).to.include('+++ success');
         const { data } = result.myscript.sql.foreignkeys.row;
         expect(data[0].desc).to.equal('PKTABLE_CAT');
@@ -407,13 +440,16 @@ describe('iSql Functional Tests', function () {
       sql.statistics(['', 'QIWS', 'QCUSTCDT', 'all']);
       connection.add(sql.toXML());
       connection.run((xmlOut) => {
+        const validate = XMLValidator.validate(xmlOut, {
+          allowBooleanAttributes: true,
+        });
+        expect(validate).to.equal(true);
         const parser = new XMLParser({
           // Added ignoreAttributes to allow fast-xml-parser to return description.
           ignoreAttributes: false,
           attributeNamePrefix: '',
         });
         const result = parser.parse(xmlOut);
-        expect(Object.keys(result).length).gt(0);
         expect(result.myscript.sql.statistics.success).to.include('+++ success');
         const { data } = result.myscript.sql.statistics.row;
         expect(data[0].desc).to.equal('TABLE_CAT');
@@ -447,13 +483,16 @@ describe('iSql Functional Tests', function () {
       connection.add(sql.toXML());
       connection.debug(true);
       connection.run((xmlOut) => {
+        const validate = XMLValidator.validate(xmlOut, {
+          allowBooleanAttributes: true,
+        });
+        expect(validate).to.equal(true);
         const parser = new XMLParser({
           // Added ignoreAttributes to allow fast-xml-parser to return description.
           ignoreAttributes: false,
           attributeNamePrefix: '',
         });
         const result = parser.parse(xmlOut);
-        expect(Object.keys(result).length).gt(0);
         // TODO add more assertions
         expect(result).to.be.an('object');
         done();
@@ -476,13 +515,16 @@ describe('iSql Functional Tests', function () {
       sql.free();
       connection.add(sql.toXML());
       connection.run((xmlOut) => {
+        const validate = XMLValidator.validate(xmlOut, {
+          allowBooleanAttributes: true,
+        });
+        expect(validate).to.equal(true);
         const parser = new XMLParser({
           // Added ignoreAttributes to allow fast-xml-parser to return description.
           ignoreAttributes: false,
           attributeNamePrefix: '',
         });
         const result = parser.parse(xmlOut);
-        expect(Object.keys(result).length).gt(0);
         const sqlNode = result.myscript.sql;
         expect(sqlNode.query.success).to.include('+++ success');
         expect(sqlNode.free.success).to.include('+++ success');
