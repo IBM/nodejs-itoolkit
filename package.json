@@ -62,10 +62,16 @@
     "fast-xml-parser": "^5.7.0",
     "idb-connector": "^1.2.18",
     "idb-pconnector": "^1.1.0",
-    "odbc": "^2.4.6",
+    "odbc": "^2.5",
     "ssh2": "^1.11.0"
   },
   "engines": {
     "node": ">= 20.0"
+  },
+  "allowScripts": {
+    "cpu-features@0.0.4": true,
+    "idb-pconnector@1.1.1": true,
+    "odbc@2.5.0": true,
+    "ssh2@1.11.0": true
   }
 }
