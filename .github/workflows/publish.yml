@@ -5,22 +5,36 @@ on:
     tags:
       - "v*.*.*"
 
+permissions:
+  id-token: write  # Required for OIDC
+  contents: write  # Required for action-gh-release
+
 jobs:
-  npm-publish-and-gh-release:
+  npm-gh-release-and-publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with:
-          node-version: 24
-          registry-url: https://registry.npmjs.org/
-      - run: npm ci
-      - run: npm test
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
-      - uses: softprops/action-gh-release@v1
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org/'
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v3
         with:
           generate_release_notes: true
-          token: ${{ secrets.GH_TOKEN }}
 
+      - name: get-npm-version
+        id: package-version
+        run: jq -r '"version=" + .version' package.json  >> "$GITHUB_OUTPUT"
+
+      - name: get-npm-tag
+        id: package-tag
+        run: .github/npm-tag.sh $PACKAGE_VERSION >> "$GITHUB_OUTPUT"
+        env:
+          PACKAGE_VERSION: ${{ steps.package-version.outputs.version }}
+
+      - name: Publish to NPM
+        run: npm publish --tag $PACKAGE_TAG
+        env:
+          PACKAGE_TAG: ${{ steps.package-tag.outputs.tag }}
