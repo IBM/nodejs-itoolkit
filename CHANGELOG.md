@@ -1,6 +1,54 @@
 # Changelog
 
+## [1.1.0](https://github.com/IBM/nodejs-itoolkit/compare/v1.0.2...v1.1.0) (2026-09-29)
+
+- build(deps): bump urllib3 from 1.26.17 to 1.26.18 in /docs
+- build(deps): 2024-01-11 address vulnerabilities in docs
+- build: update release-it to 0.17.5
+- build(deps): bump tar from 6.1.12 to 6.2.1
+- build(deps): bump idna from 3.4 to 3.7 in /docs
+- build(deps): bump jinja2 from 3.1.3 to 3.1.4 in /docs
+- build(deps-dev): bump braces from 3.0.2 to 3.0.3
+- build(deps): bump urllib3 from 1.26.18 to 1.26.19 in /docs
+- build: update to python version for RTD
+- build(deps): bump requests from 2.31.0 to 2.32.2 in /docs
+- build(deps): bump fast-xml-parser from 4.2.5 to 4.4.1
+- test: Replace xml2js with fast-xml-parser
+- test: fix eslint errors
+- build(deps): bump jinja2 from 3.1.4 to 3.1.6 in /docs
+- build(deps): bump serialize-javascript and mocha
+- build(deps): bump brace-expansion from 1.1.11 to 1.1.18
+- build(deps): bump ip-address and socks
+- build(deps-dev): bump js-yaml from 4.1.0 to 4.3.2
+- build(deps): bump serialize-javascript and mocha
+- build(deps): bump fast-xml-parser from 4.4.1 to 5.7.0
+- ci: Update github action and node versions
+- docs: Update packages and config
+- build(deps): bump basic-ftp from 5.0.4 to 5.3.1
+- build(deps): bump tmp, @release-it/conventional-changelog and release-it
+- test: Use XMLValidator
+- refactor: Replace xml2js in the code
+- ci: Use trusted publisher
+- chore: npm audit fix
+- refactor: Remove xml2js
+- build: make npm-tag.sh executable
+- ci: Add explicit workflow permissions
+
 ## [1.0.2](https://github.com/IBM/nodejs-itoolkit/compare/v1.0.1...v1.0.2) (2023-10-11)
+
+- build(package.json): Add lint-fix script
+- ci: Disable running integration tests
+- build(deps): bump json5 from 1.0.1 to 1.0.2
+- Added correct link
+- chore: fix copyright headers
+- ci: update release process
+- build(deps): bump xml2js from 0.4.23 to 0.5.0
+- build(deps-dev): bump word-wrap from 1.2.3 to 1.2.5
+- build(deps): bump fast-xml-parser from 4.0.11 to 4.2.5
+- build: run npm audit fix
+- docs: Remove deprecated attributes from RtD config
+- Address vulnerabilities in docs packages
+- build: update release-it config
 
 ## [1.0.1](https://github.com/IBM/nodejs-itoolkit/compare/v1.0.0...v1.0.1) (2022-10-31)
 
