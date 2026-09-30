@@ -1,34 +1,84 @@
-# Release
+# Release Process
 
-To create a new release the developer first needs to run:
+Releases follow a two-phase flow: one or more **release candidates (RC)** are
+published first, then the **final release** is cut once the RC is validated.
 
-```sh
-npm run release
-```
+---
 
-This script will run [release-it](https://github.com/release-it/release-it) which will then prompt the user for the:
+## Phase 1 - Release Candidate
 
-1) version
-2) commit message
-3) tag name (NOTE: Tag name should follow the pattern v*.*.*)
+### 1. Bump the version to an RC
 
-release-it should then:
-
-- bump the version in the package.json and package-lock.json files
-- update CHANGELOG.md
-- make the release commit
-- create the tag
-
-From there the developer needs to:
-
-1) Review the changes made by release-it are as expected.
-2) Push the commit and tag to the main branch (requires proper authority)
+Run `npm version` with the exact RC version string.  The first RC for a given
+release is always `.0`; bump the trailing number for every subsequent RC.
 
 ```sh
-git push --follow-tags origin master
+# Examples
+npm version 1.2.0-rc.0 --no-git-tag-version
+npm version 1.2.0-rc.1 --no-git-tag-version   # if another RC is needed
 ```
 
-Once the tag and commit is pushed to the main branch our [github action](../.github/workflows/publish.yml) will:
+`--no-git-tag-version` keeps `npm version` from creating the commit and tag -
+those are done manually in the next steps.
 
-1) Create the GH release
-2) Publish the release to NPM
+### 2. Commit the version bump
+
+```sh
+git add package.json package-lock.json
+git commit -m "chore: release v$(node -p "require('./package.json').version")"
+```
+
+### 3. Create and push the RC tag
+
+Tags must follow the `v*.*.*` pattern (the publish workflow is triggered by
+this pattern).
+
+```sh
+git tag v$(node -p "require('./package.json').version")
+git push origin main
+git push origin v$(node -p "require('./package.json').version")
+```
+
+Pushing the tag triggers the [publish workflow](../.github/workflows/publish.yml),
+which creates a GitHub pre-release and publishes the package to npm under the
+`rc` dist-tag.
+
+---
+
+## Phase 2 - Final Release
+
+### 1. Copy the auto-generated changelog from GitHub
+
+After the RC tag is pushed, GitHub auto-generates release notes for that tag.
+Open the draft/pre-release on GitHub, copy the generated notes, and paste them
+as a new entry at the top of [`CHANGELOG.md`](../CHANGELOG.md).
+
+### 2. Bump the version to the final release
+
+```sh
+npm version <major|minor|patch> --no-git-tag-version
+# e.g. npm version 1.2.0 --no-git-tag-version
+```
+
+### 3. Commit the release
+
+```sh
+git add package.json package-lock.json CHANGELOG.md
+git commit -m "chore: release v$(node -p "require('./package.json').version")"
+```
+
+### 4. Create the final tag
+
+```sh
+git tag v$(node -p "require('./package.json').version")
+```
+
+### 5. Push the branch and tag
+
+```sh
+git push origin main
+git push origin v$(node -p "require('./package.json').version")
+```
+
+Pushing the tag triggers the [publish workflow](../.github/workflows/publish.yml),
+which creates the GitHub release and publishes the package to npm.
