@@ -14,8 +14,7 @@
     "test": "./node_modules/mocha/bin/mocha.js --recursive test/unit",
     "test-integration": "./node_modules/mocha/bin/mocha.js --timeout 5s test/functional/*.js",
     "lint": "./node_modules/eslint/bin/eslint.js lib/ test/",
-    "lint-fix": "./node_modules/eslint/bin/eslint.js lib/ test/ --fix",
-    "release": "./node_modules/release-it/bin/release-it.js"
+    "lint-fix": "./node_modules/eslint/bin/eslint.js lib/ test/ --fix"
   },
   "repository": {
     "type": "git",
@@ -48,14 +47,12 @@
     "fast-xml-parser": "^5.7.0"
   },
   "devDependencies": {
-    "@release-it/conventional-changelog": "^12.0.2",
     "chai": "^4.3.6",
     "eslint": "^8.26.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-mocha": "^10.1.0",
     "mocha": "^12.0.1",
-    "release-it": "^21.0.3",
     "sinon": "^14.0.1"
   },
   "optionalDependencies": {
